@@ -49,19 +49,65 @@ public class RegisterActivity extends AppCompatActivity {
         tvSignIn.setOnClickListener(v -> startActivity(new Intent(this, LoginActivity.class)));
     }
 
-    private void registerUser() {
+    private boolean validateForm() {
         String username = edtUsername.getText().toString().trim();
-        String password = edtPassword.getText().toString().trim();
-        String confirmPassword = edtPasswordConfirm.getText().toString().trim();
         String email = edtEmail.getText().toString().trim();
         String phone = edtPhone.getText().toString().trim();
+        String password = edtPassword.getText().toString();
+        String passwordConfirm = edtPasswordConfirm.getText().toString();
 
-        if (username.length() < 5 || password.length() < 6 || !password.equals(confirmPassword) || email.isEmpty()) {
-            Toast.makeText(this, "Invalid input. Check all fields.", Toast.LENGTH_SHORT).show();
-            return;
+        if (username.isEmpty()) {
+            edtUsername.setError("Username is required");
+            edtUsername.requestFocus();
+            return false;
         }
+        if (email.isEmpty()) {
+            edtEmail.setError("Email is required");
+            edtEmail.requestFocus();
+            return false;
+        }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            edtEmail.setError("Invalid email format");
+            edtEmail.requestFocus();
+            return false;
+        }
+        if (phone.isEmpty()) {
+            edtPhone.setError("Phone number is required");
+            edtPhone.requestFocus();
+            return false;
+        }
+        if (!phone.matches("[0-9]{9,15}")) {
+            edtPhone.setError("Invalid phone number");
+            edtPhone.requestFocus();
+            return false;
+        }
+        if (password.isEmpty()) {
+            edtPassword.setError("Password is required");
+            edtPassword.requestFocus();
+            return false;
+        }
+        if (password.length() < 6) {
+            edtPassword.setError("Password must be at least 6 characters");
+            edtPassword.requestFocus();
+            return false;
+        }
+        if (!password.equals(passwordConfirm)) {
+            edtPasswordConfirm.setError("Passwords do not match");
+            edtPasswordConfirm.requestFocus();
+            return false;
+        }
+        return true;
+    }
 
-        RegisterRequest request = new RegisterRequest(username, password, confirmPassword, email, phone);
+    private void registerUser() {
+        if (!validateForm()) return;
+        String username = edtUsername.getText().toString().trim();
+        String email = edtEmail.getText().toString().trim();
+        String phone = edtPhone.getText().toString().trim();
+        String password = edtPassword.getText().toString();
+        String passwordConfirm = edtPasswordConfirm.getText().toString();
+
+        RegisterRequest request = new RegisterRequest(username, password, passwordConfirm, email, phone);
         AuthService authService = APIClient.getClient(this).create(AuthService.class);
 
         authService.register(request).enqueue(new Callback<Void>() {

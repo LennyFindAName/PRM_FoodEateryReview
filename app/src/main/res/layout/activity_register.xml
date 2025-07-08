@@ -21,13 +21,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/pr_icon" />
+            android:src="@drawable/pr_icon"
+            android:contentDescription="@string/register_toolbar_title" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Eatery food review app"
+            android:text="@string/register_toolbar_title"
             android:textColor="#0BAE77"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -39,12 +40,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:text="Sign Up"
+        android:text="@string/register_title"
         android:textColor="@android:color/black"
         android:textSize="28sp"
         android:textStyle="bold" />
 
-    <!-- Name Input -->
+    <!-- Username Input -->
     <EditText
         android:id="@+id/edtUsername"
         android:layout_width="match_parent"
@@ -53,39 +54,13 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/rounded_edit_text"
+        android:drawableEnd="@drawable/ic_person"
         android:drawableTint="@color/colorAccent"
-        android:hint="Username"
+        android:hint="@string/register_username"
         android:inputType="textPersonName"
         android:padding="12dp" />
 
     <!-- Email Input -->
-    <EditText
-        android:id="@+id/edtPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/rounded_edit_text"
-        android:drawableTint="@color/colorAccent"
-        android:hint="Password"
-        android:inputType="textEmailAddress"
-        android:padding="12dp" />
-
-    <!-- Password Input -->
-    <EditText
-        android:id="@+id/edtPasswordConfirm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/rounded_edit_text"
-        android:drawableTint="@color/colorAccent"
-        android:hint="Password confirm"
-        android:padding="12dp" />
-
-    <!-- Phone number Input -->
     <EditText
         android:id="@+id/edtEmail"
         android:layout_width="match_parent"
@@ -94,11 +69,13 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/rounded_edit_text"
+        android:drawableEnd="@drawable/ic_email"
         android:drawableTint="@color/colorAccent"
-        android:hint="Email"
+        android:hint="@string/register_email"
+        android:inputType="textEmailAddress"
         android:padding="12dp" />
 
-    <!-- Address Input -->
+    <!-- Phone Input -->
     <EditText
         android:id="@+id/edtPhoneNumber"
         android:layout_width="match_parent"
@@ -107,10 +84,43 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/rounded_edit_text"
+        android:drawableEnd="@drawable/ic_phone"
         android:drawableTint="@color/colorAccent"
-        android:hint="Phone number"
+        android:hint="@string/register_phone"
+        android:inputType="phone"
         android:padding="12dp" />
 
+    <!-- Password Input -->
+    <EditText
+        android:id="@+id/edtPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/rounded_edit_text"
+        android:drawableEnd="@drawable/ic_visibility_off"
+        android:drawableTint="@color/colorAccent"
+        android:hint="@string/register_password"
+        android:inputType="textPassword"
+        android:padding="12dp" />
+
+    <!-- Password Confirm Input -->
+    <EditText
+        android:id="@+id/edtPasswordConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/rounded_edit_text"
+        android:drawableEnd="@drawable/ic_visibility_off"
+        android:drawableTint="@color/colorAccent"
+        android:hint="@string/register_password_confirm"
+        android:inputType="textPassword"
+        android:padding="12dp" />
+
+    <!-- Sign Up Button -->
     <Button
         android:id="@+id/btnSignUp"
         android:layout_width="match_parent"
@@ -120,7 +130,7 @@
         android:layout_marginRight="20dp"
         android:background="@drawable/rounded_button"
         android:padding="14dp"
-        android:text="SIGN UP"
+        android:text="@string/register_signup"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
 
@@ -131,34 +141,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        android:text="Already have an account? Sign In."
+        android:text="@string/register_signin"
         android:textColor="@color/colorAccent"
         android:textSize="16sp" />
-
-    <!-- Social Media Login Buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/btnFacebookLogin"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="16dp"
-            android:background="?attr/selectableItemBackground"
-            android:src="@drawable/facebook" />
-
-        <ImageButton
-            android:id="@+id/btnGoogleLogin"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackground"
-            android:src="@drawable/google" />
-    </LinearLayout>
 
 </LinearLayout>
