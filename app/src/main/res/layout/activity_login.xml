@@ -46,7 +46,7 @@
 
     <!-- Email Input -->
     <EditText
-        android:id="@+id/edtEmail"
+        android:id="@+id/edtUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -55,7 +55,7 @@
         android:background="@drawable/rounded_edit_text"
         android:drawableEnd="@drawable/ic_check"
         android:drawableTint="@color/colorAccent"
-        android:hint="Email"
+        android:hint="Username"
         android:inputType="textEmailAddress"
         android:padding="12dp" />
 

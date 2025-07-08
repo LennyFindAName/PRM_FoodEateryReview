@@ -11,19 +11,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIClient {
 
-    private static String baseURL = "http://192.168.1.4:7191/api/";
+    private static String baseURL = "http://192.168.1.21:5029/api/";
 
     private static Retrofit retrofit;
 
     public static Retrofit getClient(Context context) {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .callTimeout(90, TimeUnit.SECONDS) // Thay đổi thời gian chờ ở đây
-                .readTimeout(90, TimeUnit.SECONDS) // Thời gian chờ đọc
-                .writeTimeout(90, TimeUnit.SECONDS) // Thời gian chờ ghi
-                .addInterceptor(new AuthInterceptor(context))
-                .build();
-
         if (retrofit == null) {
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .callTimeout(90, TimeUnit.SECONDS)
+                    .readTimeout(90, TimeUnit.SECONDS)
+                    .writeTimeout(90, TimeUnit.SECONDS)
+                    .addInterceptor(new AuthInterceptor(context))
+                    .build();
+
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseURL)
                     .client(client)
@@ -32,4 +32,5 @@ public class APIClient {
         }
         return retrofit;
     }
+
 }

@@ -11,16 +11,12 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
 
 import prm392.project.R;
 import prm392.project.model.ResponseTokenDTO;
 import prm392.project.model.SignUp;
-import prm392.project.model.User;
 import prm392.project.repo.AuthRepository;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         edtUsername = findViewById(R.id.edtUsername);
-        edtEmail = findViewById(R.id.edtEmail);
+        edtEmail = findViewById(R.id.edtUsername);
         edtPassword = findViewById(R.id.edtPassword);
         edtPhoneNumber = findViewById(R.id.edtPhoneNumber);
         edtAddress = findViewById(R.id.edtAddress);

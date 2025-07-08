@@ -14,6 +14,10 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import prm392.project.R;
+import prm392.project.factory.APIClient;
+import prm392.project.inter.AuthService;
+import prm392.project.model.DTOs.LoginRequest;
+import prm392.project.model.DTOs.LoginResponse;
 import prm392.project.model.SignIn;
 import prm392.project.model.ResponseTokenDTO;
 import prm392.project.repo.AuthRepository;
@@ -22,87 +26,80 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    private EditText edtEmail, edtPassword;
+
+    private EditText edtUsername, edtPassword;
     private Button btnLogin;
-    private TextView tvRegister;
-    private AuthRepository authRepository;
+    private TextView tvForgotPassword, tvRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-        edtEmail = findViewById(R.id.edtEmail);
+        edtUsername = findViewById(R.id.edtUsername);
         edtPassword = findViewById(R.id.edtPassword);
-        tvRegister = findViewById(R.id.tvRegister);
         btnLogin = findViewById(R.id.btnLogin);
+        tvForgotPassword = findViewById(R.id.tvForgotPassword);
+        tvRegister = findViewById(R.id.tvRegister);
 
-        authRepository = new AuthRepository(this);
-
-        tvRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
+        btnLogin.setOnClickListener(v -> loginUser());
     }
 
-    private void login() {
-        String email = edtEmail.getText().toString();
-        String password = edtPassword.getText().toString();
+    private void loginUser() {
+        String username = edtUsername.getText().toString().trim();
+        String password = edtPassword.getText().toString().trim();
 
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(LoginActivity.this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
+        if (username.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please enter all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        SignIn account = new SignIn(email, password);
+        // ✅ In thông tin tài khoản ra Logcat
+        Log.d("LOGIN_DEBUG", "Username: " + username);
+        Log.d("LOGIN_DEBUG", "Password: " + password);
 
-        authRepository.signIn(account).enqueue(new Callback<ResponseTokenDTO>() {
+        LoginRequest request = new LoginRequest(username, password);
+        AuthService authService = APIClient.getClient(this).create(AuthService.class);
+        Call<LoginResponse> call = authService.login(request);
+
+        call.enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onResponse(Call<ResponseTokenDTO> call, Response<ResponseTokenDTO> response) {
-                if (response.isSuccessful()) {
-                    String token = response.body().getAccess_token();
-                    Log.d("LoginResponse", "Received Token: " + token);
-                    saveToken(token);
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                // ✅ In response code và body
+                Log.d("LOGIN_DEBUG", "Response Code: " + response.code());
+
+                if (response.isSuccessful() && response.body() != null) {
+                    LoginResponse loginData = response.body();
+
+                    Log.d("LOGIN_DEBUG", "AccessToken: " + loginData.getAccessToken());
+                    Log.d("LOGIN_DEBUG", "Username (BE response): " + loginData.getUsername());
+                    Log.d("LOGIN_DEBUG", "RoleId: " + loginData.getRoleId());
+
+                    // Lưu và chuyển màn
+                    SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("access_token", loginData.getAccessToken());
+                    editor.putString("username", loginData.getUsername());
+                    editor.putInt("role_id", loginData.getRoleId());
+                    editor.apply();
+
                     Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
 
-                    // Chuyển sang màn hình HomeActivity
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
-                    finish();  // Optional
-
+                    finish();
                 } else {
-                    if (response.code() == 403) {
-                        Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
-                    }
+                    Log.e("LOGIN_DEBUG", "Login failed - Code: " + response.code());
+                    Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseTokenDTO> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Log.e("LOGIN_DEBUG", "Network error: " + t.getMessage(), t);
+                Toast.makeText(LoginActivity.this, "Login failed: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void saveToken(String token) {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("access_token", token);
-        editor.apply();
-        String savedToken = sharedPreferences.getString("access_token", "No Token Found");
-        Log.d("saveToken", "Saved Token: " + savedToken);
-    }
 }
