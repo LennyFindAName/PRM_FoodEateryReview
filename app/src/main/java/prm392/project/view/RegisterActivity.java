@@ -3,6 +3,7 @@ package prm392.project.view;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 
 import prm392.project.R;
+import prm392.project.factory.APIClient;
+import prm392.project.inter.AuthService;
+import prm392.project.model.DTOs.RegisterRequest;
 import prm392.project.model.ResponseTokenDTO;
 import prm392.project.model.SignUp;
 import prm392.project.repo.AuthRepository;
@@ -23,97 +27,61 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
-    private EditText edtUsername, edtEmail, edtPassword, edtPhoneNumber, edtAddress;
+
+    private EditText edtUsername, edtPassword, edtPasswordConfirm, edtEmail, edtPhone;
     private Button btnSignUp;
     private TextView tvSignIn;
-    private AuthRepository authRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
 
         edtUsername = findViewById(R.id.edtUsername);
-        edtEmail = findViewById(R.id.edtUsername);
         edtPassword = findViewById(R.id.edtPassword);
-        edtPhoneNumber = findViewById(R.id.edtPhoneNumber);
-        edtAddress = findViewById(R.id.edtAddress);
+        edtPasswordConfirm = findViewById(R.id.edtPasswordConfirm);
+        edtEmail = findViewById(R.id.edtEmail);
+        edtPhone = findViewById(R.id.edtPhoneNumber);
         btnSignUp = findViewById(R.id.btnSignUp);
         tvSignIn = findViewById(R.id.tvSignIn);
 
-        authRepository = new AuthRepository(this);
-
-        tvSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signUp();
-            }
-        });
+        btnSignUp.setOnClickListener(v -> registerUser());
+        tvSignIn.setOnClickListener(v -> startActivity(new Intent(this, LoginActivity.class)));
     }
 
-    private void signUp() {
-        String username = edtUsername.getText().toString();
-        String email = edtEmail.getText().toString();
-        String password = edtPassword.getText().toString();
-        String phoneNumber = edtPhoneNumber.getText().toString();
-        String address = edtAddress.getText().toString();
+    private void registerUser() {
+        String username = edtUsername.getText().toString().trim();
+        String password = edtPassword.getText().toString().trim();
+        String confirmPassword = edtPasswordConfirm.getText().toString().trim();
+        String email = edtEmail.getText().toString().trim();
+        String phone = edtPhone.getText().toString().trim();
 
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty() || phoneNumber.isEmpty() || address.isEmpty()) {
-            Toast.makeText(RegisterActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+        if (username.length() < 5 || password.length() < 6 || !password.equals(confirmPassword) || email.isEmpty()) {
+            Toast.makeText(this, "Invalid input. Check all fields.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(RegisterActivity.this, "Invalid email format", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        RegisterRequest request = new RegisterRequest(username, password, confirmPassword, email, phone);
+        AuthService authService = APIClient.getClient(this).create(AuthService.class);
 
-        SignUp signUp = new SignUp(email, password, username, phoneNumber, address);
-
-        authRepository.signUp(signUp).enqueue(new Callback<ResponseTokenDTO>() {
+        authService.register(request).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<ResponseTokenDTO> call, Response<ResponseTokenDTO> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("REGISTER_DEBUG", "Response Code: " + response.code());
                 if (response.isSuccessful()) {
-                    String token = response.body().getAccess_token();
-                    saveToken(token);
-                    Toast.makeText(RegisterActivity.this, "Register successful", Toast.LENGTH_SHORT).show();
-
-                    // Chuyển sang màn hình HomeActivity
-                    Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();  // Optional
-
+                    Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                    finish();
                 } else {
-                    Toast.makeText(RegisterActivity.this, "Sign Up failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Registration failed: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
-
             @Override
-            public void onFailure(Call<ResponseTokenDTO> call, Throwable t) {
-                if (t instanceof IOException) {
-                    Toast.makeText(RegisterActivity.this, "Network error, please check your connection", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(RegisterActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("REGISTER_DEBUG", "Error: " + t.getMessage());
+                Toast.makeText(RegisterActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
-
-    private void saveToken(String token) {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("access_token", token);
-        editor.apply();
-    }
-
 }

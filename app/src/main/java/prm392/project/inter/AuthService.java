@@ -2,6 +2,7 @@ package prm392.project.inter;
 
 import prm392.project.model.DTOs.LoginRequest;
 import prm392.project.model.DTOs.LoginResponse;
+import prm392.project.model.DTOs.RegisterRequest;
 import prm392.project.model.SignIn;
 import prm392.project.model.ResponseTokenDTO;
 import prm392.project.model.SignUp;
@@ -16,6 +17,6 @@ public interface AuthService {
     @POST("Authen/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
 
-    @POST("User/auth/local/sigup")
-    Call<ResponseTokenDTO> signup(@Body SignUp user);
+    @POST("Authen/register")
+    Call<Void> register(@Body RegisterRequest request);
 }

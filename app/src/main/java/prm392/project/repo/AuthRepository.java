@@ -5,6 +5,7 @@ import prm392.project.factory.APIClient;
 import prm392.project.inter.AuthService;
 import prm392.project.model.DTOs.LoginRequest;
 import prm392.project.model.DTOs.LoginResponse;
+import prm392.project.model.DTOs.RegisterRequest;
 import prm392.project.model.SignIn;
 import prm392.project.model.ResponseTokenDTO;
 import prm392.project.model.SignUp;
@@ -24,7 +25,7 @@ public class AuthRepository {
         return authService.login(loginRequest);
     }
 
-    public Call<ResponseTokenDTO> signUp(SignUp account){
-        return authService.signup(account);
+    public Call<Void> register(@Body RegisterRequest request){
+        return authService.register(request);
     }
 }

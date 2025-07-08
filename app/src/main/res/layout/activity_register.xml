@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Order your meal"
+            android:text="Eatery food review app"
             android:textColor="#0BAE77"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -60,20 +60,6 @@
 
     <!-- Email Input -->
     <EditText
-        android:id="@+id/edtUsername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/rounded_edit_text"
-        android:drawableTint="@color/colorAccent"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:padding="12dp" />
-
-    <!-- Password Input -->
-    <EditText
         android:id="@+id/edtPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,9 +69,36 @@
         android:background="@drawable/rounded_edit_text"
         android:drawableTint="@color/colorAccent"
         android:hint="Password"
+        android:inputType="textEmailAddress"
+        android:padding="12dp" />
+
+    <!-- Password Input -->
+    <EditText
+        android:id="@+id/edtPasswordConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/rounded_edit_text"
+        android:drawableTint="@color/colorAccent"
+        android:hint="Password confirm"
         android:padding="12dp" />
 
     <!-- Phone number Input -->
+    <EditText
+        android:id="@+id/edtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/rounded_edit_text"
+        android:drawableTint="@color/colorAccent"
+        android:hint="Email"
+        android:padding="12dp" />
+
+    <!-- Address Input -->
     <EditText
         android:id="@+id/edtPhoneNumber"
         android:layout_width="match_parent"
@@ -96,19 +109,6 @@
         android:background="@drawable/rounded_edit_text"
         android:drawableTint="@color/colorAccent"
         android:hint="Phone number"
-        android:padding="12dp" />
-
-    <!-- Address Input -->
-    <EditText
-        android:id="@+id/edtAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/rounded_edit_text"
-        android:drawableTint="@color/colorAccent"
-        android:hint="Address"
         android:padding="12dp" />
 
     <Button

@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import prm392.project.R;
@@ -18,9 +16,6 @@ import prm392.project.factory.APIClient;
 import prm392.project.inter.AuthService;
 import prm392.project.model.DTOs.LoginRequest;
 import prm392.project.model.DTOs.LoginResponse;
-import prm392.project.model.SignIn;
-import prm392.project.model.ResponseTokenDTO;
-import prm392.project.repo.AuthRepository;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,13 +31,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        edtUsername = findViewById(R.id.edtUsername);
-        edtPassword = findViewById(R.id.edtPassword);
+        edtUsername = findViewById(R.id.edtPassword);
+        edtPassword = findViewById(R.id.edtPasswordConfirm);
         btnLogin = findViewById(R.id.btnLogin);
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
         tvRegister = findViewById(R.id.tvRegister);
 
         btnLogin.setOnClickListener(v -> loginUser());
+
+        //nagative register
+        tvRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     private void loginUser() {

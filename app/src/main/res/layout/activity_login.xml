@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Order your meal"
+            android:text="Eatery food review app"
             android:textColor="#0BAE77"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -46,7 +46,7 @@
 
     <!-- Email Input -->
     <EditText
-        android:id="@+id/edtUsername"
+        android:id="@+id/edtPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -61,7 +61,7 @@
 
     <!-- Password Input -->
     <EditText
-        android:id="@+id/edtPassword"
+        android:id="@+id/edtPasswordConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
