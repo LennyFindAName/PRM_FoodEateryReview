@@ -3,29 +3,28 @@ package prm392.project.model;
 import com.google.gson.annotations.SerializedName;
 
 public class Blog {
-    @SerializedName("BlogId")
+    @SerializedName("blogId")
     private int blogId;
 
-    @SerializedName("UserId")
+    @SerializedName("userId")
     private Integer userId;
 
-    @SerializedName("Username")
+    @SerializedName("username")
     private String username;
 
-    @SerializedName("BlogTitle")
+    @SerializedName("blogTitle")
     private String blogTitle;
+    @SerializedName("blogDate")
+    private String blogDate; // Changed to String to handle "2025-07-01T00:00:00" and avoid API 26 requirement
+
+    @SerializedName("blogLike")
+    private Integer blogLike;
+    @SerializedName("firstImage")
+    private String firstImage; // Changed to String to handle Base64 from API
 
     @SerializedName("BlogContent")
     private String blogContent;
-
-    @SerializedName("BlogDate")
-    private String blogDate; // Changed to String to handle "2025-07-01T00:00:00" and avoid API 26 requirement
-
-    @SerializedName("BlogLike")
-    private Integer blogLike;
-
     // Optional fields that might not be in the response
-    private byte[] blogBillImage;
     private Double blogRate;
     private Integer eateryId;
     private Integer blogStatus;
@@ -98,12 +97,12 @@ public class Blog {
         this.blogLike = blogLike;
     }
 
-    public byte[] getBlogBillImage() {
-        return blogBillImage;
+    public String getFirstImage() {
+        return firstImage;
     }
 
-    public void setBlogBillImage(byte[] blogBillImage) {
-        this.blogBillImage = blogBillImage;
+    public void setFirstImage(String firstImage) {
+        this.firstImage = firstImage;
     }
 
     public Double getBlogRate() {

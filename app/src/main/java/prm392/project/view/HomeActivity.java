@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -24,10 +23,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +31,6 @@ import prm392.project.R;
 import prm392.project.adapter.BlogAdapter;
 import prm392.project.adapter.FoodAdapter;
 import prm392.project.inter.OnCartUpdateListener;
-import prm392.project.repo.FoodRepository;
 import prm392.project.repo.BlogRepository;
 import prm392.project.inter.FoodService;
 import prm392.project.inter.BlogService;
@@ -50,14 +45,14 @@ import retrofit2.Response;
 public class HomeActivity extends AppCompatActivity implements OnCartUpdateListener {
 
     GridView gridView;
-    FoodAdapter foodAdapter;
+    //FoodAdapter foodAdapter;
 
     BlogAdapter blogAdapter;
-    ArrayList<Food> foodList;
+    //ArrayList<Food> foodList;
 
     ArrayList<Blog> blogList;
     SwipeRefreshLayout swipeRefreshLayout;
-    FoodService foodService;
+    //FoodService foodService;
     BlogService blogService;
 
     @Override
@@ -74,11 +69,11 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
         });
 
         blogList =  new ArrayList<>(); // Initialize the blogList
-        foodList = new ArrayList<>(); // Initialize the foodList
+        //foodList = new ArrayList<>(); // Initialize the foodList
         Log.d("HomeActivity", "Food list initialized");
 
-        foodService = FoodRepository.getFoodService(this); // Initialize foodService
-        foodAdapter = new FoodAdapter(this, foodList, this);
+        //foodService = FoodRepository.getFoodService(this); // Initialize foodService
+        //foodAdapter = new FoodAdapter(this, foodList, this);
 
         //For blogs
         blogService = BlogRepository.getBlogService(this); // Initialize blogService
@@ -146,13 +141,13 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
         });
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
-        loadFoodData();
+        loadBlogData();
         Log.d("HomeActivity", "Food data loading started");
 
         // Handle pull-to-refresh
         swipeRefreshLayout.setOnRefreshListener(() -> {
             Log.d("HomeActivity", "Pull-to-refresh triggered");
-            refreshFoodData();  // Your method to refresh data
+            refreshBlogData();  // Your method to refresh data
             swipeRefreshLayout.setRefreshing(false);  // Stop the refresh animation
             Log.d("HomeActivity", "Pull-to-refresh completed");
         });
@@ -192,36 +187,11 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
     }
 
     // Method to load the initial data
-    private void loadFoodData() {
+    private void loadBlogData() {
         updateCartCountAtHome();
         Log.d("HomeActivity", "Loading food data...");
-        Call<List<Food>> call = foodService.getFoodList(1, 99999, "");
+        //Call<List<Food>> call = foodService.getFoodList(1, 99999, "");
         Call<List<Blog>> blogCall = blogService.getBlogList(1, 99999);
-        call.enqueue(new Callback<List<Food>>() {
-            @Override
-            public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
-                Log.d("HomeActivity", "Response received from food service");
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.d("HomeActivity", "Food data successfully loaded");
-                    foodList.clear();
-                    foodList.addAll(response.body());
-                    foodAdapter.notifyDataSetChanged();
-                } else {
-                    Log.d("HomeActivity", "Failed to load food data: " + response.code());
-                    Toast.makeText(HomeActivity.this, "Failed to load data", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Food>> call, Throwable t) {
-                Log.e("HomeActivity", "API error: " + t.getMessage());
-                if (t instanceof java.net.SocketTimeoutException) {
-                    Toast.makeText(HomeActivity.this, "Request timed out. Please try again.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(HomeActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
         blogCall.enqueue(new Callback<List<Blog>>() {
             @Override
@@ -249,17 +219,45 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
             }
         });
 
+        /* call.enqueue(new Callback<List<Food>>() {
+            @Override
+            public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
+                Log.d("HomeActivity", "Response received from food service");
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.d("HomeActivity", "Food data successfully loaded");
+                    foodList.clear();
+                    foodList.addAll(response.body());
+                    foodAdapter.notifyDataSetChanged();
+                } else {
+                    Log.d("HomeActivity", "Failed to load food data: " + response.code());
+                    Toast.makeText(HomeActivity.this, "Failed to load data", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Food>> call, Throwable t) {
+                Log.e("HomeActivity", "API error: " + t.getMessage());
+                if (t instanceof java.net.SocketTimeoutException) {
+                    Toast.makeText(HomeActivity.this, "Request timed out. Please try again.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(HomeActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });*/
+
+
+
 
     }
 
     // Method to refresh data
-    private void refreshFoodData() {
+    private void refreshBlogData() {
         Log.d("HomeActivity", "Refreshing food data...");
-        foodList.clear();  // Clear the existing list
+        //foodList.clear();  // Clear the existing list
         blogList.clear();  // Clear the existing blog list
 
-        loadFoodData();    // Reload the data
-        foodAdapter.notifyDataSetChanged();  // Notify adapter of the data change
+        loadBlogData();    // Reload the data
+       // foodAdapter.notifyDataSetChanged();  // Notify adapter of the data change
         blogAdapter.notifyDataSetChanged();  // Notify blog adapter of the data change
 
         Log.d("HomeActivity", "Food data refreshed");

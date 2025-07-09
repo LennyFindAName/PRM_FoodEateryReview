@@ -2,6 +2,9 @@ package prm392.project.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,8 +78,16 @@ public class BlogAdapter extends BaseAdapter {
         String dateText = "No Date";
         if (blog.getBlogDate() != null && !blog.getBlogDate().isEmpty()) {
             try {
-                // Parse the input date format "2025-07-01T00:00:00"
-                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                SimpleDateFormat inputFormat;
+                // Check if the date contains time (T) or just date
+                if (blog.getBlogDate().contains("T")) {
+                    // Handle full datetime format "2025-07-01T00:00:00"
+                    inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                } else {
+                    // Handle date-only format "2025-07-08"
+                    inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                }
+
                 SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
 
                 Date date = inputFormat.parse(blog.getBlogDate());
@@ -89,10 +100,26 @@ public class BlogAdapter extends BaseAdapter {
         }
         calorieView.setText(dateText);
 
-        // Set default image (since blogs don't have images in current JSON)
-        imageView.setImageResource(R.drawable.salah);
+        // Load image from Base64 string or use default
+        if (blog.getFirstImage() != null && !blog.getFirstImage().isEmpty()) {
+            try {
+                // Decode Base64 string to bitmap
+                byte[] decodedString = Base64.decode(blog.getFirstImage(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-        // Handle click events
+                if (decodedByte != null) {
+                    imageView.setImageBitmap(decodedByte);
+                } else {
+                    imageView.setImageResource(R.drawable.salah);
+                }
+            } catch (IllegalArgumentException e) {
+                imageView.setImageResource(R.drawable.salah);
+            }
+        } else {
+            imageView.setImageResource(R.drawable.salah);
+        }
+
+        // Handle click events , FOR BLOG DETAILS ACTIVITY
         imageView.setOnClickListener(v -> {
             // TODO: Create BlogDetailActivity instead of using FoodDetailActivity
             Intent intent = new Intent(context, FoodDetailActivity.class);
@@ -101,7 +128,7 @@ public class BlogAdapter extends BaseAdapter {
         });
 
         // Hide or modify the add button for blogs
-        addButton.setVisibility(View.GONE); // Hide since it's not relevant for blogs
+        //addButton.setVisibility(View.GONE); // Hide since it's not relevant for blogs
 
         return view;
     }
