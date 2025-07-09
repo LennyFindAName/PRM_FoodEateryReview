@@ -17,5 +17,5 @@ public interface BlogService {
     );
 
     @GET("blog/details/{id}")
-    Call<Blog> getBlogDetails(@Path("id") int blogId);
+    Call<Blog> getBlogDetails(@Path("id") String blogId);
 }

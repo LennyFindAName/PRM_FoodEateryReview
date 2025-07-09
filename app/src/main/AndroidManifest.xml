@@ -34,6 +34,9 @@
             android:name=".view.FoodDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".view.BlogDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.OrderHistoryActivity"
             android:exported="false" />
         <activity

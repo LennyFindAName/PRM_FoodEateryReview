@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import java.util.Locale;
 
 import prm392.project.R;
 import prm392.project.model.Blog;
+import prm392.project.view.BlogDetailActivity;
 import prm392.project.view.FoodDetailActivity;
 
 public class BlogAdapter extends BaseAdapter {
@@ -121,9 +123,8 @@ public class BlogAdapter extends BaseAdapter {
 
         // Handle click events , FOR BLOG DETAILS ACTIVITY
         imageView.setOnClickListener(v -> {
-            // TODO: Create BlogDetailActivity instead of using FoodDetailActivity
-            Intent intent = new Intent(context, FoodDetailActivity.class);
-            intent.putExtra("blog_id", blog.getBlogId());
+            Intent intent = new Intent(context, BlogDetailActivity.class);
+            intent.putExtra("blog_id", String.valueOf(blog.getBlogId()));
             context.startActivity(intent);
         });
 
