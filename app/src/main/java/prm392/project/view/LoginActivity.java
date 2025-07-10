@@ -16,6 +16,7 @@ import prm392.project.factory.APIClient;
 import prm392.project.inter.AuthService;
 import prm392.project.model.DTOs.LoginRequest;
 import prm392.project.model.DTOs.LoginResponse;
+import prm392.project.utils.JwtUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,12 +40,10 @@ public class LoginActivity extends AppCompatActivity {
 
         btnLogin.setOnClickListener(v -> loginUser());
 
-        //nagative register
         tvRegister.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
-
     }
 
     private void loginUser() {
@@ -56,7 +55,6 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // ✅ In thông tin tài khoản ra Logcat
         Log.d("LOGIN_DEBUG", "Username: " + username);
         Log.d("LOGIN_DEBUG", "Password: " + password);
 
@@ -67,22 +65,34 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                // ✅ In response code và body
                 Log.d("LOGIN_DEBUG", "Response Code: " + response.code());
 
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginData = response.body();
+                    String token = loginData.getAccessToken();
 
-                    Log.d("LOGIN_DEBUG", "AccessToken: " + loginData.getAccessToken());
-                    Log.d("LOGIN_DEBUG", "Username (BE response): " + loginData.getUsername());
-                    Log.d("LOGIN_DEBUG", "RoleId: " + loginData.getRoleId());
+                  // giải mã JWT
+                    JwtUtils jwtUtils = new JwtUtils(token);
+                    if (!jwtUtils.isValid()) {
+                        Toast.makeText(LoginActivity.this, "Token invalid or cannot be decoded", Toast.LENGTH_SHORT).show();
+                        Log.e("JWT", "Token decode failed");
+                        return;
+                    }
+                    String userId = jwtUtils.getUserId();
+                    String decodedUsername = jwtUtils.getUsername();
+                    String role = jwtUtils.getRole();
 
-                    // Lưu và chuyển màn
+                    Log.d("JWT", "UserId: " + userId);
+                    Log.d("JWT", "Username: " + decodedUsername);
+                    Log.d("JWT", "Role: " + role);
+
+                    // ✅ Lưu vào SharedPreferences
                     SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("access_token", loginData.getAccessToken());
+                    editor.putString("access_token", token);
                     editor.putString("username", loginData.getUsername());
                     editor.putInt("role_id", loginData.getRoleId());
+                    if (userId != null) editor.putString("user_id", userId);
                     editor.apply();
 
                     Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
@@ -103,5 +113,4 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
 }
