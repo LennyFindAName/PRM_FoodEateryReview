@@ -5,6 +5,7 @@ import android.content.Context;
 import prm392.project.factory.APIClient;
 import prm392.project.inter.BlogService;
 import prm392.project.model.Blog;
+import prm392.project.model.DTOs.BlogRequest;
 import prm392.project.model.Food;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -23,5 +24,9 @@ public class BlogRepository {
 
     public Call<Blog> getBlogDetails(String blogId) {
         return blogService.getBlogDetails(blogId);
+    }
+
+    public Call<Void> createBlog(BlogRequest blog) {
+        return blogService.createBlog(blog);
     }
 }

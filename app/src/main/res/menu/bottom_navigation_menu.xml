@@ -15,4 +15,8 @@
         android:id="@+id/nav_profile"
         android:icon="@drawable/baseline_person_pin_24"
         android:title="Profile" />
+    <item
+        android:id="@+id/nav_create_blog"
+        android:icon="@drawable/baseline_person_pin_24"
+        android:title="Create Blog" />
 </menu>

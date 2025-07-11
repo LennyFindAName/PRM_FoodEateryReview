@@ -87,6 +87,10 @@ public class BlogDetailActivity extends AppCompatActivity {
                     Intent intent = new Intent(BlogDetailActivity.this, GoogleMapsActivity.class);
                     startActivity(intent);
                     finish();
+                } else if (item.getItemId() == R.id.nav_create_blog) {
+                    Intent intent = new Intent(BlogDetailActivity.this, CreateBlogActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 return true;
             }

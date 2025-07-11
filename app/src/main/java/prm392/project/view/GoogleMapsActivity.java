@@ -119,6 +119,10 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                     Intent intent = new Intent(GoogleMapsActivity.this, GoogleMapsActivity.class);
                     startActivity(intent);
                     finish();
+                } else if (item.getItemId() == R.id.nav_create_blog) {
+                    Intent intent = new Intent(GoogleMapsActivity.this, CreateBlogActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 return true;
             }

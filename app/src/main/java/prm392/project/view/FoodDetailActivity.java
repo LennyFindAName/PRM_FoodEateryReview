@@ -95,6 +95,10 @@ public class FoodDetailActivity extends AppCompatActivity {
                     Intent intent = new Intent(FoodDetailActivity.this, GoogleMapsActivity.class);
                     startActivity(intent);
                     finish();
+                } else if (item.getItemId() == R.id.nav_create_blog) {
+                    Intent intent = new Intent(FoodDetailActivity.this, CreateBlogActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 return true;
             }

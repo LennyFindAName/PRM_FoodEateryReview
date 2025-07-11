@@ -174,6 +174,10 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
                     Intent intent = new Intent(HomeActivity.this, GoogleMapsActivity.class);
                     startActivity(intent);
                     finish();
+                } else if (item.getItemId() == R.id.nav_create_blog) {
+                    Intent intent = new Intent(HomeActivity.this, CreateBlogActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 return true;
             }

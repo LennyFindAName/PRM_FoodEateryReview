@@ -87,6 +87,10 @@ public class OrderHistoryActivity extends AppCompatActivity {
                     Intent intent = new Intent(OrderHistoryActivity.this, GoogleMapsActivity.class);
                     startActivity(intent);
                     finish();
+                } else if (item.getItemId() == R.id.nav_create_blog) {
+                    Intent intent = new Intent(OrderHistoryActivity.this, CreateBlogActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 return true;
             }

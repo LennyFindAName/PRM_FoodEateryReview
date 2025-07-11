@@ -55,6 +55,9 @@
             android:name=".view.GoogleMapsActivity"
             android:exported="false" />
         <activity
+            android:name=".view.CreateBlogActivity"
+            android:exported="false"/>
+        <activity
             android:name=".view.MainActivity"
             android:exported="true">
             <intent-filter>
