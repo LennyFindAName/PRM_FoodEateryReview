@@ -22,7 +22,7 @@ public class Blog {
     @SerializedName("firstImage")
     private String firstImage; // Changed to String to handle Base64 from API
 
-    @SerializedName("BlogContent")
+    @SerializedName("blogContent")
     private String blogContent;
     // Optional fields that might not be in the response
     private Double blogRate;

@@ -109,6 +109,50 @@
                     android:textColor="#305F72"
                     android:textSize="16sp" />
             </LinearLayout>
+            <TextView
+                android:id="@+id/foodQualityRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chất lượng món ăn: 5"
+                android:textSize="16sp"
+                android:textColor="#444"
+                android:layout_marginTop="6dp"/>
+
+            <TextView
+                android:id="@+id/environmentRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Không gian: 4"
+                android:textSize="16sp"
+                android:textColor="#444"
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/serviceRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phục vụ: 5"
+                android:textSize="16sp"
+                android:textColor="#444"
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/pricingRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Giá cả: 3"
+                android:textSize="16sp"
+                android:textColor="#444"
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/hygieneRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vệ sinh: 4"
+                android:textSize="16sp"
+                android:textColor="#444"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
