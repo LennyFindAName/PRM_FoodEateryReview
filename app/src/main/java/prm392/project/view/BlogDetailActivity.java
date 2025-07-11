@@ -37,6 +37,7 @@ import android.util.Base64;
 public class BlogDetailActivity extends AppCompatActivity {
     private ImageView blogImage;
     private TextView blogName, blogDescription, blogPrice, blogCalories;
+    private TextView foodQualityRate, environmentRate, serviceRate, pricingRate, hygieneRate;
     private Button btnAddToCart;
     private BlogRepository blogRepository;
     Blog tmpBlog = new Blog();
@@ -54,6 +55,10 @@ public class BlogDetailActivity extends AppCompatActivity {
         blogPrice = findViewById(R.id.blogPrice);
         blogCalories = findViewById(R.id.blogCalories);
         btnAddToCart = findViewById(R.id.btnAddToCart);
+        foodQualityRate = findViewById(R.id.foodQualityRate);
+        environmentRate = findViewById(R.id.environmentRate);
+        serviceRate = findViewById(R.id.serviceRate);
+        pricingRate = findViewById(R.id.pricingRate);
 
         blogRepository = new BlogRepository(this);
 
@@ -117,6 +122,11 @@ public class BlogDetailActivity extends AppCompatActivity {
                         blogDescription.setText(blog.getBlogContent());
                         blogPrice.setText(blog.getBlogDate());
                         blogCalories.setText("Lượt like: " + blog.getBlogLike());
+                        foodQualityRate.setText("Chất lượng món ăn: " + blog.getFoodQualityRate());
+                        environmentRate.setText("Không gian: " + blog.getEnvironmentRate());
+                        serviceRate.setText("Phục vụ: " + blog.getServiceRate());
+                        pricingRate.setText("Giá cả: " + blog.getPricingRate());
+                        hygieneRate.setText("Vệ sinh: " + blog.getHygieneRate());
 
                         if (blog.getFirstImage() != null && !blog.getFirstImage().isEmpty()) {
                             try {
