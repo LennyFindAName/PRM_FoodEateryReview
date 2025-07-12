@@ -31,14 +31,38 @@
                 android:src="@drawable/pr_icon"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="User profile"
                 android:textColor="#0bae77"
                 android:textSize="30sp"
-                android:layout_marginStart="20dp"/>
+                android:layout_marginStart="20dp"
+                android:layout_weight="1" />
 
+            <ImageButton
+                android:id="@+id/btn_edit_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@android:drawable/ic_menu_edit"
+                android:contentDescription="Edit Profile"/>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/hiddenUserId"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/default_profile"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@android:color/darker_gray" />
 
         <!-- Username Field -->
         <TextView
@@ -54,6 +78,21 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:hint="User name"
+            android:enabled="false" />
+
+        <!-- Display Name Field -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Display Name"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/profile_displayName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="User displayName"
             android:enabled="false" />
 
         <!-- Email Field -->
@@ -84,21 +123,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:hint="User phone number"
-            android:enabled="false" />
-
-        <!-- Address Field -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Address"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/profile_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="User address"
             android:enabled="false" />
 
     </LinearLayout>
