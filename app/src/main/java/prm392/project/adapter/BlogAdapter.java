@@ -103,10 +103,25 @@ public class BlogAdapter extends BaseAdapter {
         calorieView.setText(dateText);
 
         // Load image from Base64 string or use default
-        if (blog.getFirstImage() != null && !blog.getFirstImage().isEmpty()) {
+        String imageToDisplay = null;
+
+        // Use first image from blogImages List if available, otherwise fall back to firstImage
+        if (blog.getBlogImages() != null && !blog.getBlogImages().isEmpty()) {
+            imageToDisplay = blog.getBlogImages().get(0); // Get first image from the list
+        } else if (blog.getFirstImage() != null && !blog.getFirstImage().isEmpty()) {
+            imageToDisplay = blog.getFirstImage(); // Fallback to single image
+        }
+
+        if (imageToDisplay != null && !imageToDisplay.isEmpty()) {
             try {
+                // Remove data URL prefix if present
+                String base64String = imageToDisplay;
+                if (base64String.contains(",")) {
+                    base64String = base64String.substring(base64String.indexOf(",") + 1);
+                }
+
                 // Decode Base64 string to bitmap
-                byte[] decodedString = Base64.decode(blog.getFirstImage(), Base64.DEFAULT);
+                byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
                 if (decodedByte != null) {

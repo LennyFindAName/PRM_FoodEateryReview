@@ -2,6 +2,8 @@ package prm392.project.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Blog {
     @SerializedName("blogId")
     private int blogId;
@@ -21,6 +23,9 @@ public class Blog {
     private Integer blogLike;
     @SerializedName("firstImage")
     private String firstImage; // Changed to String to handle Base64 from API
+
+    @SerializedName("blogImagesBase64")
+    private List<String> blogImages; // Changed to String to handle Base64 from API
 
     @SerializedName("blogContent")
     private String blogContent;
@@ -103,6 +108,14 @@ public class Blog {
 
     public void setFirstImage(String firstImage) {
         this.firstImage = firstImage;
+    }
+
+    public List<String> getBlogImages() {
+        return blogImages;
+    }
+
+    public void setBlogImages(List<String> blogImages) {
+        this.blogImages = blogImages;
     }
 
     public Double getBlogRate() {

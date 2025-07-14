@@ -178,20 +178,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
     private void updateCartCount(BottomNavigationView bottomNavigationView, int itemCount) {
-        MenuItem cartMenuItem = bottomNavigationView.getMenu().findItem(R.id.nav_cart);
-        if (cartMenuItem != null) {
-            TextView sizeCart = findViewById(R.id.cartSize);
-            if (itemCount > 0) {
-                sizeCart.setText(String.valueOf(itemCount));
-                sizeCart.setVisibility(View.VISIBLE);
-                sizeCart.setZ(1f);
-                bottomNavigationView.setZ(0f);
-            } else {
-                sizeCart.setText("0");
-                sizeCart.setZ(1f);
-                bottomNavigationView.setZ(0f);
-            }
-        }
+
     }
 
     private void updateCartCountAtHome() {

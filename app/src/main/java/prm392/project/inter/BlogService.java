@@ -18,7 +18,7 @@ public interface BlogService {
             @Query("pageSize") int pageSize
     );
 
-    @GET("blog/details/{id}")
+    @GET("blog/detailsApp/{id}")
     Call<Blog> getBlogDetails(@Path("id") String blogId);
 
     @POST("blog/create")

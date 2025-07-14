@@ -3,13 +3,11 @@ package prm392.project.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -57,7 +55,6 @@ public class OrderHistoryActivity extends AppCompatActivity {
         orderList = new ArrayList<>();
         orderAdapter = new OrderAdapter(this, orderList);
         loadOrderData();
-        updateCartCountAtHome();
         orderHistoryList.setAdapter(orderAdapter);
 
         // Handle pull-to-refresh
@@ -97,29 +94,6 @@ public class OrderHistoryActivity extends AppCompatActivity {
         });
     }
 
-    private void updateCartCount(BottomNavigationView bottomNavigationView, int itemCount) {
-        MenuItem cartMenuItem = bottomNavigationView.getMenu().findItem(R.id.nav_cart);
-        if (cartMenuItem != null) {
-            TextView sizeCart = findViewById(R.id.cartSize);
-            if (itemCount > 0) {
-                sizeCart.setText(String.valueOf(itemCount));
-                sizeCart.setVisibility(View.VISIBLE);
-                sizeCart.setZ(1f);
-                bottomNavigationView.setZ(0f);
-            } else {
-                sizeCart.setText("0");
-                sizeCart.setZ(1f);
-                bottomNavigationView.setZ(0f);
-            }
-        }
-    }
-
-    private void updateCartCountAtHome() {
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        SharedPreferences sharedPreferences = this.getSharedPreferences("cart", Context.MODE_PRIVATE);
-        int itemCount = sharedPreferences.getAll().size();
-        updateCartCount(bottomNavigationView, itemCount);
-    }
 
     private void loadOrderData() {
         // call API
