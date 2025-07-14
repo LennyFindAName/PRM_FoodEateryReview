@@ -1,20 +1,39 @@
 package prm392.project.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.File;
+
 public class User {
+    @SerializedName("userID")
     private String UserID;
+
+    @SerializedName("username")
     private String Username;
+
+    @SerializedName("email")
     private String Email;
+
+    @SerializedName("phoneNumber")
     private String PhoneNumber;
-    private String Address;
+
+    @SerializedName("displayName")
+    private String DisplayName;
+
+    @SerializedName("role")
     private String Role;
 
-    public User(String userID, String username, String email, String phoneNumber, String address, String role) {
+    @SerializedName("userImage")
+    private String UserImage;
+
+    public User(String userID, String username, String email, String phoneNumber, String displayName, String role, String userImage) {
         UserID = userID;
         Username = username;
         Email = email;
         PhoneNumber = phoneNumber;
-        Address = address;
+        DisplayName = displayName;
         Role = role;
+        UserImage = userImage;
     }
 
     public User() {
@@ -52,12 +71,12 @@ public class User {
         PhoneNumber = phoneNumber;
     }
 
-    public String getAddress() {
-        return Address;
+    public String getDisplayName() {
+        return DisplayName;
     }
 
-    public void setAddress(String address) {
-        Address = address;
+    public void setDisplayName(String displayName) {
+        DisplayName = displayName;
     }
 
     public String getRole() {
@@ -66,5 +85,13 @@ public class User {
 
     public void setRole(String role) {
         Role = role;
+    }
+
+    public String getUserImage() {
+        return UserImage;
+    }
+
+    public void setUserImage(String userImage) {
+        UserImage = userImage;
     }
 }

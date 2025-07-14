@@ -52,4 +52,7 @@ dependencies {
     implementation("com.auth0.android:jwtdecode:2.0.1")
     implementation("com.google.android.gms:play-services-maps:19.0.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("javax.validation:validation-api:2.0.1.Final")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+
 }

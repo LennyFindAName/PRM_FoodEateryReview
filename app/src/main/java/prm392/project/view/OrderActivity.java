@@ -42,7 +42,7 @@ import retrofit2.Response;
 
 public class OrderActivity extends AppCompatActivity {
 
-    private TextView fullName, address, phoneNumber;
+    private TextView fullName, displayName, phoneNumber;
     private ListView cartItemListView;
     private TextView totalPrice;
     private RadioButton paymentCOD, paymentQRCode;
@@ -63,7 +63,7 @@ public class OrderActivity extends AppCompatActivity {
         orderRepository = new OrderRepository(this);
 
         fullName = findViewById(R.id.fullName);
-        address = findViewById(R.id.address);
+        displayName = findViewById(R.id.displayName);
         phoneNumber = findViewById(R.id.phoneNumber);
         cartItemListView = findViewById(R.id.cartItemListView);
         totalPrice = findViewById(R.id.totalPrice);
@@ -134,12 +134,12 @@ public class OrderActivity extends AppCompatActivity {
         orderButton.setOnClickListener(v -> {
             // Get customer info from the fields
             String customerName = fullName.getText().toString();
-            String customerAddress = address.getText().toString();
+            String customerDisplayName = displayName.getText().toString();
             String customerPhone = phoneNumber.getText().toString();
             String paymentMethod = getSelectedPaymentMethod();
 
             // Validate input
-            if (customerName.isEmpty() || customerAddress.isEmpty() || customerPhone.isEmpty()) {
+            if (customerName.isEmpty() || customerDisplayName.isEmpty() || customerPhone.isEmpty()) {
                 Toast.makeText(OrderActivity.this, "Please fill in all customer information", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -156,7 +156,7 @@ public class OrderActivity extends AppCompatActivity {
             }
 
             // Create the order DTO
-            CreateOrderDTO createOrderDTO = new CreateOrderDTO(customerName, customerPhone, customerAddress, paymentMethod, minimalOrderDetails);
+            CreateOrderDTO createOrderDTO = new CreateOrderDTO(customerName, customerPhone, customerDisplayName, paymentMethod, minimalOrderDetails);
             // Create the order using OrderRepository
             orderRepository.createOrder(createOrderDTO).enqueue(new Callback<String>() {
                 @Override
@@ -193,7 +193,7 @@ public class OrderActivity extends AppCompatActivity {
                         User user = response.body();
                         // Set user data to views
                         fullName.setText(user.getUsername());
-                        address.setText(user.getAddress());
+                        displayName.setText(user.getDisplayName());
                         phoneNumber.setText(user.getPhoneNumber());
                     } else {
                         // Log the response body if it's null
