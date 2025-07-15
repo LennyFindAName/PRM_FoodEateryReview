@@ -110,6 +110,10 @@ public class OrderActivity extends AppCompatActivity {
                     Intent intent = new Intent(OrderActivity.this, CreateBlogActivity.class);
                     startActivity(intent);
                     finish();
+                } else if (item.getItemId() == R.id.nav_chat) {
+                    Intent intent = new Intent(OrderActivity.this, ChatActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 return true;
             }

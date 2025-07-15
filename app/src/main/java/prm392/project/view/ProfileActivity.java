@@ -124,6 +124,10 @@ public class ProfileActivity extends AppCompatActivity {
                     Intent intent = new Intent(ProfileActivity.this, CreateBlogActivity.class);
                     startActivity(intent);
                     finish();
+                } else if (item.getItemId() == R.id.nav_chat) {
+                    Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 return true;
             }

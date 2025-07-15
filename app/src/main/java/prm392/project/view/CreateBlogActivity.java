@@ -80,6 +80,10 @@ public class CreateBlogActivity extends AppCompatActivity {
                             Intent intent = new Intent(CreateBlogActivity.this, CreateBlogActivity.class);
                             startActivity(intent);
                             finish();
+                        } else if (item.getItemId() == R.id.nav_chat) {
+                            Intent intent = new Intent(CreateBlogActivity.this, ChatActivity.class);
+                            startActivity(intent);
+                            finish();
                         }
                         return true;
                     }

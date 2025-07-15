@@ -1,5 +1,6 @@
 package prm392.project.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -47,6 +48,33 @@ public class ChatActivity extends AppCompatActivity {
         Button sendButton = findViewById(R.id.send_button);
         userRepository = new UserRepository(this);
         loadUserProfile();
+        // Xử lý sự kiện cho BottomNavigationView
+        com.google.android.material.bottomnavigation.BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_chat);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_home) {
+                startActivity(new Intent(ChatActivity.this, HomeActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_cart) {
+                startActivity(new Intent(ChatActivity.this, CartListActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_profile) {
+                startActivity(new Intent(ChatActivity.this, ProfileActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_create_blog) {
+                startActivity(new Intent(ChatActivity.this, CreateBlogActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_chat) {
+                // Đang ở màn chat, không cần chuyển
+                return true;
+            }
+            return false;
+        });
 
         // Sử dụng APIClient để tạo ChatService
         chatService = prm392.project.factory.APIClient.getClient(this).create(ChatService.class);
@@ -54,7 +82,9 @@ public class ChatActivity extends AppCompatActivity {
         Button backButton = findViewById(R.id.back_button);
         Button clearChatButton = findViewById(R.id.clear_chat_button);
         backButton.setOnClickListener(view -> {
-            finish(); // This will close the current activity and return to the previous one
+            Intent intent = new Intent(ChatActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         clearChatButton.setOnClickListener(view -> {
