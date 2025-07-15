@@ -120,10 +120,6 @@ public class ProfileActivity extends AppCompatActivity {
                     Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
                     startActivity(intent);
                     finish();
-                } else if (item.getItemId() == R.id.nav_location) {
-                    Intent intent = new Intent(ProfileActivity.this, GoogleMapsActivity.class);
-                    startActivity(intent);
-                    finish();
                 } else if (item.getItemId() == R.id.nav_create_blog) {
                     Intent intent = new Intent(ProfileActivity.this, CreateBlogActivity.class);
                     startActivity(intent);

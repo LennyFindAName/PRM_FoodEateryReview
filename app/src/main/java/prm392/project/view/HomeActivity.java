@@ -94,38 +94,14 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
                 public boolean onMenuItemClick(MenuItem item) {
                     if (item.getItemId() == R.id.logout) {
                         Log.d("HomeActivity", "Logout menu item clicked");
-
-                        // Call logout API
-                        UserRepository userRepository = new UserRepository(HomeActivity.this);
-                        Log.d("HomeActivity", "Calling logout API...");
-
-                        userRepository.logout().enqueue(new Callback<Boolean>() {
-                            @Override
-                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                                Log.d("HomeActivity", "Logout API response received");
-
-                                if (response.isSuccessful() && response.body() != null) {
-                                    Log.d("HomeActivity", "Logout API successful, response: " + response.body());
-                                    if (response.body()) {
-                                        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    } else {
-                                        Log.d("HomeActivity", "Logout API returned false");
-                                        Toast.makeText(HomeActivity.this, "Logout failed", Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Log.d("HomeActivity", "Logout API failed, response code: " + response.code());
-                                    Toast.makeText(HomeActivity.this, "Logout failed", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Boolean> call, Throwable t) {
-                                Log.d("HomeActivity", "Logout API call failed: " + t.getMessage());
-                                Toast.makeText(HomeActivity.this, "Logout failed", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        // Xóa token và chuyển về MainActivity
+                        SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.remove("access_token");
+                        editor.apply();
+                        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     } else if (item.getItemId() == R.id.orderHistory) {
                         Intent intent = new Intent(HomeActivity.this, OrderHistoryActivity.class);
                         startActivity(intent);
@@ -172,18 +148,30 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
                     Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
                     startActivity(intent);
                     finish();
-                } else if (item.getItemId() == R.id.nav_location) {
-                    Intent intent = new Intent(HomeActivity.this, GoogleMapsActivity.class);
-                    startActivity(intent);
-                    finish();
                 } else if (item.getItemId() == R.id.nav_create_blog) {
                     Intent intent = new Intent(HomeActivity.this, CreateBlogActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (item.getItemId() == R.id.nav_chat) {
+                    Intent intent = new Intent(HomeActivity.this, ChatActivity.class);
                     startActivity(intent);
                     finish();
                 }
                 return true;
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
+        String token = prefs.getString("access_token", null);
+        if (token == null || token.isEmpty()) {
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override

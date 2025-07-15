@@ -106,10 +106,6 @@ public class OrderActivity extends AppCompatActivity {
                     Intent intent = new Intent(OrderActivity.this, ProfileActivity.class);
                     startActivity(intent);
                     finish();
-                } else if (item.getItemId() == R.id.nav_location) {
-                    Intent intent = new Intent(OrderActivity.this, GoogleMapsActivity.class);
-                    startActivity(intent);
-                    finish();
                 } else if (item.getItemId() == R.id.nav_create_blog) {
                     Intent intent = new Intent(OrderActivity.this, CreateBlogActivity.class);
                     startActivity(intent);
