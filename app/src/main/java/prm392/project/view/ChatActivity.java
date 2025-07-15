@@ -181,10 +181,13 @@ public class ChatActivity extends AppCompatActivity {
 
         // Bong bóng tin nhắn
         TextView messageView = new TextView(this);
-        messageView.setText(message);
+        messageView.setText(parseMarkdownBold(message));
         messageView.setTextColor(getResources().getColor(android.R.color.black));
         messageView.setTextSize(16);
         messageView.setPadding(0, 0, 0, 0);
+        messageView.setLineSpacing(0, 1.2f);
+        messageView.setMaxWidth((int)(getResources().getDisplayMetrics().widthPixels * 0.7));
+        messageView.setMovementMethod(android.text.method.LinkMovementMethod.getInstance());
         LinearLayout.LayoutParams bubbleParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -202,6 +205,27 @@ public class ChatActivity extends AppCompatActivity {
             row.addView(contentLayout);
         }
         messagesContainer.addView(row);
+    }
+
+    // Parse markdown bold: **text** thành in đậm và loại bỏ dấu **
+    private android.text.Spannable parseMarkdownBold(String text) {
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\*\\*(.+?)\\*\\*");
+        java.util.regex.Matcher matcher = pattern.matcher(text);
+        android.text.SpannableStringBuilder builder = new android.text.SpannableStringBuilder();
+        int lastEnd = 0;
+        while (matcher.find()) {
+            // Thêm đoạn trước **
+            builder.append(text.substring(lastEnd, matcher.start()));
+            // Đoạn cần in đậm
+            String boldText = matcher.group(1);
+            int start = builder.length();
+            builder.append(boldText);
+            builder.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), start, start + boldText.length(), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            lastEnd = matcher.end();
+        }
+        // Thêm phần còn lại
+        builder.append(text.substring(lastEnd));
+        return builder;
     }
 
     // Hiệu ứng loading động cho bot
