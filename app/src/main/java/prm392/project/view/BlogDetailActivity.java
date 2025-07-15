@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.SeekBar;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,7 +43,7 @@ public class BlogDetailActivity extends AppCompatActivity {
     private TextView imageCounter;
     private ImageCarouselAdapter imageAdapter;
     private TextView blogName, blogDescription, blogPrice, blogCalories;
-    private TextView foodQualityRate, environmentRate, serviceRate, pricingRate, hygieneRate;
+    private SeekBar foodQualityRate, environmentRate, serviceRate, pricingRate, hygieneRate;
     private Button btnAddToCart;
     private BlogRepository blogRepository;
     Blog tmpBlog = new Blog();
@@ -226,11 +227,11 @@ public class BlogDetailActivity extends AppCompatActivity {
 
                         blogPrice.setText(blog.getBlogDate());
                         blogCalories.setText("Lượt like: " + blog.getBlogLike());
-                        foodQualityRate.setText("Chất lượng món ăn: " + blog.getFoodQualityRate());
-                        environmentRate.setText("Không gian: " + blog.getEnvironmentRate());
-                        serviceRate.setText("Phục vụ: " + blog.getServiceRate());
-                        pricingRate.setText("Giá cả: " + blog.getPricingRate());
-                        hygieneRate.setText("Vệ sinh: " + blog.getHygieneRate());
+                        foodQualityRate.setProgress(blog.getFoodQualityRate());
+                        environmentRate.setProgress(blog.getEnvironmentRate());
+                        serviceRate.setProgress(blog.getServiceRate());
+                        pricingRate.setProgress(blog.getPricingRate());
+                        hygieneRate.setProgress(blog.getHygieneRate());
 
                         // Setup image carousel
                         List<String> imageList = new ArrayList<>();

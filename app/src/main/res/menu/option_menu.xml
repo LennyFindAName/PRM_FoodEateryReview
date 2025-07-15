@@ -6,6 +6,7 @@
         android:id="@+id/orderHistory"
         android:title="Order History"
         app:showAsAction="always"
+        android:visible="false"
         android:icon="@drawable/baseline_shopping_cart_24"/>
     <item
         android:id="@+id/logout"

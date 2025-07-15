@@ -76,7 +76,6 @@ public class BlogAdapter extends BaseAdapter {
         // Show username in description field
         descriptionView.setText("By: " + (blog.getUsername() != null ? blog.getUsername() : "Unknown"));
 
-        // Format date in "calorie" field using SimpleDateFormat (API level 24 compatible)
         String dateText = "No Date";
         if (blog.getBlogDate() != null && !blog.getBlogDate().isEmpty()) {
             try {
