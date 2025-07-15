@@ -64,4 +64,11 @@ public class JwtUtils {
         return jwt != null;
     }
 
+    public static boolean isTokenValid(android.content.Context context) {
+        android.content.SharedPreferences prefs = context.getSharedPreferences("auth", android.content.Context.MODE_PRIVATE);
+        String token = prefs.getString("access_token", null);
+        if (token == null || token.isEmpty()) return false;
+        JwtUtils jwtUtils = new JwtUtils(token);
+        return jwtUtils.isValid() && !jwtUtils.isExpired();
+    }
 }

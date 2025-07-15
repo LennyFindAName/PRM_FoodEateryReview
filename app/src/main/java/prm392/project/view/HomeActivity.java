@@ -165,10 +165,9 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
     @Override
     protected void onStart() {
         super.onStart();
-        SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
-        String token = prefs.getString("access_token", null);
-        if (token == null || token.isEmpty()) {
-            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+        if (!prm392.project.utils.JwtUtils.isTokenValid(this)) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         }

@@ -112,6 +112,17 @@ public class BlogDetailActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!prm392.project.utils.JwtUtils.isTokenValid(this)) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }
+    }
+
     private void setupImageCarousel(List<String> imageList) {
         if (imageList == null || imageList.isEmpty()) {
             // Show placeholder image
