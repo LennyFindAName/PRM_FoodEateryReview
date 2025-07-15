@@ -14,7 +14,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/chat"
-        android:title="Chat with shop"
+        android:title="Chat with AI"
         app:showAsAction="always"
         android:icon="@drawable/ic_back"/>
 </menu>

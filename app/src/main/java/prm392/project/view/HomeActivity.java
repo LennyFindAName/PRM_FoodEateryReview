@@ -131,7 +131,9 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
                         startActivity(intent);
                     }
                     else if (item.getItemId() == R.id.chat){
+                        // Mở ChatActivity, đổi tên hiển thị là Chat with AI
                         Intent intent = new Intent(HomeActivity.this, ChatActivity.class);
+                        intent.putExtra("chatType", "AI");
                         startActivity(intent);
                     }
                     return false;

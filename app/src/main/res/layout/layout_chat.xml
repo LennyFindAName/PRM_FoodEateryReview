@@ -8,14 +8,28 @@
     android:background="@android:color/white">
 
     <!-- Back Button -->
-    <Button
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back"
-        android:background="@color/colorAccent"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="16dp" />
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Back"
+            android:background="@color/colorAccent"
+            android:textColor="@android:color/white" />
+        <Button
+            android:id="@+id/clear_chat_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Clear Chat"
+            android:background="@color/colorAccent"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 
     <!-- Title TextView -->
     <TextView
