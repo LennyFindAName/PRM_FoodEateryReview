@@ -97,8 +97,8 @@ public class BlogDetailActivity extends AppCompatActivity {
                     Intent intent = new Intent(BlogDetailActivity.this, ProfileActivity.class);
                     startActivity(intent);
                     finish();
-                } else if (item.getItemId() == R.id.nav_location) {
-                    Intent intent = new Intent(BlogDetailActivity.this, GoogleMapsActivity.class);
+                } else if (item.getItemId() == R.id.nav_chat) {
+                    Intent intent = new Intent(BlogDetailActivity.this, ChatActivity.class);
                     startActivity(intent);
                     finish();
                 } else if (item.getItemId() == R.id.nav_create_blog) {

@@ -1,5 +1,6 @@
 package prm392.project.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -9,34 +10,40 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.List;
 
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 import prm392.project.R;
 import prm392.project.inter.ChatService;
-import prm392.project.model.ChatMessage;
+import prm392.project.model.ChatRequest;
+import prm392.project.model.ChatResponse;
+import prm392.project.model.ChatHistoryModel;
 import prm392.project.model.User;
+import prm392.project.model.MessageModel;
 import prm392.project.repo.UserRepository;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import android.widget.ImageButton;
 
 public class ChatActivity extends AppCompatActivity {
-    private Socket socket;
-    private LinearLayout messagesContainer;
+    private RecyclerView recyclerViewMessages;
+    private MessageAdapter messageAdapter;
+    private List<MessageModel> messageList = new ArrayList<>();
     private EditText messageInput;
+    private ImageButton sendButton;
+    private ImageButton backButton;
+    private ImageButton clearChatButton;
     private UserRepository userRepository;
     private ChatService chatService;
-
     private User currentUser;
 
     @Override
@@ -44,89 +51,122 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_chat);
 
-        messagesContainer = findViewById(R.id.messages_container);
+        recyclerViewMessages = findViewById(R.id.recycler_view_messages);
         messageInput = findViewById(R.id.message_input);
-        Button sendButton = findViewById(R.id.send_button);
+        sendButton = findViewById(R.id.send_button);
+        backButton = findViewById(R.id.back_button);
+        clearChatButton = findViewById(R.id.clear_chat_button);
         userRepository = new UserRepository(this);
+        messageAdapter = new MessageAdapter(messageList);
+        recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewMessages.setAdapter(messageAdapter);
+
         loadUserProfile();
-
-        // Initialize Retrofit
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://poke-life.onrender.com/api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        chatService = retrofit.create(ChatService.class);
-
-        // Connect to Socket.IO server
-        try {
-            socket = IO.socket("https://poke-life.onrender.com");
-            socket.connect();
-            Log.d("ChatActivity", "Connect socket.io successfully");
-        } catch (URISyntaxException e) {
-            Log.d("ChatActivity", "Connect socket.io failed!");
-            e.printStackTrace();
-        }
-
-        // Listen for messages
-        socket.on("message", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                runOnUiThread(() -> {
-                    JSONObject message = (JSONObject) args[0];
-                    addMessage("Admin: " + message.optString("text"));
-                });
+        // Xử lý sự kiện cho BottomNavigationView
+        com.google.android.material.bottomnavigation.BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_chat);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_home) {
+                startActivity(new Intent(ChatActivity.this, HomeActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_cart) {
+                startActivity(new Intent(ChatActivity.this, CartListActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_profile) {
+                startActivity(new Intent(ChatActivity.this, ProfileActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_create_blog) {
+                startActivity(new Intent(ChatActivity.this, CreateBlogActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_chat) {
+                // Đang ở màn chat, không cần chuyển
+                return true;
             }
+            return false;
         });
 
-        Button backButton = findViewById(R.id.back_button);
+        // Sử dụng APIClient để tạo ChatService
+        chatService = prm392.project.factory.APIClient.getClient(this).create(ChatService.class);
+
         backButton.setOnClickListener(view -> {
-            finish(); // This will close the current activity and return to the previous one
+            Intent intent = new Intent(ChatActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
         });
 
-        // Handle send button click
+        clearChatButton.setOnClickListener(view -> {
+            chatService.clearChat().enqueue(new retrofit2.Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        messageList.clear();
+                        messageAdapter.notifyDataSetChanged();
+                        Toast.makeText(ChatActivity.this, "Chat history cleared", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ChatActivity.this, "Failed to clear chat history", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(ChatActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+
         sendButton.setOnClickListener(view -> {
             String message = messageInput.getText().toString().trim();
             if (!message.isEmpty()) {
-                sendMessage(message);
+                sendUserMessage(message);
                 messageInput.setText("");
             }
         });
     }
 
-    private void sendMessage(String message) {
-        String sender = currentUser.getEmail();
-        String userId = "admin";
-
-        ChatMessage chatMessage = new ChatMessage(sender, message, userId);
-        chatService.sendMessage(chatMessage).enqueue(new Callback<Void>() {
+    private void sendUserMessage(String message) {
+        // Thêm tin nhắn user vào list
+        MessageModel userMsg = new MessageModel(message, "Bạn", false, System.currentTimeMillis());
+        messageList.add(userMsg);
+        messageAdapter.notifyItemInserted(messageList.size() - 1);
+        scrollToBottom();
+        // Hiển thị hiệu ứng bot đang trả lời (nếu muốn, có thể thêm item typing vào list)
+        // Gửi request lên server
+        ChatRequest chatRequest = new ChatRequest(message);
+        chatService.sendMessage(chatRequest).enqueue(new Callback<ChatResponse>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    addMessage("You: " + message); // Display message in UI
+            public void onResponse(Call<ChatResponse> call, Response<ChatResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    MessageModel botMsg = new MessageModel(response.body().getResponse(), "Chatbot", true, System.currentTimeMillis());
+                    messageList.add(botMsg);
+                    messageAdapter.notifyItemInserted(messageList.size() - 1);
+                    scrollToBottom();
                 } else {
                     Toast.makeText(ChatActivity.this, "Failed to send message", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<ChatResponse> call, Throwable t) {
                 Toast.makeText(ChatActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void addMessage(String message) {
-        TextView messageView = new TextView(this);
-        messageView.setText(message);
-        messagesContainer.addView(messageView);
+    private void scrollToBottom() {
+        int itemCount = messageAdapter.getItemCount();
+        if (itemCount > 0) {
+            recyclerViewMessages.post(() -> recyclerViewMessages.smoothScrollToPosition(itemCount - 1));
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        socket.disconnect();
-        socket.off("message");
     }
 
     private void loadUserProfile() {
@@ -136,9 +176,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         User user = response.body();
-                        // Set user data to views
                         currentUser = user;
-                        // Load chat history after getting the user profile
                         loadChatHistory();
                     } else {
                         Log.e("ChatActivity", "Response body is null");
@@ -158,39 +196,24 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void loadChatHistory() {
-        String userId = currentUser.getEmail(); // Assuming the user ID is the email
-
-        chatService.getChatHistory(userId).enqueue(new Callback<List<ChatMessage>>() {
+        chatService.getChatHistory().enqueue(new Callback<List<ChatHistoryModel>>() {
             @Override
-            public void onResponse(Call<List<ChatMessage>> call, Response<List<ChatMessage>> response) {
-                if (response.isSuccessful()) {
-                    List<ChatMessage> chatMessages = response.body();
-                    if (chatMessages != null) {
-                        for (ChatMessage message : chatMessages) {
-                            String displayMessage = message.getSender().equals(userId) ? "You: " : "Admin: ";
-                            displayMessage += message.getText();
-                            addMessage(displayMessage);
-                        }
+            public void onResponse(Call<List<ChatHistoryModel>> call, Response<List<ChatHistoryModel>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<ChatHistoryModel> chatList = response.body();
+                    for (ChatHistoryModel chat : chatList) {
+                        messageList.add(new MessageModel(chat.getMessage(), "Bạn", false, System.currentTimeMillis()));
+                        messageList.add(new MessageModel(chat.getResponse(), "Chatbot", true, System.currentTimeMillis()));
                     }
+                    messageAdapter.notifyDataSetChanged();
+                    scrollToBottom();
                 } else {
-                    // Log the error details
-                    Log.e("ChatActivity", "Error code: " + response.code());
-                    Log.e("ChatActivity", "Error message: " + response.message());
-                    if (response.errorBody() != null) {
-                        try {
-                            Log.e("ChatActivity", "Error body: " + response.errorBody().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
                     Toast.makeText(ChatActivity.this, "Failed to load chat history", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<ChatMessage>> call, Throwable t) {
-                // Log the failure details
-                Log.e("ChatActivity", "API call failed", t);
+            public void onFailure(Call<List<ChatHistoryModel>> call, Throwable t) {
                 Toast.makeText(ChatActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

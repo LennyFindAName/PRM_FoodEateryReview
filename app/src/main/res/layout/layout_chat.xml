@@ -1,83 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/chat_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="@android:color/white">
 
-    <!-- Back Button -->
-    <Button
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back"
-        android:background="@color/colorAccent"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="16dp" />
-
-    <!-- Title TextView -->
-    <TextView
-        android:id="@+id/chat_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chat"
-        android:textSize="24sp"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="16dp"
-        android:layout_gravity="center_horizontal" />
-
-    <ScrollView
-        android:id="@+id/scroll_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true"
-        android:background="@android:color/background_light"
-        android:padding="8dp"
-        android:clipToPadding="false">
-
-        <LinearLayout
-            android:id="@+id/messages_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
-    </ScrollView>
-
+    <!-- Toolbar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp">
+        android:padding="12dp"
+        android:gravity="center_vertical">
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back"
+            android:contentDescription="Back"/>
+        <TextView
+            android:id="@+id/chat_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Chatbot"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+        <ImageButton
+            android:id="@+id/clear_chat_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="Clear"/>
+    </LinearLayout>
+
+    <!-- Danh sách tin nhắn -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_messages"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"/>
+
+    <!-- Nhập tin nhắn -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="@android:color/white"
+        android:gravity="center_vertical">
 
         <EditText
             android:id="@+id/message_input"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_weight="1"
-            android:hint="Type a message"
-            android:inputType="text"
+            android:hint="Nhập tin nhắn..."
+            android:background="@drawable/input"
             android:padding="12dp"
-            android:background="@drawable/edittext_background"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="16sp"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/send_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send"
-            android:padding="12dp"
-            android:background="@color/colorAccent"
-            android:textColor="@android:color/white"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:drawablePadding="8dp" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_send"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Send"/>
     </LinearLayout>
+
+    <!-- Bottom Navigation View -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bottom_nav"
+        app:menu="@menu/bottom_navigation_menu"
+        app:itemIconTint="@color/bottom_nav_item_color"
+        app:itemTextColor="@color/bottom_nav_item_color"/>
 </LinearLayout>

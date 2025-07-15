@@ -83,12 +83,12 @@ public class CartListActivity extends AppCompatActivity {
                     Intent intent = new Intent(CartListActivity.this, ProfileActivity.class);
                     startActivity(intent);
                     finish();
-                } else if (item.getItemId() == R.id.nav_location) {
-                    Intent intent = new Intent(CartListActivity.this, GoogleMapsActivity.class);
-                    startActivity(intent);
-                    finish();
                 } else if (item.getItemId() == R.id.nav_create_blog) {
                     Intent intent = new Intent(CartListActivity.this, CreateBlogActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (item.getItemId() == R.id.nav_chat) {
+                    Intent intent = new Intent(CartListActivity.this, ChatActivity.class);
                     startActivity(intent);
                     finish();
                 }
