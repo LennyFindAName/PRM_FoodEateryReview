@@ -37,6 +37,7 @@ import prm392.project.repo.UserRepository;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.widget.ImageButton;
 
 public class CreateBlogActivity extends AppCompatActivity {
     private EditText titleEditText, contentEditText, dateEditText, eateryAddressEditText, eateryLocationEditText,
@@ -50,6 +51,8 @@ public class CreateBlogActivity extends AppCompatActivity {
     private ArrayList<String> blogImagesBase64 = new ArrayList<>();
     private ImageView imageViewBill;
     private LinearLayout layoutBlogImages;
+    private ImageButton buttonSelectBillImage;
+    private ImageButton buttonSelectBlogImages;
 
 
     @Override
@@ -104,8 +107,8 @@ public class CreateBlogActivity extends AppCompatActivity {
         priceRangeEditText = findViewById(R.id.editTextPriceRange);
         submitButton = findViewById(R.id.buttonSubmit);
 
-        Button buttonSelectBillImage = findViewById(R.id.buttonSelectBillImage);
-        Button buttonSelectBlogImages = findViewById(R.id.buttonSelectBlogImages);
+        buttonSelectBillImage = findViewById(R.id.buttonSelectBillImage);
+        buttonSelectBlogImages = findViewById(R.id.buttonSelectBlogImages);
         imageViewBill = findViewById(R.id.imageViewBill);
         layoutBlogImages = findViewById(R.id.layoutBlogImages);
 

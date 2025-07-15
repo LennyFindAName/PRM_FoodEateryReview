@@ -42,12 +42,11 @@
             android:layout_alignParentBottom="true"
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="#23c55e"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_bottom_nav"
             app:menu="@menu/bottom_navigation_menu"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:itemIconTint="@color/bottom_nav_item_color"
+            app:itemTextColor="@color/bottom_nav_item_color" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
