@@ -58,7 +58,7 @@ public class CreateBlogActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_blog);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_home);
+        bottomNavigationView.setSelectedItemId(R.id.nav_create_blog);
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @SuppressLint("NonConstantResourceId")
