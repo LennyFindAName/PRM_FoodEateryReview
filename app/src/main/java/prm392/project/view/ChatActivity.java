@@ -201,6 +201,8 @@ public class ChatActivity extends AppCompatActivity {
             public void onResponse(Call<List<ChatHistoryModel>> call, Response<List<ChatHistoryModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<ChatHistoryModel> chatList = response.body();
+                    java.util.Collections.reverse(chatList); // Đảo ngược thứ tự lịch sử
+                    messageList.clear();
                     for (ChatHistoryModel chat : chatList) {
                         messageList.add(new MessageModel(chat.getMessage(), "Bạn", false, System.currentTimeMillis()));
                         messageList.add(new MessageModel(chat.getResponse(), "Chatbot", true, System.currentTimeMillis()));
@@ -211,7 +213,6 @@ public class ChatActivity extends AppCompatActivity {
                     Toast.makeText(ChatActivity.this, "Failed to load chat history", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<List<ChatHistoryModel>> call, Throwable t) {
                 Toast.makeText(ChatActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
