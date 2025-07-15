@@ -26,41 +26,43 @@
                 android:src="@drawable/pr_icon"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="194dp"
                 android:layout_height="wrap_content"
-                android:text="Eatery Reviews"
+                android:layout_marginStart="20dp"
+                android:text="Trang Chủ"
                 android:textColor="#0bae77"
                 android:textSize="30sp"
-                android:layout_marginStart="20dp"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/menu_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#23c55e"
-                android:src="@drawable/baseline_menu_24"
                 android:layout_marginStart="30dp"
-                android:padding="8dp"/>
+                android:background="#23c55e"
+                android:padding="8dp"
+                android:src="@drawable/baseline_menu_24" />
 
         </LinearLayout>
 
-<!--        <EditText-->
-<!--            android:id="@+id/search_edit_text"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="10dp"-->
-<!--            android:layout_below="@id/header_section"-->
-<!--            android:hint="Search your meal..."-->
-<!--            android:padding="10dp"-->
-<!--            android:background="@drawable/custom_search_bar"-->
-<!--            android:drawablePadding="10dp"-->
-<!--            android:textColor="#000000"-->
-<!--            android:textSize="16sp"/>-->
+        <EditText
+            android:id="@+id/search_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_below="@id/header_section"
+            android:hint="Tìm kiếm bài viết..."
+            android:padding="10dp"
+            android:background="@drawable/custom_search_bar"
+            android:drawableStart="@drawable/search_24dp"
+            android:drawablePadding="10dp"
+            android:textColor="#000000"
+            android:textSize="16sp"/>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_below="@id/header_section"
+            android:layout_below="@id/search_edit_text"
             android:layout_height="wrap_content"
             android:layout_marginBottom="80dp"
             android:layout_weight="1"

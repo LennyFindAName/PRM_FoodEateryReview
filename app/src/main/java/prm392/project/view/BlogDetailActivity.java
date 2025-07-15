@@ -36,16 +36,28 @@ import android.util.Base64;
 import android.text.Html;
 import android.text.Spanned;
 import android.os.Build;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import android.location.Geocoder;
+import android.location.Address;
+import java.io.IOException;
+import java.util.Locale;
 
-public class BlogDetailActivity extends AppCompatActivity {
+public class BlogDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
     private ViewPager2 imageViewPager;
     private LinearLayout pageIndicators;
     private TextView imageCounter;
     private ImageCarouselAdapter imageAdapter;
-    private TextView blogName, blogDescription, blogPrice, blogCalories;
+    private TextView blogName, blogDescription, blogPrice, blogCalories, locationText;
     private SeekBar foodQualityRate, environmentRate, serviceRate, pricingRate, hygieneRate;
     private Button btnAddToCart;
     private BlogRepository blogRepository;
+    private GoogleMap mMap;
+    private SupportMapFragment mapFragment;
     Blog tmpBlog = new Blog();
 
     @Override
@@ -68,6 +80,7 @@ public class BlogDetailActivity extends AppCompatActivity {
         serviceRate = findViewById(R.id.serviceRate);
         pricingRate = findViewById(R.id.pricingRate);
         hygieneRate = findViewById(R.id.hygieneRate);
+        locationText = findViewById(R.id.locationText);
 
         blogRepository = new BlogRepository(this);
 
@@ -110,6 +123,11 @@ public class BlogDetailActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize the map fragment
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
     }
 
     private void setupImageCarousel(List<String> imageList) {
@@ -225,7 +243,7 @@ public class BlogDetailActivity extends AppCompatActivity {
                         Spanned formattedContent = parseHtmlContent(blog.getBlogContent());
                         blogDescription.setText(formattedContent);
 
-                        blogPrice.setText(blog.getBlogDate());
+                        blogPrice.setText("Tạo lúc: "+ blog.getBlogDate());
                         blogCalories.setText("Lượt like: " + blog.getBlogLike());
                         foodQualityRate.setProgress(blog.getFoodQualityRate());
                         environmentRate.setProgress(blog.getEnvironmentRate());
@@ -245,6 +263,15 @@ public class BlogDetailActivity extends AppCompatActivity {
 
                         setupImageCarousel(imageList);
 
+                        // Set location text and geocode the address
+                        String locationDetail = blog.getEateryLocationDetail();
+                        locationText.setText(locationDetail != null ? locationDetail : "Không có thông tin vị trí");
+
+                        // Geocode the address to get coordinates and show on map
+                        if (mMap != null && locationDetail != null && !locationDetail.isEmpty()) {
+                            geocodeAndShowLocation(locationDetail);
+                        }
+
                     } else {
                         // Log the response body if it's null
                         Log.e("blogDetailActivity", "Response body is null");
@@ -262,6 +289,43 @@ public class BlogDetailActivity extends AppCompatActivity {
                 Toast.makeText(BlogDetailActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // Geocode the address and show the location on the map
+    private void geocodeAndShowLocation(String address) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addressList = geocoder.getFromLocationName(address, 1);
+            if (addressList != null && !addressList.isEmpty()) {
+                Address location = addressList.get(0);
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                // Move camera to the geocoded location
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                mMap.addMarker(new MarkerOptions().position(latLng).title("Eatery Location"));
+            } else {
+                Toast.makeText(this, "Không tìm thấy địa chỉ trên bản đồ", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Lỗi khi tìm địa chỉ: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Enable MyLocation layer if the permission is granted
+        if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        } else {
+            // Request location permission
+            androidx.core.app.ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+
+        // Move camera to the default location (e.g., Sydney) if the blog details are not yet loaded
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-34.0, 151.0), 10));
     }
 
 }
