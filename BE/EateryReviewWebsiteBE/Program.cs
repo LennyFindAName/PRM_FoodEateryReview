@@ -8,7 +8,6 @@ using Repositories.Repositories.AuthenRepository;
 using Services.Helper;
 using Services.Services.AuthenService;
 using System.Globalization;
-using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -55,7 +54,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-
 //add Database
 builder.Services.AddDbContext<EateryReviewDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -82,9 +80,7 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)
-        ),
-        RoleClaimType = ClaimTypes.Role,
-        NameClaimType = ClaimTypes.Name
+        )
     };
 });
 //Add Chatbot
@@ -125,24 +121,18 @@ builder.Services.AddControllers().AddOData(options =>
 
 
 // FE
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowFrontend", policy =>
-//    {
-//        policy.WithOrigins("http://localhost:5143") // FE chạy ở đâu thì thêm ở đây
-//              .AllowAnyHeader()
-//              .AllowAnyMethod();
-//    });
-//});
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy
+        .AllowAnyOrigin()
+        //.WithOrigins("http://localhost:5143") // FE chạy ở đâu thì thêm ở đây
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
+
 
 // Cấu hình để xử lý tiếng Việt đúng
 builder.Services.Configure<RequestLocalizationOptions>(options =>
@@ -166,8 +156,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseCors("AllowFrontend"); // thêm trước UseAuthorization
-app.UseCors("AllowAll");
+app.UseCors("AllowFrontend"); // thêm trước UseAuthorization
 app.UseAuthentication(); // ⬅️ Trước UseAuthorization
 app.UseAuthorization();
 

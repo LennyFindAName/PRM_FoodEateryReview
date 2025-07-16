@@ -34,6 +34,7 @@ import prm392.project.R;
 import prm392.project.adapter.BlogAdapter;
 import prm392.project.adapter.FoodAdapter;
 import prm392.project.inter.OnCartUpdateListener;
+import prm392.project.model.DTOs.BlogPagedResponse;
 import prm392.project.repo.BlogRepository;
 import prm392.project.inter.FoodService;
 import prm392.project.inter.BlogService;
@@ -194,18 +195,18 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
         updateCartCountAtHome();
         Log.d("HomeActivity", "Loading food data...");
         //Call<List<Food>> call = foodService.getFoodList(1, 99999, "");
-        Call<List<Blog>> blogCall = blogService.getBlogList (1, 99999);
+        Call<BlogPagedResponse> blogCall = blogService.getPagedBlogs (1, 99999);
 
-        blogCall.enqueue(new Callback<List<Blog>>() {
+        blogCall.enqueue(new Callback<BlogPagedResponse>() {
             @Override
-            public void onResponse(Call<List<Blog>> call, Response<List<Blog>> response) {
+            public void onResponse(Call<BlogPagedResponse> call, Response<BlogPagedResponse> response) {
                 Log.d("HomeActivity", "Response received from blog service");
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("HomeActivity", "Blog data successfully loaded");
                     blogList.clear();
-                    blogList.addAll(response.body());
+                    blogList.addAll(response.body().blogs);
                     allBlogList.clear(); // Clear the allBlogList
-                    allBlogList.addAll(response.body()); // Add all blogs to allBlogList
+                    allBlogList.addAll(response.body().blogs); // Add all blogs to allBlogList
                     blogAdapter.notifyDataSetChanged();
                 } else {
                     Log.d("HomeActivity", "Failed to load blog data: " + response.code());
@@ -214,7 +215,7 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
             }
 
             @Override
-            public void onFailure(Call<List<Blog>> call, Throwable t) {
+            public void onFailure(Call<BlogPagedResponse> call, Throwable t) {
                 Log.e("HomeActivity", "API error: " + t.getMessage());
                 if (t instanceof java.net.SocketTimeoutException) {
                     Toast.makeText(HomeActivity.this, "Request timed out. Please try again.", Toast.LENGTH_SHORT).show();

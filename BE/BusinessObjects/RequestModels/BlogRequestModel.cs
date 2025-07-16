@@ -1,4 +1,5 @@
 ﻿
+using BusinessObjects.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -27,15 +28,16 @@ namespace BusinessObjects.RequestModels
         public int? ServiceRate { get; set; }
         public int? PricingRate { get; set; }
         public int? HygieneRate { get; set; }
+        public int? DisplayPaidCost { get; set; } // Cost to display the blog, if applicable
+        public User? User { get; set; }
+
         public List<string> FoodTypeNames { get; set; } = new List<string>();
         public List<string> MealTypeNames { get; set; } = new List<string>();
         public List<string> PriceRanges { get; set; } = new List<string>();
-
-        public string? FirstImage { get; set; }
-
+      
 
         // New properties for base64 image data
-
+       
         public string? BlogBillImageBase64 { get; set; }
         public List<string> BlogImagesBase64 { get; set; } = new List<string>();
 

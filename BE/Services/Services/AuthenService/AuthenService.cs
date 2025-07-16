@@ -33,9 +33,6 @@ namespace Services.Services.AuthenService
             if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
                 throw new UnauthorizedAccessException("Invalid username or password");
 
-            user.LastLogin = DateTime.Now;
-            await _authenRepository.UpdateAsync(user);
-
             var response = _mapper.Map<LoginResponseModel>(user);
             response.AccessToken = JwtHelper.GenerateJwtToken(user.UserId.ToString(),user.Username, user.RoleId.ToString(), _config);
             if (string.IsNullOrEmpty(response.AccessToken))

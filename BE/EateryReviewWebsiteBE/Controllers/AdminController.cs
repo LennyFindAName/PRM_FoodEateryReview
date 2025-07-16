@@ -1,5 +1,4 @@
 ﻿using BusinessObjects.Models;
-using BusinessObjects.RequestModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

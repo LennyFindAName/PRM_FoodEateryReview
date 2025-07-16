@@ -257,10 +257,15 @@ public class BlogDetailActivity extends AppCompatActivity implements OnMapReadyC
                         blogPrice.setText("Tạo lúc: "+ blog.getBlogDate());
                         blogCalories.setText("Lượt like: " + blog.getBlogLike());
                         foodQualityRate.setProgress(blog.getFoodQualityRate());
+                        foodQualityRate.setEnabled(false);
                         environmentRate.setProgress(blog.getEnvironmentRate());
+                        environmentRate.setEnabled(false);
                         serviceRate.setProgress(blog.getServiceRate());
+                        serviceRate.setEnabled(false);
                         pricingRate.setProgress(blog.getPricingRate());
+                        pricingRate.setEnabled(false);
                         hygieneRate.setProgress(blog.getHygieneRate());
+                        hygieneRate.setEnabled(false);
 
                         // Setup image carousel
                         List<String> imageList = new ArrayList<>();

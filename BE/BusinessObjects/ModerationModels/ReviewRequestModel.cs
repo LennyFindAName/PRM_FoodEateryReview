@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.ModerationModels
 {
-    public class ReviewRequest
+    public class ReviewRequestModel
     {
         public int Request { get; set; }
         public string Opinion { get; set; }

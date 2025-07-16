@@ -31,6 +31,8 @@ public partial class User
 
     public DateTime? LastLogin { get; set; }
 
+    public string? ModeratorNote { get; set; }
+
     public virtual ICollection<BlogLike> BlogLikes { get; set; } = new List<BlogLike>();
 
     public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
@@ -46,6 +48,8 @@ public partial class User
     public virtual ICollection<ReplyLike> ReplyLikes { get; set; } = new List<ReplyLike>();
 
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
+
+    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
     public virtual ICollection<WalletTransaction> WalletTransactions { get; set; } = new List<WalletTransaction>();
 }

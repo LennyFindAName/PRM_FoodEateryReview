@@ -1,4 +1,5 @@
 package prm392.project.inter;
+import prm392.project.model.DTOs.BlogPagedResponse;
 
 import java.util.List;
 
@@ -12,13 +13,13 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 public interface BlogService {
 
-    @GET("blog/list")
-    Call<List<Blog>> getBlogList(
+    @GET("blog")
+    Call<BlogPagedResponse> getPagedBlogs(
             @Query("pageIndex") int pageIndex,
             @Query("pageSize") int pageSize
     );
 
-    @GET("blog/detailsApp/{id}")
+    @GET("blog/details/{id}")
     Call<Blog> getBlogDetails(@Path("id") String blogId);
 
     @POST("blog/create")

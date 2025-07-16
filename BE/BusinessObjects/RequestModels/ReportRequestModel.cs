@@ -11,5 +11,7 @@ namespace BusinessObjects.RequestModels
         public int BlogId { get; set; }
         public int ReportReasonId { get; set; }
         public int ReporterId { get; set; }
+        public string? ReportContent { get; set; }
+
     }
 }

@@ -17,6 +17,8 @@ public partial class Report
 
     public int? ReporterId { get; set; }
 
+    public string? ReportContent { get; set; }
+
     public virtual Blog? Blog { get; set; }
 
     public virtual ReportReason? ReportReason { get; set; }

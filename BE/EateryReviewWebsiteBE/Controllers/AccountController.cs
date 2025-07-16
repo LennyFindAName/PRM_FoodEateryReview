@@ -52,5 +52,42 @@ namespace EateryReviewWebsiteBE.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving user: {ex.Message}");
             }
         }
+
+        [HttpGet("searchUsers")]
+        public IActionResult GetSearchedPagedUsers(string result = "", int page = 1, int pageSize = 10)
+        {
+            var skip = (page - 1) * pageSize;
+
+            // Start with all users and apply search filter
+            var query = _context.Users.AsQueryable();
+
+            // Apply search filter if result parameter is provided
+            if (!string.IsNullOrEmpty(result))
+            {
+                query = query.Where(u => u.Username.Contains(result) || u.DisplayName.Contains(result));
+            }
+
+            // Get total count of filtered results
+            var totalCount = query.Count();
+
+            // Apply ordering, pagination, and projection
+            var users = query
+                .OrderBy(u => u.DisplayName)
+                .Skip(skip)
+                .Take(pageSize)
+                .Select(user => new
+                {
+                    user.UserId,
+                    user.DisplayName,
+                    user.Username,
+                    user.UserEmail,
+                    UserImage = user.UserImage != null ? Convert.ToBase64String(user.UserImage) : null,
+                    user.RoleId,
+                    user.UserStatus
+                })
+                .ToList();
+
+            return Ok(new { totalCount, users });
+        }
     }
 }

@@ -43,6 +43,8 @@ public partial class Blog
 
     public string? Opinion { get; set; }
 
+    public DateTime? PaidExpirationDate { get; set; }
+
     public virtual ICollection<BlogFoodType> BlogFoodTypes { get; set; } = new List<BlogFoodType>();
 
     public virtual ICollection<BlogImage> BlogImages { get; set; } = new List<BlogImage>();

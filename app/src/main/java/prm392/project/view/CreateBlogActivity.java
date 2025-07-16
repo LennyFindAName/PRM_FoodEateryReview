@@ -132,6 +132,15 @@ public class CreateBlogActivity extends AppCompatActivity {
                 try {
                     BlogRequest blogRequest = new BlogRequest();
                     BlogRepository blogRepository = new BlogRepository(this);
+
+                    if (titleEditText.getText().toString().trim().length() > 100) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "Title must be 100 characters or less", Toast.LENGTH_SHORT).show();
+                            submitButton.setEnabled(true);
+                        });
+                        return;
+                    }
+
                     blogRequest.setBlogTitle(titleEditText.getText().toString().trim());
                     blogRequest.setBlogContent(contentEditText.getText().toString().trim());
 

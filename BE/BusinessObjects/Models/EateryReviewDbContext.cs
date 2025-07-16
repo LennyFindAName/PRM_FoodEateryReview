@@ -43,6 +43,10 @@ public partial class EateryReviewDbContext : DbContext
 
     public virtual DbSet<ReportReason> ReportReasons { get; set; }
 
+    public virtual DbSet<Ticket> Tickets { get; set; }
+
+    public virtual DbSet<TicketType> TicketTypes { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<WalletTransaction> WalletTransactions { get; set; }
@@ -81,6 +85,11 @@ public partial class EateryReviewDbContext : DbContext
             entity.Property(e => e.FoodQualityRate).HasColumnName("food_quality_rate");
             entity.Property(e => e.HygieneRate).HasColumnName("hygiene_rate");
             entity.Property(e => e.Opinion).HasColumnName("opinion");
+
+            entity.Property(e => e.PaidExpirationDate)
+               .HasColumnType("datetime")
+               .HasColumnName("paid_expiration_date");
+
             entity.Property(e => e.PricingRate).HasColumnName("pricing_rate");
             entity.Property(e => e.ServiceRate).HasColumnName("service_rate");
             entity.Property(e => e.UserId).HasColumnName("user_id");
@@ -311,6 +320,9 @@ public partial class EateryReviewDbContext : DbContext
 
             entity.Property(e => e.ReportId).HasColumnName("report_id");
             entity.Property(e => e.BlogId).HasColumnName("blog_id");
+            entity.Property(e => e.ReportContent)
+                .HasMaxLength(250)
+                .HasColumnName("report_content");
             entity.Property(e => e.ReportReasonId).HasColumnName("report_reason_id");
             entity.Property(e => e.ReportStatus).HasColumnName("report_status");
             entity.Property(e => e.ReportTime)
@@ -341,6 +353,44 @@ public partial class EateryReviewDbContext : DbContext
             entity.Property(e => e.BlogReasonContent)
                 .HasMaxLength(300)
                 .HasColumnName("blog_reason_content");
+        });
+
+        modelBuilder.Entity<Ticket>(entity =>
+        {
+            entity.HasKey(e => e.TicketId).HasName("PK__ticket__D596F96B7CB256F0");
+
+            entity.ToTable("ticket");
+
+            entity.Property(e => e.TicketId).HasColumnName("ticket_id");
+            entity.Property(e => e.CreatorId).HasColumnName("creator_id");
+            entity.Property(e => e.TicketContent)
+                .HasMaxLength(300)
+                .HasColumnName("ticket_content");
+            entity.Property(e => e.TicketStatus).HasColumnName("ticket_status");
+            entity.Property(e => e.TicketTime)
+                .HasColumnType("datetime")
+                .HasColumnName("ticket_time");
+            entity.Property(e => e.TypeId).HasColumnName("type_id");
+
+            entity.HasOne(d => d.Creator).WithMany(p => p.Tickets)
+                .HasForeignKey(d => d.CreatorId)
+                .HasConstraintName("FK__ticket__creator___18EBB532");
+
+            entity.HasOne(d => d.Type).WithMany(p => p.Tickets)
+                .HasForeignKey(d => d.TypeId)
+                .HasConstraintName("FK__ticket__type_id__17F790F9");
+        });
+
+        modelBuilder.Entity<TicketType>(entity =>
+        {
+            entity.HasKey(e => e.TypeId).HasName("PK__ticket_t__2C0005988BAA84E6");
+
+            entity.ToTable("ticket_type");
+
+            entity.Property(e => e.TypeId).HasColumnName("type_id");
+            entity.Property(e => e.TicketTypeContent)
+                .HasMaxLength(200)
+                .HasColumnName("ticket_type_content");
         });
 
         modelBuilder.Entity<User>(entity =>

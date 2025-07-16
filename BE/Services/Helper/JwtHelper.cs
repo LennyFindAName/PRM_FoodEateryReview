@@ -15,14 +15,6 @@ namespace Services.Helper
         // Cập nhật hàm để thêm tham số userName
         public static string GenerateJwtToken(string userId, string userName, string role, IConfiguration config)
         {
-            string roleName = role switch
-            {
-                "1" => "Admin",
-                "2" => "Moderator",
-                "3" => "User",
-                _ => "Unknown"
-            };
-
             try
             {
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Secret"]!));
@@ -30,11 +22,11 @@ namespace Services.Helper
 
                 // Thêm claim "name" vào token
                 var claims = new[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, userId), // <-- bắt buộc để Get userId
-                    new Claim(ClaimTypes.Name, userName),
-                    new Claim(ClaimTypes.Role, roleName)
-                };
+{
+    new Claim(ClaimTypes.NameIdentifier, userId), // <-- bắt buộc để Get userId
+    new Claim(ClaimTypes.Name, userName),
+    new Claim(ClaimTypes.Role, role)
+};
 
 
                 var token = new JwtSecurityToken(

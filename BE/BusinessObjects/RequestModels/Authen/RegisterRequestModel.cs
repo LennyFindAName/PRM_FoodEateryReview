@@ -18,7 +18,6 @@ namespace BusinessObjects.RequestModels.Authen
         public string ConfirmPassword { get; set; }
         [Required, EmailAddress]
         public string Email { get; set; }
-
         public string Phone { get; set; }
     }
 
