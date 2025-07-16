@@ -165,12 +165,12 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
     @Override
     protected void onStart() {
         super.onStart();
-        if (!prm392.project.utils.JwtUtils.isTokenValid(this)) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        }
+        // if (!prm392.project.utils.JwtUtils.isTokenValid(this)) {
+        //     Intent intent = new Intent(this, LoginActivity.class);
+        //     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //     startActivity(intent);
+        //     finish();
+        // }
     }
 
     @Override
