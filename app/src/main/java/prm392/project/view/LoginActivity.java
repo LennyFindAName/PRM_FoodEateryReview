@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
+       /* SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
         String token = prefs.getString("access_token", null);
         if (token != null && !token.isEmpty()) {
             Log.d("LOGIN_DEBUG", "Đã có token, chuyển sang HomeActivity");
@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
             return;
-        }
+        }*/
         setContentView(R.layout.activity_login);
 
         edtUsername = findViewById(R.id.edtPassword);
