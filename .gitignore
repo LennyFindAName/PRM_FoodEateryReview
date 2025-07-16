@@ -1,6 +1,3 @@
 ﻿.gradle
-.idea
-.gradle
 local.properties
 .idea
-app/src/main/java/prm392/project/factory/APIClient.java
