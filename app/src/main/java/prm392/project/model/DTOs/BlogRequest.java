@@ -4,7 +4,7 @@ import java.util.List;
 
 public class BlogRequest {
     private Integer blogId;
-    private Integer userId;
+    private String userId;
     private String blogTitle;
     private String blogContent;
     private String blogDate; // Use String for date, or Date if you prefer
@@ -35,8 +35,8 @@ public class BlogRequest {
     public Integer getBlogId() { return blogId; }
     public void setBlogId(Integer blogId) { this.blogId = blogId; }
 
-    public Integer getUserId() { return userId; }
-    public void setUserId(Integer userId) { this.userId = userId; }
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
 
     public String getBlogTitle() { return blogTitle; }
     public void setBlogTitle(String blogTitle) { this.blogTitle = blogTitle; }

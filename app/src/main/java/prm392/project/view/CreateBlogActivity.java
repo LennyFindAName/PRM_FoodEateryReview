@@ -157,18 +157,18 @@ public class CreateBlogActivity extends AppCompatActivity {
                     blogRequest.setLikeCount(0);
                     blogRequest.setHasLiked(false);
 
-//                    UserRepository userRepository = new UserRepository(this);
-//                    Response<User> userResponse = userRepository.getUserProfile().execute();
-//                    if (!userResponse.isSuccessful() || userResponse.body() == null) {
-//                        runOnUiThread(() -> {
-//                            Toast.makeText(this, "Failed to get user", Toast.LENGTH_SHORT).show();
-//                            finish();
-//                        });
-//                        return;
-//                    }
+                    UserRepository userRepository = new UserRepository(this);
+                    Response<User> userResponse = userRepository.getUserProfile().execute();
+                    if (!userResponse.isSuccessful() || userResponse.body() == null) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "Failed to get user", Toast.LENGTH_SHORT).show();
+                            finish();
+                        });
+                        return;
+                    }
 
                     // Temporarily using a mock user ID
-                    int userId = 1;
+                    String userId = userResponse.body().getUserID();
                     blogRequest.setUserId(userId);
 
                     if (blogRequest.getUserId() == null ||
