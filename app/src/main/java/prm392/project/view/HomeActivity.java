@@ -13,9 +13,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.EditText;
-import android.text.TextWatcher;
-import android.text.Editable;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -54,9 +51,7 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
     //ArrayList<Food> foodList;
 
     ArrayList<Blog> blogList;
-    ArrayList<Blog> allBlogList; // Store all blogs for filtering
     SwipeRefreshLayout swipeRefreshLayout;
-    EditText searchEditText;
     //FoodService foodService;
     BlogService blogService;
 
@@ -74,7 +69,6 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
         });
 
         blogList =  new ArrayList<>(); // Initialize the blogList
-        allBlogList = new ArrayList<>(); // Initialize the allBlogList
         //foodList = new ArrayList<>(); // Initialize the foodList
         Log.d("HomeActivity", "Food list initialized");
 
@@ -125,11 +119,6 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
         });
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
-
-        // Initialize search EditText and set up search functionality
-        searchEditText = findViewById(R.id.search_edit_text);
-        setupSearchFunctionality();
-
         loadBlogData();
         Log.d("HomeActivity", "Food data loading started");
 
@@ -194,7 +183,7 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
         updateCartCountAtHome();
         Log.d("HomeActivity", "Loading food data...");
         //Call<List<Food>> call = foodService.getFoodList(1, 99999, "");
-        Call<List<Blog>> blogCall = blogService.getBlogList (1, 99999);
+        Call<List<Blog>> blogCall = blogService.getBlogList(1, 99999);
 
         blogCall.enqueue(new Callback<List<Blog>>() {
             @Override
@@ -204,8 +193,6 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
                     Log.d("HomeActivity", "Blog data successfully loaded");
                     blogList.clear();
                     blogList.addAll(response.body());
-                    allBlogList.clear(); // Clear the allBlogList
-                    allBlogList.addAll(response.body()); // Add all blogs to allBlogList
                     blogAdapter.notifyDataSetChanged();
                 } else {
                     Log.d("HomeActivity", "Failed to load blog data: " + response.code());
@@ -271,52 +258,6 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
 
     private void updateCartCountAtHome() {
         // CartSize functionality removed - no longer needed
-    }
-
-    // Setup search functionality with TextWatcher
-    private void setupSearchFunctionality() {
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Not needed for this implementation
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Filter blogs in real-time as user types
-                filterBlogs(s.toString().trim());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Not needed for this implementation
-            }
-        });
-    }
-
-    // Filter blogs based on search query
-    private void filterBlogs(String searchQuery) {
-        Log.d("HomeActivity", "Filtering blogs with query: " + searchQuery);
-
-        blogList.clear(); // Clear current displayed list
-
-        if (searchQuery.isEmpty()) {
-            // If search query is empty, show all blogs
-            blogList.addAll(allBlogList);
-        } else {
-            // Filter blogs based on blog title (case-insensitive)
-            for (Blog blog : allBlogList) {
-                if (blog.getBlogTitle() != null &&
-                    blog.getBlogTitle().toLowerCase().contains(searchQuery.toLowerCase())) {
-                    blogList.add(blog);
-                }
-            }
-        }
-
-        // Notify adapter of data changes
-        blogAdapter.notifyDataSetChanged();
-
-        Log.d("HomeActivity", "Filtered results: " + blogList.size() + " blogs found");
     }
 
 }

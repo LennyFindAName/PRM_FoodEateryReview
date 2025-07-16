@@ -29,15 +29,11 @@ public class Blog {
 
     @SerializedName("blogContent")
     private String blogContent;
-
-    @SerializedName("eateryLocationDetail")
-    private String eateryLocationDetail;
-
-
     // Optional fields that might not be in the response
     private Double blogRate;
     private Integer eateryId;
     private Integer blogStatus;
+    private String eateryLocationDetail;
     private String eateryAddressDetail;
     private Integer foodQualityRate;
     private Integer environmentRate;

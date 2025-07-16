@@ -151,42 +151,6 @@
                         android:textSize="16sp" />
                 </LinearLayout>
 
-                <!-- Location Section -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Vị trí quán ăn"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#333"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="8dp"/>
-
-                <TextView
-                    android:id="@+id/locationText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Đang tải vị trí..."
-                    android:textSize="14sp"
-                    android:textColor="#666"
-                    android:layout_marginBottom="8dp"/>
-
-                <!-- Google Map Container -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp">
-
-                    <fragment
-                        android:id="@+id/mapFragment"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                </androidx.cardview.widget.CardView>
-
                 <!-- Rating Section with Sliders -->
                 <TextView
                     android:layout_width="match_parent"
@@ -342,9 +306,6 @@
                         android:thumbTint="#9C27B0"
                         android:progressBackgroundTint="#E0E0E0"/>
                 </LinearLayout>
-
-
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
