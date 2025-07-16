@@ -42,6 +42,7 @@ import prm392.project.inter.BlogService;
 import prm392.project.model.Food;
 import prm392.project.model.Blog;
 import prm392.project.repo.UserRepository;
+import prm392.project.utils.BottomNavHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,12 +68,6 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
         Log.d("HomeActivity", "onCreate: Activity is being created");
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            Log.d("HomeActivity", "WindowInsets applied");
-            return insets;
-        });
 
         blogList =  new ArrayList<>(); // Initialize the blogList
         allBlogList = new ArrayList<>(); // Initialize the allBlogList
@@ -143,35 +138,7 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_home);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.nav_home) {
-                    Intent intent = new Intent(HomeActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_cart) {
-                    Intent intent = new Intent(HomeActivity.this, CartListActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_profile) {
-                    Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_create_blog) {
-                    Intent intent = new Intent(HomeActivity.this, CreateBlogActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_chat) {
-                    Intent intent = new Intent(HomeActivity.this, ChatActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                return true;
-            }
-        });
+        BottomNavHelper.setup(this, bottomNavigationView, R.id.nav_home);
     }
 
     @Override

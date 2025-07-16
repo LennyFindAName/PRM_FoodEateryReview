@@ -33,6 +33,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import android.widget.ImageButton;
+import prm392.project.utils.BottomNavHelper;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ChatActivity extends AppCompatActivity {
     private RecyclerView recyclerViewMessages;
@@ -62,33 +65,8 @@ public class ChatActivity extends AppCompatActivity {
         recyclerViewMessages.setAdapter(messageAdapter);
 
         loadUserProfile();
-        // Xử lý sự kiện cho BottomNavigationView
-        com.google.android.material.bottomnavigation.BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_chat);
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_home) {
-                startActivity(new Intent(ChatActivity.this, HomeActivity.class));
-                finish();
-                return true;
-            } else if (id == R.id.nav_cart) {
-                startActivity(new Intent(ChatActivity.this, CartListActivity.class));
-                finish();
-                return true;
-            } else if (id == R.id.nav_profile) {
-                startActivity(new Intent(ChatActivity.this, ProfileActivity.class));
-                finish();
-                return true;
-            } else if (id == R.id.nav_create_blog) {
-                startActivity(new Intent(ChatActivity.this, CreateBlogActivity.class));
-                finish();
-                return true;
-            } else if (id == R.id.nav_chat) {
-                // Đang ở màn chat, không cần chuyển
-                return true;
-            }
-            return false;
-        });
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        BottomNavHelper.setup(this, bottomNavigationView, R.id.nav_chat);
 
         // Sử dụng APIClient để tạo ChatService
         chatService = prm392.project.factory.APIClient.getClient(this).create(ChatService.class);

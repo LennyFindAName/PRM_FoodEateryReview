@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:layout_above="@id/btnAddToCart"
+        android:layout_above="@id/btnBookmark"
         android:fillViewport="true"
         android:scrollbars="vertical">
 
@@ -351,7 +351,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/btnAddToCart"
+        android:id="@+id/btnBookmark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_navigation"

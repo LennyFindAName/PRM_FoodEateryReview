@@ -64,37 +64,8 @@ public class CartListActivity extends AppCompatActivity {
 
         loadCartData(); // Tải dữ liệu từ SharedPreferences
 
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_cart);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.nav_home) {
-                    Intent intent = new Intent(CartListActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_cart) {
-                    Intent intent = new Intent(CartListActivity.this, CartListActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_profile) {
-                    Intent intent = new Intent(CartListActivity.this, ProfileActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_create_blog) {
-                    Intent intent = new Intent(CartListActivity.this, CreateBlogActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_chat) {
-                    Intent intent = new Intent(CartListActivity.this, ChatActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                return true;
-            }
-        });
+//        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+//        BottomNavHelper.setup(this, bottomNavigationView, R.id.nav_cart);
     }
 
     private void loadCartData() {

@@ -27,6 +27,7 @@ import prm392.project.R;
 import prm392.project.model.Food;
 import prm392.project.model.OrderDetail;
 import prm392.project.repo.FoodRepository;
+import prm392.project.utils.BottomNavHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -74,32 +75,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_home);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.nav_home) {
-                    Intent intent = new Intent(FoodDetailActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_cart) {
-                    Intent intent = new Intent(FoodDetailActivity.this, CartListActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_profile) {
-                    Intent intent = new Intent(FoodDetailActivity.this, ProfileActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_create_blog) {
-                    Intent intent = new Intent(FoodDetailActivity.this, CreateBlogActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                return true;
-            }
-        });
-
+        BottomNavHelper.setup(this, bottomNavigationView, R.id.nav_home);
     }
 
     @Override

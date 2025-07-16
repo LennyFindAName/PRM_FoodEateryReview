@@ -97,31 +97,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         // bottomNavigationView.setSelectedItemId(R.id.nav_location); // Đã loại bỏ nav_location
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.nav_home) {
-                    Intent intent = new Intent(GoogleMapsActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_cart) {
-                    Intent intent = new Intent(GoogleMapsActivity.this, CartListActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_profile) {
-                    Intent intent = new Intent(GoogleMapsActivity.this, ProfileActivity.class);
-                    //chưa có trang profile
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_create_blog) {
-                    Intent intent = new Intent(GoogleMapsActivity.this, CreateBlogActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                return true;
-            }
-        });
+
     }
 
     @Override

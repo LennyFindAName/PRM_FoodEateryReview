@@ -36,6 +36,7 @@ import prm392.project.model.OrderDetailsDTO;
 import prm392.project.model.User;
 import prm392.project.repo.OrderRepository;
 import prm392.project.repo.UserRepository;
+import prm392.project.utils.BottomNavHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -89,35 +90,7 @@ public class OrderActivity extends AppCompatActivity {
         calculateTotalPrice();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_cart);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.nav_home) {
-                    Intent intent = new Intent(OrderActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_cart) {
-                    Intent intent = new Intent(OrderActivity.this, CartListActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_profile) {
-                    Intent intent = new Intent(OrderActivity.this, ProfileActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_create_blog) {
-                    Intent intent = new Intent(OrderActivity.this, CreateBlogActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_chat) {
-                    Intent intent = new Intent(OrderActivity.this, ChatActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                return true;
-            }
-        });
+//        BottomNavHelper.setup(this, bottomNavigationView, R.id.nav_cart);
 
         //Show qrCodeImage
         paymentMethodGroup.setOnCheckedChangeListener((group, checkedId) -> {

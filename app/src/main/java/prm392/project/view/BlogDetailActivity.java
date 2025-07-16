@@ -25,8 +25,12 @@ import com.google.gson.Gson;
 import prm392.project.R;
 import prm392.project.adapter.ImageCarouselAdapter;
 import prm392.project.model.Blog;
+import prm392.project.model.User;
 import prm392.project.repo.BlogRepository;
+import prm392.project.repo.ProfileRepository;
 import prm392.project.model.OrderDetail;
+import prm392.project.repo.UserRepository;
+import prm392.project.utils.BottomNavHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,7 +58,8 @@ public class BlogDetailActivity extends AppCompatActivity implements OnMapReadyC
     private ImageCarouselAdapter imageAdapter;
     private TextView blogName, blogDescription, blogPrice, blogCalories, locationText;
     private SeekBar foodQualityRate, environmentRate, serviceRate, pricingRate, hygieneRate;
-    private Button btnAddToCart;
+    private Button btnBookmark;
+    private boolean isBookmarked = false;
     private BlogRepository blogRepository;
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
@@ -74,7 +79,7 @@ public class BlogDetailActivity extends AppCompatActivity implements OnMapReadyC
         blogDescription = findViewById(R.id.blogDescription);
         blogPrice = findViewById(R.id.blogPrice);
         blogCalories = findViewById(R.id.blogCalories);
-        btnAddToCart = findViewById(R.id.btnAddToCart);
+        btnBookmark = findViewById(R.id.btnBookmark);
         foodQualityRate = findViewById(R.id.foodQualityRate);
         environmentRate = findViewById(R.id.environmentRate);
         serviceRate = findViewById(R.id.serviceRate);
@@ -83,6 +88,60 @@ public class BlogDetailActivity extends AppCompatActivity implements OnMapReadyC
         locationText = findViewById(R.id.locationText);
 
         blogRepository = new BlogRepository(this);
+        ProfileRepository profileRepository = new ProfileRepository(this);
+
+        UserRepository userRepository = new UserRepository(this);
+        userRepository.getUserProfile().enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (!response.isSuccessful() || response.body() == null) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(BlogDetailActivity.this, "Failed to get user", Toast.LENGTH_SHORT).show();
+                        finish();
+                    });
+                    return;
+                }
+                int userId = Integer.parseInt(response.body().getUserID());
+
+                btnBookmark.setOnClickListener(v -> {
+                    if (!isBookmarked) {
+                        profileRepository.addBookmark(userId, tmpBlog.getBlogId()).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                if (response.isSuccessful()) {
+                                    isBookmarked = true;
+                                    updateBookmarkButton();
+                                    Toast.makeText(BlogDetailActivity.this, "Bookmark added", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) { }
+                        });
+                    } else {
+                        profileRepository.removeBookmark(userId, tmpBlog.getBlogId()).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                if (response.isSuccessful()) {
+                                    isBookmarked = false;
+                                    updateBookmarkButton();
+                                    Toast.makeText(BlogDetailActivity.this, "Bookmark removed", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) { }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                runOnUiThread(() -> {
+                    Toast.makeText(BlogDetailActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    finish();
+                });
+            }
+        });
 
         String blogId = getIntent().getStringExtra("blog_id");
         Log.e("dangdeptrai", "dangdeptrai blogid: " + blogId);
@@ -93,35 +152,7 @@ public class BlogDetailActivity extends AppCompatActivity implements OnMapReadyC
         }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_home);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.nav_home) {
-                    Intent intent = new Intent(BlogDetailActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_cart) {
-                    Intent intent = new Intent(BlogDetailActivity.this, CartListActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_profile) {
-                    Intent intent = new Intent(BlogDetailActivity.this, ProfileActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_chat) {
-                    Intent intent = new Intent(BlogDetailActivity.this, ChatActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_create_blog) {
-                    Intent intent = new Intent(BlogDetailActivity.this, CreateBlogActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                return true;
-            }
-        });
+        BottomNavHelper.setup(this, bottomNavigationView, R.id.nav_home);
 
         // Initialize the map fragment
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
@@ -139,6 +170,11 @@ public class BlogDetailActivity extends AppCompatActivity implements OnMapReadyC
             startActivity(intent);
             finish();
         }
+    }
+
+    private void updateBookmarkButton() {
+        btnBookmark.setText(isBookmarked ? "Bookmarked" : "Add to Bookmark");
+        btnBookmark.setEnabled(true);
     }
 
     private void setupImageCarousel(List<String> imageList) {

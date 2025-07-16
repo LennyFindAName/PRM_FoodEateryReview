@@ -59,6 +59,9 @@
             android:name=".view.CreateBlogActivity"
             android:exported="false"/>
         <activity
+            android:name=".view.BookmarkActivity"
+            android:exported="false"/>
+        <activity
             android:name=".view.MainActivity"
             android:exported="true">
             <intent-filter>

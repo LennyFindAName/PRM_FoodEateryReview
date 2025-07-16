@@ -61,17 +61,16 @@ public class BlogAdapter extends BaseAdapter {
 
         ImageView imageView = view.findViewById(R.id.foodImage);
         TextView nameView = view.findViewById(R.id.foodName);
-        TextView priceView = view.findViewById(R.id.foodPrice);
+//        TextView likesView = view.findViewById(R.id.likesView);
         TextView descriptionView = view.findViewById(R.id.description);
-        TextView calorieView = view.findViewById(R.id.foodCalorie);
+        TextView dateView = view.findViewById(R.id.dateView);
         ImageButton addButton = view.findViewById(R.id.btnAddToCart);
 
         // Set blog data to the UI elements
         nameView.setText(blog.getBlogTitle() != null ? blog.getBlogTitle() : "No Title");
 
-        // Format blog likes as "price" (since we're reusing food layout)
-        String likesText = blog.getBlogLike() != null ? blog.getBlogLike() + " likes" : "0 likes";
-        priceView.setText(likesText);
+//        String likesText = blog.getBlogLike() != null ? blog.getBlogLike() + " likes" : "0 likes";
+//        likesView.setText(likesText);
 
         // Show username in description field
         descriptionView.setText("By: " + (blog.getUsername() != null ? blog.getUsername() : "Unknown"));
@@ -89,7 +88,7 @@ public class BlogAdapter extends BaseAdapter {
                     inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 }
 
-                SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+                SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
                 Date date = inputFormat.parse(blog.getBlogDate());
                 if (date != null) {
@@ -99,7 +98,8 @@ public class BlogAdapter extends BaseAdapter {
                 dateText = "Invalid Date";
             }
         }
-        calorieView.setText(dateText);
+        // Format date to Vietnamese format: dd/MM/yyyy
+        dateView.setText(dateText);
 
         // Load image from Base64 string or use default
         String imageToDisplay = null;

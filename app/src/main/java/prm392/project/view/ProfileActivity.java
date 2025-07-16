@@ -41,6 +41,7 @@ import prm392.project.inter.UserService;
 import prm392.project.model.DTOs.UpdateProfileDTO;
 import prm392.project.model.User;
 import prm392.project.repo.UserRepository;
+import prm392.project.utils.BottomNavHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -103,35 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
         loadUserProfile();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_profile);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                if (item.getItemId() == R.id.nav_home) {
-                    Intent intent = new Intent(ProfileActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_cart) {
-                    Intent intent = new Intent(ProfileActivity.this, CartListActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_profile) {
-                    Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_create_blog) {
-                    Intent intent = new Intent(ProfileActivity.this, CreateBlogActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (item.getItemId() == R.id.nav_chat) {
-                    Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                return true;
-            }
-        });
+        BottomNavHelper.setup(this, bottomNavigationView, R.id.nav_profile);
     }
 
     @Override
