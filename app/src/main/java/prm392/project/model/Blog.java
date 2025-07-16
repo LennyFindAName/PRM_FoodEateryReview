@@ -11,8 +11,8 @@ public class Blog {
     @SerializedName("userId")
     private Integer userId;
 
-    @SerializedName("username")
-    private String username;
+    @SerializedName("displayName")
+    private String displayName;
 
     @SerializedName("blogTitle")
     private String blogTitle;
@@ -66,12 +66,12 @@ public class Blog {
         this.userId = userId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getBlogTitle() {

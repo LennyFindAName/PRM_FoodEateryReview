@@ -74,7 +74,7 @@ public class BlogAdapter extends BaseAdapter {
         priceView.setText(likesText);
 
         // Show username in description field
-        descriptionView.setText("By: " + (blog.getUsername() != null ? blog.getUsername() : "Unknown"));
+        descriptionView.setText("By: " + (blog.getDisplayName() != null ? blog.getDisplayName() : "Unknown"));
 
         String dateText = "No Date";
         if (blog.getBlogDate() != null && !blog.getBlogDate().isEmpty()) {

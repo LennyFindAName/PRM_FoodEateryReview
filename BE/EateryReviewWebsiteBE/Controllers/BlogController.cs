@@ -294,7 +294,7 @@ namespace EateryReviewWebsiteBE.Controllers
                     blog.BlogDate,
                     blog.BlogLike,
                     blog.UserId,
-                    Username = blog.User != null ? blog.User.Username : "Anonymous",
+                    DisplayName = blog.User != null ? blog.User.DisplayName : "Anonymous",
                      FirstImage = _context.BlogImages
                          .Where(bi => bi.BlogId == blog.BlogId)
                          .Select(bi => Convert.ToBase64String(bi.BlogImage1 ?? Array.Empty<byte>()))
