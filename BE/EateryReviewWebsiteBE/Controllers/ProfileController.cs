@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -114,9 +115,10 @@ namespace EateryReviewWebsiteBE.Controllers
                 {
                     b.Blog.BlogId,
                     b.Blog.BlogTitle,
-                    Image = b.Blog.BlogBillImage != null
-                        ? Convert.ToBase64String(b.Blog.BlogBillImage)
-                        : null
+                    Image = _context.BlogImages
+                            .Where(bi => bi.BlogId == b.Blog.BlogId)
+                            .Select(bi => Convert.ToBase64String(bi.BlogImage1 ?? Array.Empty<byte>()))
+                            .FirstOrDefault(),
                 })
                 .ToListAsync();
 
