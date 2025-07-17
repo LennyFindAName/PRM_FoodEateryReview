@@ -50,6 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView hiddenUserId;
     private EditText profileName, profileEmail, profiledisplayName, profilePhone;
     private CircleImageView profileImageView;
+    private TextView profileDisplayNameText;
     private UserRepository userRepository;
 
     private ImageButton editProfileButton;
@@ -73,6 +74,7 @@ public class ProfileActivity extends AppCompatActivity {
         profilePhone = findViewById(R.id.profile_phone);
         profiledisplayName = findViewById(R.id.profile_displayName);
         profileImageView = findViewById(R.id.profileImageView);
+        profileDisplayNameText = findViewById(R.id.profile_displayNameText);
 
         editProfileButton = findViewById(R.id.btn_edit_profile);
 
@@ -82,9 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
             // Toggle editable state
             profiledisplayName.setEnabled(isEditing);
             profilePhone.setEnabled(isEditing);
-
-            // Optionally, keep email read-only
-            profileEmail.setEnabled(false);
+            profileEmail.setEnabled(isEditing);
 
             if (isEditing) {
                 editProfileButton.setImageResource(android.R.drawable.ic_menu_save);
@@ -133,6 +133,7 @@ public class ProfileActivity extends AppCompatActivity {
                         profileEmail.setText(user.getEmail());
                         profiledisplayName.setText(user.getDisplayName());
                         profilePhone.setText(user.getPhoneNumber());
+                        profileDisplayNameText.setText(user.getDisplayName());
 
                         if (user.getUserImage() != null && !user.getUserImage().isEmpty()) {
                             try {
