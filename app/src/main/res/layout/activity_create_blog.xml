@@ -22,7 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Tạo Blog mới"
+            android:text="Tạo bài mới"
             android:textColor="#0BAE77"
             android:textSize="22sp"
             android:textStyle="bold"

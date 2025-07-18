@@ -23,7 +23,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Nội dung bài viết"
+            android:text="Nội dung"
+            android:textStyle="bold"
             android:textColor="#0BAE77"
             android:textSize="26sp" />
 
