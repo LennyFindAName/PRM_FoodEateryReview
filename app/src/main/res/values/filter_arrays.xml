@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="food_types">
+        <item>All</item>
+        <item>Vietnamese</item>
+        <item>Chinese</item>
+        <item>Korean</item>
+        <item>American</item>
+        <item>Europe</item>
+    </string-array>
+
+    <string-array name="meal_types">
+        <item>All</item>
+        <item>Breakfast</item>
+        <item>Brunch</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+        <item>Late Night</item>
+        <item>Drink</item>
+    </string-array>
+
+    <string-array name="price_ranges">
+        <item>All</item>
+        <item>$ (&lt;50,000 vnd)</item>
+        <item>$$ (50,001 - 200,000 vnd)</item>
+        <item>$$$ (&gt;200,000 vnd)</item>
+    </string-array>
+</resources>

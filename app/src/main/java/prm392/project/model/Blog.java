@@ -33,6 +33,15 @@ public class Blog {
     @SerializedName("eateryLocationDetail")
     private String eateryLocationDetail;
 
+    @SerializedName("blogFoodType")
+    private String blogFoodType;
+
+    @SerializedName("blogMealType")
+    private String blogMealType;
+
+    @SerializedName("blogPriceRange")
+    private String blogPriceRange;
+
 
     // Optional fields that might not be in the response
     private Double blogRate;
@@ -50,6 +59,7 @@ public class Blog {
     public Blog() {}
 
     // Getter and Setter methods
+
     public int getBlogId() {
         return blogId;
     }
@@ -208,5 +218,30 @@ public class Blog {
 
     public void setOpinion(String opinion) {
         this.opinion = opinion;
+    }
+
+    // Helper methods to extract string values for filtering compatibility
+    public String getFoodTypeName() {
+        return blogFoodType;
+    }
+
+    public void setFoodTypeName(String blogFoodType) {
+        this.blogFoodType = blogFoodType;
+    }
+
+    public String getMealTypeName() {
+        return blogMealType;
+    }
+
+    public void setMealTypeName(String blogMealType) {
+        this.blogMealType = blogMealType;
+    }
+
+    public String getPriceRangeValue() {
+        return blogPriceRange;
+    }
+
+    public void setPriceRangeValue(String blogPriceRange) {
+        this.blogPriceRange = blogPriceRange;
     }
 }

@@ -6,7 +6,11 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,8 +46,8 @@ import android.widget.ImageButton;
 
 public class CreateBlogActivity extends AppCompatActivity {
     private EditText titleEditText, contentEditText, dateEditText, eateryAddressEditText, eateryLocationEditText,
-            foodQualityEditText, environmentEditText, serviceEditText, pricingEditText, hygieneEditText, overallEditText,
-            foodTypesEditText, mealTypesEditText, priceRangeEditText, billImageEditText, blogImagesEditText;
+            foodQualityEditText, environmentEditText, serviceEditText, pricingEditText, hygieneEditText, overallEditText;
+    private AutoCompleteTextView foodTypesEditText, mealTypesEditText, priceRangeEditText;
     private Button submitButton;
     private BlogRepository blogRepository;
     private static final int PICK_BILL_IMAGE = 1;
@@ -84,6 +88,12 @@ public class CreateBlogActivity extends AppCompatActivity {
         imageViewBill = findViewById(R.id.imageViewBill);
         layoutBlogImages = findViewById(R.id.layoutBlogImages);
 
+        // Set up TextWatchers for automatic average calculation
+        setupRatingCalculation();
+
+        // Set up dropdown options
+        setupDropdownOptions();
+
         buttonSelectBillImage.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
@@ -98,7 +108,10 @@ public class CreateBlogActivity extends AppCompatActivity {
         });
 
         submitButton.setOnClickListener(v -> {
+            // Disable button and show loading message
             submitButton.setEnabled(false);
+            submitButton.setText("Bài viết của bạn đang được tạo ....");
+
             Executor executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {
                 try {
@@ -108,7 +121,9 @@ public class CreateBlogActivity extends AppCompatActivity {
                     if (titleEditText.getText().toString().trim().length() > 100) {
                         runOnUiThread(() -> {
                             Toast.makeText(this, "Title must be 100 characters or less", Toast.LENGTH_SHORT).show();
+                            // Reset button state on error
                             submitButton.setEnabled(true);
+                            submitButton.setText("Đăng bài");
                         });
                         return;
                     }
@@ -128,11 +143,32 @@ public class CreateBlogActivity extends AppCompatActivity {
                     blogRequest.setPricingRate(parseInt(pricingEditText.getText().toString()));
                     blogRequest.setHygieneRate(parseInt(hygieneEditText.getText().toString()));
                     blogRequest.setBlogRate(parseDouble(overallEditText.getText().toString()));
-                    blogRequest.setFoodTypeNames(splitList(foodTypesEditText.getText().toString()));
-                    blogRequest.setMealTypeNames(splitList(mealTypesEditText.getText().toString()));
-                    blogRequest.setPriceRanges(splitList(priceRangeEditText.getText().toString()));
+
+                    // Set single-element lists for FoodTypes, MealTypes, and PriceRanges
+                    ArrayList<String> foodTypesList = new ArrayList<>();
+                    String foodType = foodTypesEditText.getText().toString().trim();
+                    if (!foodType.isEmpty()) {
+                        foodTypesList.add(foodType);
+                    }
+                    blogRequest.setFoodTypeNames(foodTypesList);
+
+                    ArrayList<String> mealTypesList = new ArrayList<>();
+                    String mealType = mealTypesEditText.getText().toString().trim();
+                    if (!mealType.isEmpty()) {
+                        mealTypesList.add(mealType);
+                    }
+                    blogRequest.setMealTypeNames(mealTypesList);
+
+                    ArrayList<String> priceRangesList = new ArrayList<>();
+                    String priceRange = priceRangeEditText.getText().toString().trim();
+                    if (!priceRange.isEmpty()) {
+                        priceRangesList.add(priceRange);
+                    }
+                    blogRequest.setPriceRanges(priceRangesList);
+
                     blogRequest.setBlogBillImageBase64(billImageBase64);
                     blogRequest.setBlogImagesBase64(blogImagesBase64);
+
                     blogRequest.setBlogLike(0);
                     blogRequest.setBlogStatus(0);
                     blogRequest.setLikeCount(0);
@@ -158,7 +194,9 @@ public class CreateBlogActivity extends AppCompatActivity {
                             blogRequest.getBlogBillImageBase64().isEmpty()){
                         runOnUiThread(() -> {
                             Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
+                            // Reset button state on error
                             submitButton.setEnabled(true);
+                            submitButton.setText("Đăng bài");
                         });
                         return;
                     }
@@ -183,11 +221,105 @@ public class CreateBlogActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        finish();
+                        // Reset button state on error
+                        submitButton.setEnabled(true);
+                        submitButton.setText("Đăng bài");
                     });
                 }
             });
         });
+    }
+
+    private void setupDropdownOptions() {
+        // Food Types dropdown options
+        String[] foodTypeOptions = {"Vietnamese", "Chinese", "Korean", "American", "Europe"};
+        ArrayAdapter<String> foodTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, foodTypeOptions);
+        foodTypesEditText.setAdapter(foodTypeAdapter);
+        foodTypesEditText.setOnClickListener(v -> foodTypesEditText.showDropDown());
+
+        // Meal Types dropdown options
+        String[] mealTypeOptions = {"Breakfast", "Brunch", "Lunch", "Dinner", "Late Night", "Drink"};
+        ArrayAdapter<String> mealTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, mealTypeOptions);
+        mealTypesEditText.setAdapter(mealTypeAdapter);
+        mealTypesEditText.setOnClickListener(v -> mealTypesEditText.showDropDown());
+
+        // Price Range dropdown options
+        String[] priceRangeOptions = {"$ (<50,000 vnd)", "$$ (50,001 - 200,000 vnd)", "$$$ (>200,000 vnd)"};
+        ArrayAdapter<String> priceRangeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, priceRangeOptions);
+        priceRangeEditText.setAdapter(priceRangeAdapter);
+        priceRangeEditText.setOnClickListener(v -> priceRangeEditText.showDropDown());
+
+        //
+    }
+
+    private void setupRatingCalculation() {
+        TextWatcher ratingWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                calculateOverallRating();
+            }
+        };
+
+        foodQualityEditText.addTextChangedListener(ratingWatcher);
+        environmentEditText.addTextChangedListener(ratingWatcher);
+        serviceEditText.addTextChangedListener(ratingWatcher);
+        pricingEditText.addTextChangedListener(ratingWatcher);
+        hygieneEditText.addTextChangedListener(ratingWatcher);
+    }
+
+    private void calculateOverallRating() {
+        try {
+            double total = 0;
+            int count = 0;
+
+            String foodQuality = foodQualityEditText.getText().toString().trim();
+            if (!foodQuality.isEmpty()) {
+                total += Double.parseDouble(foodQuality);
+                count++;
+            }
+
+            String environment = environmentEditText.getText().toString().trim();
+            if (!environment.isEmpty()) {
+                total += Double.parseDouble(environment);
+                count++;
+            }
+
+            String service = serviceEditText.getText().toString().trim();
+            if (!service.isEmpty()) {
+                total += Double.parseDouble(service);
+                count++;
+            }
+
+            String pricing = pricingEditText.getText().toString().trim();
+            if (!pricing.isEmpty()) {
+                total += Double.parseDouble(pricing);
+                count++;
+            }
+
+            String hygiene = hygieneEditText.getText().toString().trim();
+            if (!hygiene.isEmpty()) {
+                total += Double.parseDouble(hygiene);
+                count++;
+            }
+
+            if (count > 0) {
+                double average = total / count;
+                // Round to 1 decimal place
+                average = Math.round(average * 10.0) / 10.0;
+                overallEditText.setText(String.valueOf(average));
+            } else {
+                overallEditText.setText("");
+            }
+        } catch (NumberFormatException e) {
+            // Handle invalid number format
+            overallEditText.setText("");
+        }
     }
 
     private int parseInt(String s) {

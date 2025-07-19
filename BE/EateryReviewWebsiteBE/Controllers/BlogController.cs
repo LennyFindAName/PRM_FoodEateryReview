@@ -5,6 +5,7 @@ using BusinessObjects.RequestModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Services.Services.NotificationService;
 using System.Text;
@@ -51,6 +52,9 @@ namespace EateryReviewWebsiteBE.Controllers
         {
             var skip = (page - 1) * pageSize;
             var blogs = _context.Blogs
+                  .Include(b => b.BlogFoodTypes)
+                    .Include(b => b.BlogMealTypes)
+                    .Include(b => b.BlogPriceRanges)
                 .OrderByDescending(b => b.BlogDate)
                 .Where(b => b.BlogStatus == (int)BlogModerationStatus.Approved)
                 .Skip(skip)
@@ -67,7 +71,11 @@ namespace EateryReviewWebsiteBE.Controllers
                         .Where(bi => bi.BlogId == blog.BlogId)
                         .Select(bi => Convert.ToBase64String(bi.BlogImage1 ?? Array.Empty<byte>()))
                           .FirstOrDefault(),
-                    ProfileImage = blog.User != null && blog.User.UserImage != null ? Convert.ToBase64String(blog.User.UserImage) : null
+                    ProfileImage = blog.User != null && blog.User.UserImage != null ? Convert.ToBase64String(blog.User.UserImage) : null,
+                    BlogFoodType = blog.BlogFoodTypes.Select(ft => ft.FoodTypeName).FirstOrDefault(),
+                    BlogMealType = blog.BlogMealTypes.Select(mt => mt.MealTypeName).FirstOrDefault(),
+                    BlogPriceRange = blog.BlogPriceRanges.Select(pr => pr.PriceRangeValue).FirstOrDefault()
+
                 })
                 .ToList();
 
@@ -112,6 +120,7 @@ namespace EateryReviewWebsiteBE.Controllers
                 var paidBlogIds = paidBlogs.Select(b => b.BlogId).ToList();
 
                 var regularBlogs = _context.Blogs
+                  
                     .Where(b => b.BlogStatus == (int)BlogModerationStatus.Approved
                                && !paidBlogIds.Contains(b.BlogId)) // Exclude already selected paid blogs
                     .Select(blog => new
@@ -127,6 +136,7 @@ namespace EateryReviewWebsiteBE.Controllers
                             .Select(bi => Convert.ToBase64String(bi.BlogImage1 ?? Array.Empty<byte>()))
                             .FirstOrDefault(),
                         ProfileImage = blog.User != null && blog.User.UserImage != null ? Convert.ToBase64String(blog.User.UserImage) : null
+                      
                     })
                     .OrderBy(x => Guid.NewGuid())
                     .Take(neededCount)

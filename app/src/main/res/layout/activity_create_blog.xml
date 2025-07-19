@@ -45,30 +45,7 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Ảnh đại diện blog -->
-            <FrameLayout
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp">
-                <ImageView
-                    android:id="@+id/imageViewBill"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:background="#E0F8E6"
-                    android:src="@drawable/baseline_article_24"
-                    android:contentDescription="Ảnh hóa đơn"/>
-                <ImageButton
-                    android:id="@+id/buttonSelectBillImage"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="bottom|end"
-                    android:background="@drawable/bg_button_primary"
-                    android:src="@drawable/baseline_add_24"
-                    android:contentDescription="Chọn ảnh hóa đơn"/>
-            </FrameLayout>
+
 
             <!-- Tiêu đề -->
             <EditText
@@ -95,7 +72,7 @@
 
             <!-- Địa chỉ quán -->
             <EditText
-                android:id="@+id/editTextEateryAddress"
+                android:id="@+id/editTextEateryLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_edit_text"
@@ -106,7 +83,7 @@
 
             <!-- Vị trí quán -->
             <EditText
-                android:id="@+id/editTextEateryLocation"
+                android:id="@+id/editTextEateryAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_edit_text"
@@ -128,10 +105,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_edit_text"
-                    android:hint="Chất lượng"
+                    android:hint="Chất lượng (1-5)"
                     android:inputType="number"
                     android:textSize="16sp"
-                    android:padding="12dp"/>
+                    android:padding="12dp"
+                    android:maxLength="1"
+                    android:digits="12345"/>
                 <Space android:layout_width="8dp" android:layout_height="wrap_content"/>
                 <EditText
                     android:id="@+id/editTextEnvironment"
@@ -139,10 +118,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_edit_text"
-                    android:hint="Không gian"
+                    android:hint="Không gian (1-5)"
                     android:inputType="number"
                     android:textSize="16sp"
-                    android:padding="12dp"/>
+                    android:padding="12dp"
+                    android:maxLength="1"
+                    android:digits="12345"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -156,10 +137,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_edit_text"
-                    android:hint="Phục vụ"
+                    android:hint="Phục vụ (1-5)"
                     android:inputType="number"
                     android:textSize="16sp"
-                    android:padding="12dp"/>
+                    android:padding="12dp"
+                    android:maxLength="1"
+                    android:digits="12345"/>
                 <Space android:layout_width="8dp" android:layout_height="wrap_content"/>
                 <EditText
                     android:id="@+id/editTextPricing"
@@ -167,10 +150,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_edit_text"
-                    android:hint="Giá cả"
+                    android:hint="Giá cả (1-5)"
                     android:inputType="number"
                     android:textSize="16sp"
-                    android:padding="12dp"/>
+                    android:padding="12dp"
+                    android:maxLength="1"
+                    android:digits="12345"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -184,10 +169,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_edit_text"
-                    android:hint="Vệ sinh"
+                    android:hint="Vệ sinh (1-5)"
                     android:inputType="number"
                     android:textSize="16sp"
-                    android:padding="12dp"/>
+                    android:padding="12dp"
+                    android:maxLength="1"
+                    android:digits="12345"/>
                 <Space android:layout_width="8dp" android:layout_height="wrap_content"/>
                 <EditText
                     android:id="@+id/editTextOverall"
@@ -195,32 +182,41 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_edit_text"
-                    android:hint="Tổng quan"
-                    android:inputType="numberDecimal"
+                    android:hint="Tổng quan (tự động)"
+                    android:inputType="none"
                     android:textSize="16sp"
-                    android:padding="12dp"/>
+                    android:padding="12dp"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:textColor="#666666"/>
             </LinearLayout>
 
             <!-- Loại món ăn, bữa ăn, khoảng giá -->
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/editTextFoodTypes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_edit_text"
-                android:hint="Loại món ăn (phở, pizza, ...)"
+                android:hint="Loại món ăn"
                 android:textSize="16sp"
                 android:padding="14dp"
-                android:layout_marginBottom="12dp"/>
-            <EditText
+                android:layout_marginBottom="12dp"
+                android:inputType="none"
+                android:focusable="false"
+                android:clickable="true"/>
+            <AutoCompleteTextView
                 android:id="@+id/editTextMealTypes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_edit_text"
-                android:hint="Bữa ăn (sáng, trưa, tối, ...)"
+                android:hint="Bữa ăn"
                 android:textSize="16sp"
                 android:padding="14dp"
-                android:layout_marginBottom="12dp"/>
-            <EditText
+                android:layout_marginBottom="12dp"
+                android:inputType="none"
+                android:focusable="false"
+                android:clickable="true"/>
+            <AutoCompleteTextView
                 android:id="@+id/editTextPriceRange"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -228,7 +224,10 @@
                 android:hint="Khoảng giá"
                 android:textSize="16sp"
                 android:padding="14dp"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="12dp"
+                android:inputType="none"
+                android:focusable="false"
+                android:clickable="true"/>
 
             <!-- Ảnh blog -->
             <TextView
@@ -258,12 +257,47 @@
                 android:src="@drawable/baseline_add_24"
                 android:contentDescription="Chọn ảnh blog"/>
 
+
+            <!-- Ảnh blog -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ảnh bill thanh toán (tối đa 1 ảnh)"
+                android:textColor="#0BAE77"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"/>
+            <!-- Ảnh đại diện blog -->
+            <FrameLayout
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp">
+                <ImageView
+                    android:id="@+id/imageViewBill"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:background="#E0F8E6"
+                    android:src="@drawable/baseline_article_24"
+                    android:contentDescription="Ảnh hóa đơn"/>
+                <ImageButton
+                    android:id="@+id/buttonSelectBillImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="bottom|end"
+                    android:background="@drawable/bg_button_primary"
+                    android:src="@drawable/baseline_add_24"
+                    android:contentDescription="Chọn ảnh hóa đơn"/>
+            </FrameLayout>
+
             <!-- Nút Đăng -->
             <Button
                 android:id="@+id/buttonSubmit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Đăng Blog"
+                android:text="Đăng bài"
                 android:textAllCaps="false"
                 android:textSize="18sp"
                 android:textStyle="bold"

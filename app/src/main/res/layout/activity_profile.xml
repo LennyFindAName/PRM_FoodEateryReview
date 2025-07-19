@@ -98,7 +98,7 @@
                 android:text="Tên đăng nhập"
                 android:textStyle="bold"
                 android:textColor="#666"
-                android:textSize="13sp"
+                android:textSize="16sp"
                 android:layout_marginTop="4dp"/>
             <EditText
                 android:id="@+id/profile_name"
@@ -106,29 +106,11 @@
                 android:layout_height="wrap_content"
                 android:hint="User name"
                 android:enabled="false"
-                android:textColor="#222"
-                android:textSize="15sp"
-                android:background="@android:color/transparent"
-                android:layout_marginBottom="18dp"/>
-
-            <!-- Display Name -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tên hiển thị"
-                android:textStyle="bold"
-                android:textColor="#666"
-                android:textSize="13sp"
-                android:layout_marginTop="4dp"/>
-            <EditText
-                android:id="@+id/profile_displayName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Display name"
-                android:enabled="false"
-                android:textColor="#222"
-                android:textSize="15sp"
-                android:background="@android:color/transparent"
+                android:textColor="#888"
+                android:textColorHint="#AAA"
+                android:textSize="18sp"
+                android:background="@drawable/simple_edittext_border_disabled"
+                android:padding="12dp"
                 android:layout_marginBottom="18dp"/>
 
             <!-- Email -->
@@ -138,18 +120,42 @@
                 android:text="Email"
                 android:textStyle="bold"
                 android:textColor="#666"
-                android:textSize="13sp"
+                android:textSize="16sp"
                 android:layout_marginTop="4dp"/>
             <EditText
                 android:id="@+id/profile_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
-                android:enabled="true"
-                android:textColor="#222"
-                android:textSize="15sp"
-                android:background="@android:color/transparent"
+                android:enabled="false"
+                android:textColor="#888"
+                android:textColorHint="#AAA"
+                android:textSize="18sp"
+                android:background="@drawable/simple_edittext_border_disabled"
+                android:padding="12dp"
                 android:layout_marginBottom="18dp"/>
+
+            <!-- Display Name -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên hiển thị"
+                android:textStyle="bold"
+                android:textColor="#666"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp"/>
+            <EditText
+                android:id="@+id/profile_displayName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Display name"
+                android:enabled="false"
+                android:textColor="#222"
+                android:textSize="18sp"
+                android:background="@drawable/simple_edittext_border"
+                android:padding="12dp"
+                android:layout_marginBottom="18dp"/>
+
 
             <!-- Phone -->
             <TextView
@@ -158,7 +164,7 @@
                 android:text="Số điện thoại"
                 android:textStyle="bold"
                 android:textColor="#666"
-                android:textSize="13sp"
+                android:textSize="16sp"
                 android:layout_marginTop="4dp"/>
             <EditText
                 android:id="@+id/profile_phone"
@@ -167,8 +173,9 @@
                 android:hint="Phone number"
                 android:enabled="false"
                 android:textColor="#222"
-                android:textSize="15sp"
-                android:background="@android:color/transparent"
+                android:textSize="18sp"
+                android:background="@drawable/simple_edittext_border"
+                android:padding="12dp"
                 android:layout_marginBottom="0dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

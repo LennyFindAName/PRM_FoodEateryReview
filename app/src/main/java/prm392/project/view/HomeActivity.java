@@ -16,6 +16,8 @@ import android.widget.Toast;
 import android.widget.EditText;
 import android.text.TextWatcher;
 import android.text.Editable;
+import android.widget.AutoCompleteTextView;
+import android.widget.ArrayAdapter;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -59,6 +61,7 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
     ArrayList<Blog> allBlogList; // Store all blogs for filtering
     SwipeRefreshLayout swipeRefreshLayout;
     EditText searchEditText;
+    AutoCompleteTextView filterFoodType, filterMealType, filterPriceRange;
     //FoodService foodService;
     BlogService blogService;
 
@@ -125,6 +128,12 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
         // Initialize search EditText and set up search functionality
         searchEditText = findViewById(R.id.search_edit_text);
         setupSearchFunctionality();
+
+        // Initialize filter dropdowns
+        filterFoodType = findViewById(R.id.filter_food_type);
+        filterMealType = findViewById(R.id.filter_meal_type);
+        filterPriceRange = findViewById(R.id.filter_price_range);
+        setupFilterDropdowns();
 
         loadBlogData();
         Log.d("HomeActivity", "Food data loading started");
@@ -229,11 +238,17 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
         //foodList.clear();  // Clear the existing list
         blogList.clear();  // Clear the existing blog list
 
+        // Reset search bar and all filter dropdowns
+        searchEditText.setText("");
+        filterFoodType.setText("All", false);
+        filterMealType.setText("All", false);
+        filterPriceRange.setText("All", false);
+
         loadBlogData();    // Reload the data
        // foodAdapter.notifyDataSetChanged();  // Notify adapter of the data change
         blogAdapter.notifyDataSetChanged();  // Notify blog adapter of the data change
 
-        Log.d("HomeActivity", "Food data refreshed");
+        Log.d("HomeActivity", "Food data refreshed and all filters reset");
     }
 
 
@@ -251,8 +266,8 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Filter blogs in real-time as user types
-                filterBlogs(s.toString().trim());
+                // Apply all filters including search as user types
+                applyFilters();
             }
 
             @Override
@@ -287,4 +302,112 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
         Log.d("HomeActivity", "Filtered results: " + blogList.size() + " blogs found");
     }
 
+    // Setup filter dropdowns
+    private void setupFilterDropdowns() {
+        // Setup for food type filter with "All" option
+        String[] foodTypeOptions = {"All", "Breakfast", "Brunch", "Lunch", "Dinner", "Late Night", "Drink"};
+        ArrayAdapter<String> foodTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, foodTypeOptions);
+        filterFoodType.setAdapter(foodTypeAdapter);
+
+        // Setup for meal type filter with "All" option
+        String[] mealTypeOptions = {"All", "Vietnamese", "Chinese", "Korean", "American", "Europe"};
+        ArrayAdapter<String> mealTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, mealTypeOptions);
+        filterMealType.setAdapter(mealTypeAdapter);
+
+        // Setup for price range filter with "All" option
+        String[] priceRangeOptions = {"All", "$ (<50,000 vnd)", "$$ (50,001 - 200,000 vnd)", "$$$ (>200,000 vnd)"};
+        ArrayAdapter<String> priceRangeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, priceRangeOptions);
+        filterPriceRange.setAdapter(priceRangeAdapter);
+
+        // Set up item click listeners for dropdowns
+        filterFoodType.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedFoodType = (String) parent.getItemAtPosition(position);
+            Log.d("HomeActivity", "Selected food type: " + selectedFoodType);
+            applyFilters();
+        });
+
+        filterMealType.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedMealType = (String) parent.getItemAtPosition(position);
+            Log.d("HomeActivity", "Selected meal type: " + selectedMealType);
+            applyFilters();
+        });
+
+        filterPriceRange.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedPriceRange = (String) parent.getItemAtPosition(position);
+            Log.d("HomeActivity", "Selected price range: " + selectedPriceRange);
+            applyFilters();
+        });
+
+        // Make dropdowns show dropdown on click
+        filterFoodType.setOnClickListener(v -> filterFoodType.showDropDown());
+        filterMealType.setOnClickListener(v -> filterMealType.showDropDown());
+        filterPriceRange.setOnClickListener(v -> filterPriceRange.showDropDown());
+    }
+
+    // Apply all filters (search + dropdowns)
+    private void applyFilters() {
+        String searchQuery = searchEditText.getText().toString().trim();
+        String selectedMealType = filterFoodType.getText().toString();
+        String selectedFoodType = filterMealType.getText().toString();
+        String selectedPriceRange = filterPriceRange.getText().toString();
+
+        Log.d("HomeActivity", "Applying filters - Search: " + searchQuery +
+              ", FoodType: " + selectedFoodType +
+              ", MealType: " + selectedMealType +
+              ", PriceRange: " + selectedPriceRange);
+
+        blogList.clear(); // Clear current displayed list
+
+        for (Blog blog : allBlogList) {
+            boolean matchesSearch = true;
+            boolean matchesFoodType = true;
+            boolean matchesMealType = true;
+            boolean matchesPriceRange = true;
+
+            // Check search query
+            if (!searchQuery.isEmpty()) {
+                matchesSearch = blog.getBlogTitle() != null &&
+                               blog.getBlogTitle().toLowerCase().contains(searchQuery.toLowerCase());
+            }
+
+            // Check food type filter with debug logging
+            if (!selectedFoodType.isEmpty() && !selectedFoodType.equals("All")) {
+                String foodTypeName = blog.getFoodTypeName();
+                Log.d("HomeActivity", "Blog "
+                        + blog.getBlogId() + " food type: "
+                        + foodTypeName +
+                      ", looking for: " + selectedFoodType);
+                matchesFoodType = foodTypeName != null && foodTypeName.equals(selectedFoodType);
+                Log.d("HomeActivity", "Food type match result: " + matchesFoodType);
+            }
+
+            // Check meal type filter
+            if (!selectedMealType.isEmpty() && !selectedMealType.equals("All")) {
+                String mealTypeName = blog.getMealTypeName();
+                Log.d("HomeActivity", "Blog " + blog.getBlogId() + " meal type: " + mealTypeName +
+                      ", looking for: " + selectedMealType);
+                matchesMealType = mealTypeName != null && mealTypeName.equals(selectedMealType);
+                Log.d("HomeActivity", "Meal type match result: " + matchesMealType);
+            }
+
+            // Check price range filter
+            if (!selectedPriceRange.isEmpty() && !selectedPriceRange.equals("All")) {
+                String priceRangeValue = blog.getPriceRangeValue();
+                Log.d("HomeActivity", "Blog " + blog.getBlogId() + " price range: " + priceRangeValue +
+                      ", looking for: " + selectedPriceRange);
+                matchesPriceRange = priceRangeValue != null && priceRangeValue.equals(selectedPriceRange);
+                Log.d("HomeActivity", "Price range match result: " + matchesPriceRange);
+            }
+
+            // Add blog if it matches all filters
+            if (matchesSearch && matchesFoodType && matchesMealType && matchesPriceRange) {
+                blogList.add(blog);
+            }
+        }
+
+        // Notify adapter of data changes
+        blogAdapter.notifyDataSetChanged();
+
+        Log.d("HomeActivity", "Filtered results: " + blogList.size() + " blogs found");
+    }
 }

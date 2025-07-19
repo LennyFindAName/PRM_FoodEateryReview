@@ -73,7 +73,7 @@ public class BlogAdapter extends BaseAdapter {
 //        likesView.setText(likesText);
 
         // Show username in description field
-        descriptionView.setText("By: " + (blog.getUsername() != null ? blog.getUsername() : "Unknown"));
+        descriptionView.setText("Tạo bởi: " + (blog.getUsername() != null ? blog.getUsername() : "Unknown"));
 
         String dateText = "No Date";
         if (blog.getBlogDate() != null && !blog.getBlogDate().isEmpty()) {
