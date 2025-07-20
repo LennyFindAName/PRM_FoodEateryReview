@@ -23,7 +23,7 @@ public class JwtUtils {
     public String getUserId() {
         if (jwt == null) return null;
         try {
-            return jwt.getClaim("nameid").asString();
+            return jwt.getClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").asString();
         } catch (Exception e) {
             Log.e(tag, "Failed to get userId: " + e.getMessage());
             return null;
@@ -33,7 +33,7 @@ public class JwtUtils {
     public String getUsername() {
         if (jwt == null) return null;
         try {
-            return jwt.getClaim("unique_name").asString();
+            return jwt.getClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").asString();
         } catch (Exception e) {
             Log.e(tag, "Failed to get username: " + e.getMessage());
             return null;
@@ -43,7 +43,7 @@ public class JwtUtils {
     public String getRole() {
         if (jwt == null) return null;
         try {
-            return jwt.getClaim("role").asString();
+            return jwt.getClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role").asString();
         } catch (Exception e) {
             Log.e(tag, "Failed to get role: " + e.getMessage());
             return null;

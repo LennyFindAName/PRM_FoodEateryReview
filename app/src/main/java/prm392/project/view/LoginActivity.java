@@ -11,12 +11,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import prm392.project.R;
 import prm392.project.factory.APIClient;
 import prm392.project.inter.AuthService;
 import prm392.project.model.DTOs.LoginRequest;
 import prm392.project.model.DTOs.LoginResponse;
+import prm392.project.model.DTOs.RegisterTokenRequest;
 import prm392.project.utils.JwtUtils;
+import prm392.project.repo.AppNotificationRepository;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -104,6 +108,17 @@ public class LoginActivity extends AppCompatActivity {
                     if (userId != null) editor.putString("user_id", userId);
                     editor.apply();
 
+                    // Get FCM token to send to backend
+                    FirebaseMessaging.getInstance().getToken()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    String fcmToken = task.getResult();
+                                    sendTokenToBackend(Integer.parseInt(userId), fcmToken);
+                                } else {
+                                    Log.e("FCM", "Fetching FCM token failed", task.getException());
+                                }
+                            });
+
                     Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
@@ -119,6 +134,21 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Log.e("LOGIN_DEBUG", "Network error: " + t.getMessage(), t);
                 Toast.makeText(LoginActivity.this, "Login failed: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void sendTokenToBackend(int userId, String token) {
+        RegisterTokenRequest request = new RegisterTokenRequest(userId, token);
+        AppNotificationRepository notiRepo = new AppNotificationRepository(this);
+        notiRepo.registerToken(request).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("FCM", "Token sent to backend");
+            }
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("FCM", "Failed to send token", t);
             }
         });
     }

@@ -1,3 +1,4 @@
 ﻿.gradle
 local.properties
 .idea
+app/google-services.json

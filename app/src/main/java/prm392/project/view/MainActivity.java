@@ -9,7 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import android.content.SharedPreferences;
 import prm392.project.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,10 +32,35 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        button = findViewById(R.id.button);
-        button.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+        }
+
+        // In MainActivity.java, inside onCreate()
+        SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
+        String token = prefs.getString("access_token", null);
+
+        if (token != null) {
+            // User is already logged in, proceed to main content
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
             startActivity(intent);
-        });
+            finish();
+        } else {
+            // Show login button as usual
+            button = findViewById(R.id.button);
+            button.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            });
+        }
+
+//        button = findViewById(R.id.button);
+//        button.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//            startActivity(intent);
+//        });
     }
 }
