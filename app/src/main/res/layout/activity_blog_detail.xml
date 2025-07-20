@@ -344,6 +344,63 @@
                         android:progressBackgroundTint="#E0E0E0"/>
                 </LinearLayout>
 
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="16dp"
+                    android:background="#DDDDDD" />
+
+                <!-- Comment Input Section -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bình luận"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#333"
+                    android:layout_marginBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/commentInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập bình luận của bạn..."
+                    android:padding="12dp"
+                    android:minHeight="100dp"
+                    android:gravity="top|start"
+                    android:textColor="#000"
+                    android:textColorHint="#999"
+                    android:textSize="14sp"
+                    android:inputType="textMultiLine"
+                    android:maxLines="5"
+                    android:layout_marginBottom="8dp" />
+
+                <Button
+                    android:id="@+id/btnPostComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gửi bình luận"
+                    android:layout_gravity="end"
+                    android:backgroundTint="#2196F3"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Comment List -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tất cả bình luận"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#333"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:id="@+id/commentListContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
 
 
             </LinearLayout>
