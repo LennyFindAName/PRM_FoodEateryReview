@@ -305,12 +305,14 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
     // Setup filter dropdowns
     private void setupFilterDropdowns() {
         // Setup for food type filter with "All" option
-        String[] foodTypeOptions = {"All", "Breakfast", "Brunch", "Lunch", "Dinner", "Late Night", "Drink"};
+        String[] mealTypeOptions = {"All", "Breakfast", "Brunch", "Lunch", "Dinner", "Late Night", "Drink"};
+        String[] foodTypeOptions = {"All", "Vietnamese", "Chinese", "Korean", "American", "Europe"};
+
         ArrayAdapter<String> foodTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, foodTypeOptions);
         filterFoodType.setAdapter(foodTypeAdapter);
 
         // Setup for meal type filter with "All" option
-        String[] mealTypeOptions = {"All", "Vietnamese", "Chinese", "Korean", "American", "Europe"};
+
         ArrayAdapter<String> mealTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, mealTypeOptions);
         filterMealType.setAdapter(mealTypeAdapter);
 
@@ -347,8 +349,8 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
     // Apply all filters (search + dropdowns)
     private void applyFilters() {
         String searchQuery = searchEditText.getText().toString().trim();
-        String selectedMealType = filterFoodType.getText().toString();
-        String selectedFoodType = filterMealType.getText().toString();
+        String selectedFoodType = filterFoodType.getText().toString();
+        String selectedMealType = filterMealType.getText().toString();
         String selectedPriceRange = filterPriceRange.getText().toString();
 
         Log.d("HomeActivity", "Applying filters - Search: " + searchQuery +
