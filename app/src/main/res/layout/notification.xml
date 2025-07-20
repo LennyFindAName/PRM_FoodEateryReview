@@ -34,7 +34,6 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#000000"
-            android:maxLines="1"
             android:ellipsize="end"/>
 
         <TextView
@@ -44,7 +43,6 @@
             android:text="Message"
             android:textSize="14sp"
             android:textColor="#444444"
-            android:maxLines="2"
             android:ellipsize="end"/>
     </LinearLayout>
 
