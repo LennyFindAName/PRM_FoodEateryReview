@@ -4,11 +4,15 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.SeekBar;
@@ -28,8 +32,12 @@ import prm392.project.model.Blog;
 import prm392.project.model.Bookmark;
 import prm392.project.model.DTOs.BookmarksResponse;
 import prm392.project.model.User;
+import prm392.project.model.Comment;
+import prm392.project.model.DTOs.CommentRequest;
+import prm392.project.model.DTOs.CommentResponse;
 import prm392.project.repo.BlogRepository;
 import prm392.project.repo.ProfileRepository;
+import prm392.project.repo.CommentRepository;
 import prm392.project.model.OrderDetail;
 import prm392.project.repo.UserRepository;
 import prm392.project.utils.BottomNavHelper;
@@ -65,6 +73,11 @@ public class BlogDetailActivity extends AppCompatActivity implements OnMapReadyC
     private BlogRepository blogRepository;
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
+    private EditText commentInput;
+    private Button btnPostComment;
+    private LinearLayout commentListContainer;
+    private CommentRepository commentRepository;
+
     Blog tmpBlog = new Blog();
 
     @Override
@@ -88,7 +101,10 @@ public class BlogDetailActivity extends AppCompatActivity implements OnMapReadyC
         pricingRate = findViewById(R.id.pricingRate);
         hygieneRate = findViewById(R.id.hygieneRate);
         locationText = findViewById(R.id.locationText);
-
+        commentInput = findViewById(R.id.commentInput);
+        btnPostComment = findViewById(R.id.btnPostComment);
+        commentListContainer = findViewById(R.id.commentListContainer);
+        commentRepository = new CommentRepository(this);
         blogRepository = new BlogRepository(this);
         ProfileRepository profileRepository = new ProfileRepository(this);
 
@@ -122,6 +138,34 @@ public class BlogDetailActivity extends AppCompatActivity implements OnMapReadyC
                     @Override
                     public void onFailure(Call<BookmarksResponse> call, Throwable t) { }
                 });
+
+                btnPostComment.setOnClickListener(v -> {
+                    String content = commentInput.getText().toString().trim();
+                    if (content.isEmpty()) {
+                        Toast.makeText(BlogDetailActivity.this, "Vui lòng nhập nội dung bình luận", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    CommentRequest request = new CommentRequest(content, tmpBlog.getBlogId(), userId);
+                    commentRepository.postComment(request).enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                commentInput.setText(""); // clear input
+                                loadComments(tmpBlog.getBlogId()); // reload comments
+                                Toast.makeText(BlogDetailActivity.this, "Đã gửi bình luận", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(BlogDetailActivity.this, "Gửi bình luận thất bại", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Toast.makeText(BlogDetailActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                });
+
 
                 btnBookmark.setOnClickListener(v -> {
                     if (!isBookmarked) {
@@ -303,6 +347,7 @@ public class BlogDetailActivity extends AppCompatActivity implements OnMapReadyC
                     if (response.body() != null) {
                         Blog blog = response.body();
                         tmpBlog = blog;
+                        loadComments(blog.getBlogId());
                         // Set data to views
                         blogName.setText(blog.getBlogTitle());
 
@@ -362,6 +407,43 @@ public class BlogDetailActivity extends AppCompatActivity implements OnMapReadyC
             }
         });
     }
+
+    private void loadComments(int blogId) {
+        commentRepository.getComments(blogId).enqueue(new Callback<List<CommentResponse>>() {
+            @Override
+            public void onResponse(Call<List<CommentResponse>> call, Response<List<CommentResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<CommentResponse> comments = response.body();
+                    commentListContainer.removeAllViews(); // Clear old comments
+                    LayoutInflater inflater = LayoutInflater.from(BlogDetailActivity.this);
+
+                    for (CommentResponse comment : comments) {
+                        View commentView = inflater.inflate(R.layout.comment_item, commentListContainer, false);
+
+                        TextView usernameText = commentView.findViewById(R.id.commentUsername);
+                        TextView contentText = commentView.findViewById(R.id.commentContent);
+                        ImageView avatarImage = commentView.findViewById(R.id.commentAvatar);
+
+                        usernameText.setText(comment.getUsername()); // or actual username if available
+                        contentText.setText(comment.getContent());
+
+                        //Nếu muốn thì Huy sửa lại chỗ này
+                        avatarImage.setImageResource(R.drawable.default_avatar);
+
+                        commentListContainer.addView(commentView);
+                    }
+                } else {
+                    Toast.makeText(BlogDetailActivity.this, "Không thể tải bình luận", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CommentResponse>> call, Throwable t) {
+                Toast.makeText(BlogDetailActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     // Geocode the address and show the location on the map
     private void geocodeAndShowLocation(String address) {
