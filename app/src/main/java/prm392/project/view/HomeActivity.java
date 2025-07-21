@@ -123,6 +123,14 @@ public class HomeActivity extends AppCompatActivity implements OnCartUpdateListe
             popupMenu.show();
         });
 
+        // Add notification icon click handler
+        ImageView notificationIcon = findViewById(R.id.notification_icon);
+        notificationIcon.setOnClickListener(v -> {
+            Log.d("HomeActivity", "Notification icon clicked");
+            Intent intent = new Intent(HomeActivity.this, NotificationActivity.class);
+            startActivity(intent);
+        });
+
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
 
         // Initialize search EditText and set up search functionality

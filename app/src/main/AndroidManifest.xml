@@ -63,6 +63,9 @@
             android:name=".view.BookmarkActivity"
             android:exported="false"/>
         <activity
+            android:name=".view.NotificationActivity"
+            android:exported="false"/>
+        <activity
             android:name=".view.MainActivity"
             android:exported="true">
             <intent-filter>

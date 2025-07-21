@@ -74,11 +74,11 @@ public class BookmarkActivity extends AppCompatActivity {
             public void onResponse(Call<BookmarksResponse> call, Response<BookmarksResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     if (response.body().getBookmarks().isEmpty()) {
-                        Toast.makeText(BookmarkActivity.this, "No bookmark", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BookmarkActivity.this, "Không có dấu trang", Toast.LENGTH_SHORT).show();
                     }
                     adapter.setBookmarks(response.body().getBookmarks());
                 } else {
-                    Toast.makeText(BookmarkActivity.this, "Failed to load bookmarks", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BookmarkActivity.this, "Lỗi khi tải dấu trang", Toast.LENGTH_SHORT).show();
                 }
             }
 
