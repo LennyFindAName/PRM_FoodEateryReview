@@ -1,0 +1,236 @@
+﻿<header class="header">
+	<!-- Role-based Navigation Script -->
+	<script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			// Load user info and setup role-based navigation
+			loadUserInfoAndSetupNavigation();
+
+			function loadUserInfoAndSetupNavigation() {
+				const userId = getUserIdFromToken();
+				console.log('User ID from token:', userId); // Debug log
+
+				if (!userId) {
+					console.log('No userId found, hiding role-specific links');
+					hideAllRoleSpecificLinks();
+					return;
+				}
+
+				// Call API to get full user details using the userId
+				$.ajax({
+					url: `http://localhost:5029/api/Account?id=${userId}`,
+					type: 'GET',
+					headers: {
+						'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+					},
+					success: function(user) {
+						console.log('API Response - Full user object:', userId); // Debug log
+						console.log('User role from API:', user.roleId); // Debug log
+						console.log('User userRole from API:', user.roleId); // Debug log
+
+						// Try different possible role property names
+						const userRole = user.roleId ;
+						console.log('Final userRole value:', userRole, 'Type:', typeof userRole); // Debug log
+
+						// Setup role-based navigation based on user role from API
+						setupRoleBasedNavigation(userRole);
+
+						// Update profile link with userId
+						$('#profileLink').attr('href', '/Profile?id=' + userId);
+					},
+					error: function(xhr, status, error) {
+						console.error('Error fetching user data:', error);
+						console.error('XHR:', xhr);
+						hideAllRoleSpecificLinks();
+					}
+				});
+			}
+
+			// Function to get userId from JWT token
+			function getUserIdFromToken() {
+				const token = localStorage.getItem('accessToken');
+				if (!token) {
+					console.log('No access token found');
+					return null;
+				}
+
+				try {
+					const decoded = jwt_decode(token);
+					console.log('Decoded JWT:', decoded); // Debug log
+					return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+				} catch (e) {
+					console.error('Invalid token', e);
+					return null;
+				}
+			}
+
+					function setupRoleBasedNavigation(userRole) {
+			hideAllRoleSpecificLinks();
+
+			if (userRole !== null && userRole !== undefined) {
+				const roleInt = parseInt(userRole);
+
+				switch (roleInt) {
+					case 3: // User
+						document.getElementById('createBlogLink').removeAttribute('hidden');
+						break;
+					case 2: // Moderator
+						document.getElementById('reviewLink').removeAttribute('hidden');
+						document.getElementById('manageUsersLink').removeAttribute('hidden');
+						break;
+					case 1: // Admin
+						document.getElementById('adminLink').removeAttribute('hidden');
+						break;
+					default:
+						hideAllRoleSpecificLinks();
+						break;
+				}
+			}
+		}
+
+		function hideAllRoleSpecificLinks() {
+			const createLink = document.getElementById('createBlogLink');
+			const modLink = document.getElementById('moderatorLink');
+			const adminLink = document.getElementById('adminLink');
+			const reviewLink = document.getElementById('reviewLink');
+			const manageUsersLink = document.getElementById('manageUsersLink');
+
+			if (createLink) createLink.setAttribute('hidden', '');
+			if (reviewLink) reviewLink.setAttribute('hidden', '');
+			if (manageUsersLink) manageUsersLink.setAttribute('hidden', '');
+			if (modLink) modLink.setAttribute('hidden', '');
+			if (adminLink) adminLink.setAttribute('hidden', '');
+		}
+
+			// Function to refresh navigation when login status changes
+			window.refreshNavigation = function() {
+				loadUserInfoAndSetupNavigation();
+			};
+		});
+	</script>
+	<div class="header__top">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6 col-md-6">
+					<div class="header__top__left">
+						<ul>
+							<li><i class="fa fa-envelope"></i> holaeatery@gmail.com</li>
+							<li>Review Quán ăn khắp Việt Nam</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-6">
+					<div class="header__top__right">
+						<!-- Hiển thị khi đã đăng nhập -->
+						<div id="loggedInSection" style="display:none;">
+							<div class="header__top__right__auth">
+								<a id="usernameDisplay" style="margin-right:5px"></a>
+							</div>
+							<div class="header__top__right__social">
+								<a href="/Wallet"><i class="fa fa-wallet"></i> Ví tiền </a>
+								<a href="/Ticket"><i class="fa fa-ticket"></i> Khiếu nại</a>
+								<a href="#"><i class="fa fa-bell"></i> Thông báo</a>
+								 <a href="#" id="profileLink"><i class="fa fa-user"></i> Cá nhân</a> 
+								<a href="javascript:void(0);" onclick="logout()"><i class="fa fa-sign-out"></i> Đăng Xuất</a>
+							</div>
+						</div>
+
+						<!-- Hiển thị khi chưa đăng nhập -->
+						<div id="guestSection" style="display:none;">
+							<div class="header__top__right__social">
+								<a href="/Authen"><i class="fa fa-user"></i> Đăng Nhập</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-2">
+				<div class="header__logo">
+					<a href="/"><img src="/img/logo-new.png" alt="Logo" style="width: 150px; height:auto"></a>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<nav class="header__menu">
+					<ul>
+						<li><a href="/"><i class="fa fa-home"></i> Trang Chủ</a></li>
+						<!-- Role-based navigation items will be added dynamically -->
+						<li id="createBlogLink"><a href="/Blog/Create"><i class="fa fa-pencil"></i> Tạo Bài</a></li>
+						<li id="reviewLink"><a href="/Moderation/Review"><i class="fa fa-shield"></i> Manage Blogs</a></li>
+						<li id="manageUsersLink"><a href="/Moderation/ManageUsers"><i class="fa fa-shield"></i> Manage Users</a></li>
+						<li id="adminLink"><a href="/Admin/Dashboard"><i class="fa fa-group"></i> Admin</a></li>
+					</ul>
+				</nav>
+			</div>
+			<div class="col-lg-4 search-bar-holder">
+				<div class="hero__search__form">
+					<form asp-controller="Search" asp-action="Index" method="get">
+						<div class="hero__search__categories">
+							<i class="fa fa-search"></i>
+						</div>
+						<input type="text" name="query" placeholder="Bạn muốn tìm gì ?">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<style>
+		.search-bar-holder {
+			display: flex;
+			align-items: center; /* This centers the search form vertically */
+			justify-content: center; /* This centers it horizontally */
+		}
+
+		.hero__search__form {
+			position: relative;
+			width: 100%;
+			max-width: 100%;
+			overflow: hidden;
+		}
+
+			.hero__search__form form {
+				display: flex;
+				align-items: center;
+				background: #f3f6fa;
+				border-radius: 5px;
+				padding: 0;
+				width: 100%;
+			}
+
+		.hero__search__categories {
+			padding: 15px 20px;
+			border-radius: 5px 0 0 5px;
+			color: white;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 50px;
+		}
+
+		.hero__search__form input[type="text"] {
+			flex: 1;
+			border: none;
+			outline: none;
+			padding: 15px 20px;
+			background: transparent;
+			font-size: 14px;
+			width: 100%;
+			min-width: 0; /* Prevents input from overflowing */
+		}
+
+			.hero__search__form input[type="text"]::placeholder {
+				color: #b2b2b2;
+			}
+		
+		.hero__search__categories {
+			padding: 12px 15px;
+			min-width: 45px;
+		}
+
+		
+	</style>
+</header>

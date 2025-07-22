@@ -2,7 +2,7 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/baseline_home_24"
-        android:title="Home" />
+        android:title="Trang chủ" />
     <item
         android:id="@+id/nav_chat"
         android:icon="@drawable/baseline_chat_24"
@@ -10,13 +10,13 @@
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/baseline_person_pin_24"
-        android:title="Profile" />
+        android:title="Cá Nhân" />
     <item
         android:id="@+id/nav_create_blog"
         android:icon="@drawable/baseline_add_24"
-        android:title="Create Blog" />
+        android:title="Tạo bài" />
     <item
         android:id="@+id/nav_bookmark"
         android:icon="@drawable/baseline_bookmarks_24"
-        android:title="Bookmarks" />
+        android:title="Dấu trang" />
 </menu>

@@ -1,0 +1,1176 @@
+﻿﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Search";
+}
+<!DOCTYPE html>
+<html lang="zxx">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Search</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;
+    0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;
+    1,300;1,400;1,500;1,600;1,700;1,800;1,900
+    &family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900
+    &family=M+PLUS+Rounded+1c&family=Noto+Emoji:wght@300..700
+    &family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900
+    &display=swap" rel="stylesheet">
+
+    @section Styles{
+        <!-- Css Styles -->
+        <link rel="stylesheet" href="@Url.Content("~/css/bootstrap.min.css")" type="text/css">
+        <link rel="stylesheet" href="@Url.Content("~/css/font-awesome.min.css")" type="text/css">
+        <link rel="stylesheet" href="@Url.Content("~/css/elegant-icons.css")" type="text/css">
+        <link rel="stylesheet" href="@Url.Content("~/css/nice-select.css")" type="text/css">
+        <link rel="stylesheet" href="@Url.Content("~/css/jquery-ui.min.css")" type="text/css">
+        <link rel="stylesheet" href="@Url.Content("~/css/slicknav.min.css")" type="text/css">
+        <link rel="stylesheet" href="@Url.Content("~/css/style.css")" type="text/css">
+        <link rel="stylesheet" href="@Url.Content("~/css/blog-detail.css")" type="text/css">
+        <link rel="stylesheet" href="@Url.Content("~/css/owl.carousel.min.css")" type="text/css">
+    }
+   
+
+
+    @section Scripts {
+        <!-- Include jQuery FIRST - ONLY ONCE -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <!-- Include Owl Carousel JS -->
+        <script src="~/js/owl.carousel.min.js"></script>
+
+         <!-- Local JS Files -->
+    <script src="@Url.Content("~/js/jquery-3.3.1.min.js")"></script>
+    <script src="@Url.Content("~/js/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/js/jquery-ui.min.js")"></script>
+    <script src="@Url.Content("~/js/jquery.slicknav.js")"></script>
+    <script src="@Url.Content("~/js/jquery.nice-select.min.js")"></script>
+    <script src="@Url.Content("~/js/mixitup.min.js")"></script>
+    <script src="@Url.Content("~/js/owl.carousel.min.js")"></script>
+    <script src="@Url.Content("~/js/main.js")"></script>
+    }
+
+</head>
+
+<body style="max-width: 100%;overflow-x: hidden">
+    <style>
+        h1, h2, h3, h4, h5, h6, p, body {
+            font-family: Lato, sans-serif;
+            font-weight: 400;
+            color: #333;
+        }
+
+        .search-option-btn {
+            font-size: 14px;
+            color: grey;
+            font-weight: 800;
+            text-transform: uppercase;
+            display: inline-block;
+            padding: 13px 30px 12px;
+            background: #F5F4F4;
+            border: none;
+            border-radius: 15px;
+        }
+
+            .search-option-btn:hover {
+                color: black;
+                background: lightgrey;
+            }
+
+        td {
+            margin: 10px 10px;
+            width: 300px;
+        }
+
+        .featured__item {
+            background-color: white;
+            border: 1px solid lightgrey;
+            border-radius: 15px;
+            padding-bottom: 15px;
+            margin: 15px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .featured__item__pic img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .featured__item__text {
+            margin-top: 10px;
+        }
+
+        .search-link {
+            color: black;
+            cursor: pointer;
+        }
+
+        .profile-card {
+            border: 3px solid #eaeaea;
+            padding: 30px;
+            border-radius: 10px;
+            background: white;
+        }
+
+        h5 {
+            font-weight: bold;
+        }
+
+        /* Fix the main container layout */
+        .search-page-container {
+            min-height: calc(100vh - 200px);
+            margin-bottom: 50px;
+        }
+
+        /* Remove fixed height from blog content container */
+        #advanced-blog-list-content {
+            min-height: 400px;
+            background: white;
+            border-radius: 15px;
+            overflow: visible;
+        }
+
+        /* Ensure user content has proper spacing */
+        #user-content {
+            min-height: 400px;
+            padding-bottom: 60px;
+        }
+
+        /* Blog Pagination */
+        .listPage {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            position: relative;
+            clear: both;
+        }
+
+            .listPage li {
+                margin: 0 5px;
+                display: inline-block;
+            }
+
+                .listPage li a {
+                    display: block;
+                    padding: 8px 15px;
+                    border-radius: 5px;
+                    color: #333;
+                    text-decoration: none;
+                    transition: all 0.3s ease;
+                }
+
+                .listPage li.active a {
+                    background-color: #7fad39 !important;
+                    color: white;
+                }
+
+                .listPage li a:hover {
+                    background-color: #ddd;
+                }
+
+                .listPage li.active a:hover {
+                    background-color: #6a9230 !important;
+                }
+
+            .listPage .active {
+                background-color: white !important;
+                color: #fff;
+            }
+
+        /* User Pagination */
+        .listPageUsers {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 30px 0 50px 0;
+            position: relative;
+            clear: both;
+        }
+
+            .listPageUsers li {
+                margin: 0 5px;
+                display: inline-block;
+            }
+
+                .listPageUsers li a {
+                    display: block;
+                    padding: 8px 15px;
+                    border-radius: 5px;
+                    color: #333;
+                    text-decoration: none;
+                    transition: all 0.3s ease;
+                }
+
+                .listPageUsers li.active a {
+                    background-color: #7fad39 !important;
+                    color: white;
+                }
+
+                .listPageUsers li a:hover {
+                    background-color: #ddd;
+                }
+
+                .listPageUsers li.active a:hover {
+                    background-color: #6a9230 !important;
+                }
+
+            .listPageUsers .active {
+                background-color: white !important;
+                color: #fff;
+            }
+
+        /* Add clearfix for the main content */
+        .main-content-wrapper::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Featured Blogs Carousel Styles */
+        .featured-carousel-section {
+        }
+
+        .featured__blog__item {
+            background-color: white;
+            border: 1px solid lightgrey;
+            border-radius: 15px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .featured___blog__item__pic {
+            position: relative;
+            overflow: hidden;
+        }
+
+            .featured___blog__item__pic img {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+                border-radius: 15px 15px 0 0;
+                filter: brightness(80%);
+                transition: all 0.3s ease;
+            }
+
+            .featured___blog__item__pic:hover img {
+                transform: scale(1.05);
+                filter: brightness(90%);
+            }
+
+        .text-overlay {
+            position: absolute;
+            bottom: 30px;
+            left: 10px;
+            right: 10px;
+            padding: 8px 12px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 5px;
+        }
+
+        .text-overlay-count {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            padding: 4px 8px;
+            color: white;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 5px;
+        }
+
+            .text-overlay-count img {
+                margin-right: 5px;
+            }
+
+        /* Carousel Container */
+        .carousel-container {
+            position: relative;
+            margin: 20px 0;
+            padding: 0 50px;
+        }
+
+        .carousel-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #7fad39;
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .carousel-nav-btn:hover {
+                background: #6a9230;
+                transform: translateY(-50%) scale(1.1);
+            }
+
+        .carousel-nav-left {
+            left: 10px;
+        }
+
+        .carousel-nav-right {
+            right: 10px;
+        }
+
+        /* Owl Carousel customizations */
+        .owl-carousel .owl-item {
+            padding: 10px;
+        }
+
+        .owl-carousel .owl-dots {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .owl-carousel .owl-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #ddd;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .owl-carousel .owl-dot.active {
+                background: #7fad39;
+            }
+      
+    </style>
+
+      
+
+    <script>
+        $(document).ready(function() {
+            // Get the search query from the URL or ViewBag
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchQuery = urlParams.get('query') || '@(ViewBag.SearchQuery ?? "")' || '';
+
+            // Display the search query
+            if (searchQuery) {
+                $('#searchQueryDisplay').text(searchQuery);
+                $('#search-name').val(searchQuery);
+            }
+
+            // Initialize the search with the query
+            getBlogListByAJAX(1, searchQuery);
+
+
+             // Load featured blogs carousel with delay to ensure DOM is ready
+            setTimeout(function() {
+                loadFeaturedBlogsCarousel();
+            }, 500);
+
+            // Show blog tab by default
+            toTab('blog');
+
+        });
+
+        let currentPage = 1;
+        const pageSize = 6;
+        let totalItems = 0;
+        let currentSearchQuery = '';
+
+        function getBlogListByAJAX(page = 1, searchQuery = '') {
+            currentPage = page;
+            currentSearchQuery = searchQuery || currentSearchQuery;
+
+            // Collect selected filters
+            const selectedFoodTypes = [];
+            const selectedMealTypes = [];
+            const selectedPriceRanges = [];
+
+            // Get checked food types
+            document.querySelectorAll('input[name="food-type"]:checked').forEach(function(checkbox) {
+                selectedFoodTypes.push(checkbox.value);
+            });
+
+            // Get checked meal types
+            document.querySelectorAll('input[name="meal-type"]:checked').forEach(function(checkbox) {
+                selectedMealTypes.push(checkbox.value);
+            });
+
+            // Get checked price ranges
+            document.querySelectorAll('input[name="price-range"]:checked').forEach(function(checkbox) {
+                selectedPriceRanges.push(checkbox.value);
+            });
+
+            // Build API URL with parameters
+            let apiUrl = `http://localhost:5029/api/Blog/searchBlogs?page=${page}&pageSize=${pageSize}`;
+
+            // Add search query parameter
+            if (currentSearchQuery) {
+                apiUrl += `&result=${encodeURIComponent(currentSearchQuery)}`;
+            }
+
+            // Add filters to URL (only first selected item for each type as per your API)
+            if (selectedFoodTypes.length > 0) {
+                apiUrl += `&foodType=${encodeURIComponent(selectedFoodTypes[0])}`;
+            }
+            if (selectedMealTypes.length > 0) {
+                apiUrl += `&mealType=${encodeURIComponent(selectedMealTypes[0])}`;
+            }
+            if (selectedPriceRanges.length > 0) {
+                apiUrl += `&priceRange=${encodeURIComponent(selectedPriceRanges[0])}`;
+            }
+
+            console.log('API URL:', apiUrl);
+
+            // Clear existing content immediately
+            $('#advanced-blog-list-content').find('.mix:not(#blogItemTemplate)').remove();
+            $('#emptyBlogText').remove();
+
+            // Start AJAX call
+            $.ajax({
+                url: apiUrl,
+                type: 'GET',
+                dataType: 'json',
+                cache: false,
+                success: function(response) {
+                    const data = response.blogs || [];
+                    totalItems = response.totalCount || 0;
+
+                    console.log('Received blogs:', data.length, 'Total items:', totalItems);
+
+                    if (data.length > 0) {
+                        data.forEach(function(blog) {
+                            const blogItem = $('#blogItemTemplate').clone();
+                            blogItem.attr('id', 'blog-' + blog.blogId);
+                            blogItem.removeClass().addClass('col-lg-4 col-md-4 col-sm-6 mix');
+
+                            // Set blog image
+                            const blogImage = blog.firstImage ? 'data:image/jpeg;base64,' + blog.firstImage : 'https://via.placeholder.com/300';
+
+                            // Set blog title and link
+                            blogItem.find('#blogTitle').html(
+                                '<a href="/Blog/Details?id=' + blog.blogId + '">' + blog.blogTitle + '</a>'
+                            );
+
+                            // Set blog link on image
+                            blogItem.find('#blogFirstImage').html(
+                                '<a href="/Blog/Details?id=' + blog.blogId + '">' +
+                                    '<img src="' + blogImage + '" alt="' + blog.blogTitle + '" style="width: 300px; height: 300px; object-fit: cover; border-radius: 15px;">' +
+                                '</a>'
+                            );
+
+                            // Set username and likes
+                            blogItem.find('#blogUsername').text(blog.username || 'Anonymous');
+                            blogItem.find('#blogLike').text(blog.blogLike || 0);
+
+                            // Show and append the blog item
+                            blogItem.show();
+
+                            $('#advanced-blog-list-content .row:first').append(blogItem);
+
+                        });
+
+                        // Update pagination
+                        updatePagination(currentPage, pageSize, totalItems);
+                    } else {
+                        // Show empty message
+                        const emptyText = $('<div id="emptyBlogText" class="col-lg-12 text-center"><h4>Không tìm thấy bài viết nào phù hợp</h4></div>');
+                        $('#advanced-blog-list-content .listPage').parent().before(emptyText);
+
+                        // Clear pagination
+                        $('.listPage').empty();
+                    }
+
+                    // Ensure full opacity
+                    $('#advanced-blog-list-content').css('opacity', 1);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching blogs:', error);
+
+                    // Show error message
+                    const errorText = $('<div id="emptyBlogText" class="col-lg-12 text-center"><h4 style="color: red;">Lỗi khi tải dữ liệu: ' + error + '</h4></div>');
+                    $('#advanced-blog-list-content .listPage').parent().before(errorText);
+
+                    // Ensure full opacity even on error
+                    $('#advanced-blog-list-content').css('opacity', 1);
+                }
+            });
+        }
+
+           // Featured Blogs Carousel Function - IMPROVED
+             // Featured Blogs Carousel Function - Using paidBlogs endpoint
+        function loadFeaturedBlogsCarousel() {
+            console.log('Starting to load featured blogs carousel...');
+
+            // Show loading message
+            $('#featuredBlogsCarousel').html('<div class="text-center p-4"><h5>Đang tải bài viết nổi bật...</h5></div>');
+
+            const apiUrl = 'http://localhost:5029/api/Blog/paidBlogs';
+            console.log('Fetching from:', apiUrl);
+
+            $.ajax({
+                url: apiUrl,
+                type: 'GET',
+                dataType: 'json',
+                cache: false,
+                timeout: 10000, // 10 second timeout
+                success: function(response) {
+                    console.log('API Response received:', response);
+                    // Note: paidBlogs returns the blogs array directly, not wrapped in a response object
+                    const data = Array.isArray(response) ? response : response.blogs || [];
+                    console.log('Featured carousel blogs received:', data.length);
+
+                    if (data && data.length > 0) {
+                        // Clear the carousel
+                        $('#featuredBlogsCarousel').empty();
+
+                        // Add each blog to carousel
+                        data.forEach(function(blog, index) {
+                            console.log(`Processing blog ${index + 1}:`, blog.blogTitle);
+
+                            // Handle blog main image
+                            const blogImage = blog.firstImage ?
+                                'data:image/jpeg;base64,' + blog.firstImage :
+                                'https://via.placeholder.com/400x200?text=Blog+Image';
+
+                            // Handle profile image from paidBlogs endpoint
+                            const profileImage = blog.profileImage ?
+                                'data:image/jpeg;base64,' + blog.profileImage :
+                                'https://via.placeholder.com/20x20?text=' + (blog.username ? blog.username.charAt(0).toUpperCase() : 'U');
+
+                            // Create carousel item
+                            const carouselItem = $(`
+                                <div class="item">
+                                    <div class="featured__blog__item">
+                                        <div class="featured___blog__item__pic">
+                                            <a href="/Blog/Details?id=${blog.blogId}" class="category-link">
+                                                <img src="${blogImage}" alt="${blog.blogTitle || 'Blog Image'}" loading="lazy">
+                                                <div class="text-overlay" title="${blog.blogTitle || 'Untitled'}">
+                                                    ${(blog.blogTitle || 'Untitled').substring(0, 50)}${(blog.blogTitle && blog.blogTitle.length > 50) ? '...' : ''}
+                                                </div>
+                                                <div class="text-overlay-count">
+                                                    <img src="${profileImage}"
+                                                         style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover;"
+                                                         alt="Profile Picture"
+                                                         onerror="this.src='https://via.placeholder.com/20x20?text=${blog.username ? blog.username.charAt(0).toUpperCase() : 'U'}'">
+                                                    ${blog.username || 'Anonymous'}
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+
+                            $('#featuredBlogsCarousel').append(carouselItem);
+                        });
+
+                        console.log('All carousel items added, initializing Owl Carousel...');
+
+                        // Destroy existing carousel if it exists
+                        if ($('#featuredBlogsCarousel').hasClass('owl-loaded')) {
+                            $('#featuredBlogsCarousel').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
+                        }
+
+                        // Reinitialize as Owl Carousel
+                        $('#featuredBlogsCarousel').addClass('owl-carousel owl-theme');
+
+                        // Initialize Owl Carousel with timeout
+                        setTimeout(function() {
+                            $('#featuredBlogsCarousel').owlCarousel({
+                                items: 3,
+                                loop: true,
+                                margin: 20,
+                                nav: false,
+                                dots: true,
+                                autoplay: true,
+                                autoplayTimeout: 5000,
+                                autoplayHoverPause: true,
+                                responsive: {
+                                    0: {
+                                        items: 1
+                                    },
+                                    600: {
+                                        items: 2
+                                    },
+                                    1000: {
+                                        items: 3
+                                    }
+                                },
+                                onInitialized: function() {
+                                    console.log('Owl Carousel initialized successfully!');
+                                }
+                            });
+
+                            // Custom navigation buttons
+                            $('#featuredPrev').off('click').on('click', function() {
+                                console.log('Previous button clicked');
+                                $('#featuredBlogsCarousel').trigger('prev.owl.carousel');
+                            });
+
+                            $('#featuredNext').off('click').on('click', function() {
+                                console.log('Next button clicked');
+                                $('#featuredBlogsCarousel').trigger('next.owl.carousel');
+                            });
+
+                        }, 100);
+
+                    } else {
+                        console.log('No featured blogs found for carousel');
+                        $('#featuredBlogsCarousel').html('<div class="text-center p-4"><h5>Không có bài viết nổi bật</h5></div>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching featured blogs for carousel:', error);
+                    console.error('Status:', status);
+                    console.error('Response:', xhr.responseText);
+                    $('#featuredBlogsCarousel').html('<div class="text-center p-4 text-danger"><h5>Lỗi khi tải bài viết nổi bật</h5><p>' + error + '</p></div>');
+                }
+            });
+        }
+
+        // Pagination event handler
+        $(document).on('click', '.listPage a.page-link', function(e) {
+            e.preventDefault();
+            const newPage = parseInt($(this).data('page'));
+            if (newPage !== currentPage) {
+                getBlogListByAJAX(newPage);
+                // Scroll to blog list
+                $('html, body').animate({
+                    scrollTop: $('#advanced-blog-list-content').offset().top - 100
+                }, 200);
+            }
+        });
+
+        function updatePagination(currentPage, pageSize, totalItems) {
+            const totalPages = Math.ceil(totalItems / pageSize);
+            $('.listPage').empty();
+
+            console.log('Updating pagination:', { currentPage, pageSize, totalItems, totalPages });
+
+            if (totalPages <= 1) {
+                console.log('Only 1 page or less, hiding pagination');
+                return;
+            }
+
+            // Previous button
+            if (currentPage > 1) {
+                $('.listPage').append(`
+                    <li class="page-item">
+                        <a class="page-link" href="#" data-page="${currentPage - 1}">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    </li>
+                `);
+            }
+
+            // Page numbers
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, startPage + 4);
+
+            for (let i = startPage; i <= endPage; i++) {
+                $('.listPage').append(`
+                    <li class="page-item ${i === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                    </li>
+                `);
+            }
+
+            // Next button
+            if (currentPage < totalPages) {
+                $('.listPage').append(`
+                    <li class="page-item">
+                        <a class="page-link" href="#" data-page="${currentPage + 1}">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    </li>
+                `);
+            }
+
+            console.log('Pagination HTML created, total pages:', totalPages);
+        }
+
+        function toTab(tab) {
+            const allTab = document.getElementById("all");
+            const blogTab = document.getElementById("blog");
+            const userTab = document.getElementById("user");
+            const advancedSection = document.getElementById("blog-advanced-content");
+            const userSection = document.getElementById("user-content");
+
+            switch (tab) {
+                case "blog":
+                    blogTab.style.color = 'black';
+                    blogTab.style.background = 'lightgrey';
+
+                    if (allTab) {
+                        allTab.style.color = 'grey';
+                        allTab.style.background = '#F5F4F4';
+                    }
+
+                    userTab.style.color = 'grey';
+                    userTab.style.background = '#F5F4F4';
+
+                    advancedSection.style.display = "";
+                    userSection.style.display = 'none';
+                    break;
+                case "user":
+                    userTab.style.color = 'black';
+                    userTab.style.background = 'lightgrey';
+
+                    blogTab.style.color = 'grey';
+                    blogTab.style.background = '#F5F4F4';
+
+                    if (allTab) {
+                        allTab.style.color = 'grey';
+                        allTab.style.background = '#F5F4F4';
+                    }
+
+                    advancedSection.style.display = "none";
+                    userSection.style.display = '';
+
+                    // Initialize user search when user tab is clicked using the same search query
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const searchQuery = urlParams.get('query') || '@(ViewBag.SearchQuery ?? "")' || '';
+                    getUserListByAJAX(1, searchQuery);
+                    break;
+                default:
+                    break;
+            }
+        }
+    </script>
+
+    <!-- Users Search -->
+    <script>
+        // User search variables
+        let currentUserPage = 1;
+        const userPageSize = 8;
+        let totalUserItems = 0;
+        let currentUserSearchQuery = '';
+
+        function getUserListByAJAX(page = 1, searchQuery = '') {
+            currentUserPage = page;
+            currentUserSearchQuery = searchQuery || currentUserSearchQuery;
+
+            // Build API URL with parameters
+            let apiUrl = `http://localhost:5029/api/Account/searchUsers?page=${page}&pageSize=${userPageSize}`;
+
+            // Add search query parameter
+            if (currentUserSearchQuery) {
+                apiUrl += `&result=${encodeURIComponent(currentUserSearchQuery)}`;
+            }
+
+            console.log('User API URL:', apiUrl);
+
+            // Clear existing content immediately
+            $('#user-content').find('.mix:not(#userItemTemplate)').remove();
+            $('#emptyUserText').remove();
+
+            // Start AJAX call
+            $.ajax({
+                url: apiUrl,
+                type: 'GET',
+                dataType: 'json',
+                cache: false,
+                success: function(response) {
+                    const data = response.users || [];
+                    totalUserItems = response.totalCount || 0;
+
+                    console.log('Received users:', data.length, 'Total items:', totalUserItems);
+
+                    if (data.length > 0) {
+                        data.forEach(function(user) {
+                            const userItem = $('#userItemTemplate').clone();
+                            userItem.attr('id', 'user-' + user.userId);
+                            userItem.removeClass().addClass('col-lg-3 col-md-4 col-sm-6 mix');
+
+                            // Set user image
+                            const userImage = user.userImage ? 'data:image/jpeg;base64,' + user.userImage : 'https://via.placeholder.com/300';
+
+                            // Set user link and image
+                            userItem.find('#userImage').html(
+                                '<a href="/Profile?id=' + user.userId + '">' +
+                                    '<img src="' + userImage + '" alt="' + user.displayName + '" style="width: 300px; height: 300px; object-fit: cover; border-radius: 15px;">' +
+                                '</a>'
+                            );
+
+                            // Set user display name and username
+                            userItem.find('#userDisplayName').html(
+                                '<a href="/Profile?id=' + user.userId + '">' + (user.displayName || 'Unknown User') + '</a>'
+                            );
+                            userItem.find('#userUsername').text('@@' + (user.username || 'unknown'));
+
+                            // Show and append the user item
+                            userItem.show();
+                            $('#user-content .listPageUsers').parent().before(userItem);
+                        });
+
+                        // Update pagination for users
+                        updateUserPagination(currentUserPage, userPageSize, totalUserItems);
+                    } else {
+                        // Show empty message
+                        const emptyText = $('<div id="emptyUserText" class="col-lg-12 text-center"><h4>Không tìm thấy người dùng nào phù hợp</h4></div>');
+                        $('#user-content .listPageUsers').parent().before(emptyText);
+
+                        // Clear pagination
+                        $('.listPageUsers').empty();
+                    }
+
+                    // Ensure full opacity
+                    $('#user-content').css('opacity', 1);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching users:', error);
+
+                    // Show error message
+                    const errorText = $('<div id="emptyUserText" class="col-lg-12 text-center"><h4 style="color: red;">Lỗi khi tải dữ liệu: ' + error + '</h4></div>');
+                    $('#user-content .listPageUsers').parent().before(errorText);
+
+                    // Ensure full opacity even on error
+                    $('#user-content').css('opacity', 1);
+                }
+            });
+        }
+
+        // User pagination event handler
+        $(document).on('click', '.listPageUsers a.page-link', function(e) {
+            e.preventDefault();
+            const newPage = parseInt($(this).data('page'));
+            if (newPage !== currentUserPage) {
+                getUserListByAJAX(newPage, currentUserSearchQuery);
+                // Scroll to user list
+                $('html, body').animate({
+                    scrollTop: $('#user-content').offset().top - 100
+                }, 200);
+            }
+        });
+
+        function updateUserPagination(currentPage, pageSize, totalItems) {
+            const totalPages = Math.ceil(totalItems / pageSize);
+            $('.listPageUsers').empty();
+
+            console.log('Updating user pagination:', { currentPage, pageSize, totalItems, totalPages });
+
+            if (totalPages <= 1) {
+                console.log('Only 1 page or less, hiding user pagination');
+                return;
+            }
+
+            // Previous button
+            if (currentPage > 1) {
+                $('.listPageUsers').append(`
+                    <li class="page-item">
+                        <a class="page-link" href="#" data-page="${currentPage - 1}">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    </li>
+                `);
+            }
+
+            // Page numbers
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, startPage + 4);
+
+            for (let i = startPage; i <= endPage; i++) {
+                $('.listPageUsers').append(`
+                    <li class="page-item ${i === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                    </li>
+                `);
+            }
+
+            // Next button
+            if (currentPage < totalPages) {
+                $('.listPageUsers').append(`
+                    <li class="page-item">
+                        <a class="page-link" href="#" data-page="${currentPage + 1}">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    </li>
+                `);
+            }
+
+            console.log('User pagination HTML created, total pages:', totalPages);
+        }
+    </script>
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="blog-details-hero set-bg" data-setbg="img/banner/blog.jpg"
+             data-setbg="@Url.Content("~/img/banner/blog.jpg")"
+             style="background-image: url('@Url.Content("/img/banner/blog.jpg")'); background-size: cover; background-position: center;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Tìm kiếm</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <br />
+    <!-- Breadcrumb Section End -->
+  
+
+    <div class="container search-page-container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <p>Kết quả tìm kiếm cho</p>
+                    <h2 id="searchQueryDisplay">@ViewBag.SearchQuery</h2>
+                    <input type="hidden" id="search-name" value="@ViewBag.SearchQuery">
+                </div>
+
+                <div class="featured__controls">
+                    <ul>
+                        <li>
+                            <button id="blog" onclick="toTab('blog')" class="search-option-btn search-option" data-action="blog">Bài viết</button>
+                        </li>
+                        <li>
+                            <button id="user" onclick="toTab('user')" class="search-option-btn search-option" data-action="user">Người dùng</button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="main-content-wrapper">
+                    <div id="blog-advanced-content" class="row">
+                        <div class="col-lg-12 section-search">
+                            <p style="font-size: 30px; font-weight: bold;">Tìm kiếm nâng cao </p>
+                        </div>
+                        <div class="row col-lg-4">
+                            <form id="advanced-search-form">
+                                <div class="col-lg-12 profile-card mt-4">
+                                    <h5>Ẩm thực</h5><hr />
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="food-type" value="Vietnamese" onclick="getBlogListByAJAX()"> Việt<br>
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" name="food-type" value="Chinese" onclick="getBlogListByAJAX()"> Trung<br>
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" name="food-type" value="Korean" onclick="getBlogListByAJAX()"> Hàn<br>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="food-type" value="Thai" onclick="getBlogListByAJAX()"> Thái<br>
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" name="food-type" value="Europe" onclick="getBlogListByAJAX()"> Âu<br>
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" name="food-type" value="American" onclick="getBlogListByAJAX()"> Mỹ<br>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="food-type" value="Japanese" onclick="getBlogListByAJAX()"> Nhật<br>
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" name="food-type" value="Other" onclick="getBlogListByAJAX()"> Khác<br>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-lg-12 profile-card mt-4">
+                                    <h5>Bữa ăn</h5><hr>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="meal-type" onclick="getBlogListByAJAX()" value="Breakfast"> Sáng<br>
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" name="meal-type" onclick="getBlogListByAJAX()" value="Lunch"> Trưa<br>
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" name="meal-type" onclick="getBlogListByAJAX()" value="Dinner"> Tối<br>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="meal-type" onclick="getBlogListByAJAX()" value="Late Night"> Đêm khuya<br>
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" name="meal-type" onclick="getBlogListByAJAX()" value="Brunch"> Giữa sáng-trưa<br>
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" name="meal-type" onclick="getBlogListByAJAX()" value="Drink"> Đồ uống<br>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-lg-12 profile-card mt-4">
+                                    <h5>Giá thành</h5><hr>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="price-range" onclick="getBlogListByAJAX()" value="$ (>10000 vnd)"> $ (>10000 vnd) <br>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="price-range" onclick="getBlogListByAJAX()" value="$+ (10000 - 50000 vnd)"> $+ (10000 - 50000 vnd)<br>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="price-range" onclick="getBlogListByAJAX()" value="$$ (50001 - 200000 vnd)"> $$ (50001 - 200000 vnd)<br>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="price-range" onclick="getBlogListByAJAX()" value="$$+ (200001 - 500000 vnd)"> $$+ (200001 - 500000 vnd)<br>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="price-range" onclick="getBlogListByAJAX()" value="$$$ (<500000 vnd)"> $$$ (<500000 vnd)<br>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-lg-8">
+                            <div id="advanced-blog-list-content">
+                                <div class="row">
+                                    <!-- Dynamic blog items will be inserted here -->
+                                    <!-- Blog Item Template (Hidden) -->
+                                    <div id="blogItemTemplate" class="col-lg-4 col-md-4 col-sm-6 mix" style="display:none;">
+                                        <div class="featured__item">
+                                            <div id="blogFirstImage" class="featured__item__pic">
+                                                <img src="https://via.placeholder.com/300" alt="">
+                                            </div>
+                                            <div class="featured__item__text">
+                                                <h6 id="blogTitle"><a href="#">Blog Title</a></h6>
+                                                <div id="blogUserInfo" style="display: flex; align-items: center; margin-left: 15px; margin-top: 10px;">
+                                                    <img src="https://via.placeholder.com/20" style="width: 20px; height: 20px; border-radius: 14px; margin-right: 5px;" alt="Profile Picture">
+                                                    <span id="blogUsername">Username</span>
+                                                    <div id="blogLikeInfo" style="display: flex; align-items: center; margin-left: 10px;">
+                                                        <i class="fa fa-heart-o" style="margin-left: 10px;"></i>
+                                                        <span id="blogLike">0</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Empty Blog Text -->
+                                    <div id="emptyBlogText" class="col-lg-12 text-center" style="display:none;">
+                                        <h4>Không tìm thấy bài viết nào</h4>
+                                    </div>
+                                </div>
+
+                                <!-- Pagination (outside the row) -->
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <ul class="listPage"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="user-content" class="row featured__filter" style="display:none;">
+                        <div class="col-lg-12 section-search">
+                            <p style="font-size: 30px; font-weight: bold;">Người dùng</p>
+                        </div>
+
+                        <!-- Dynamic user items will be inserted here -->
+                        <!-- User Item Template (Hidden) -->
+                        <div id="userItemTemplate" class="col-lg-3 col-md-4 col-sm-6 mix" style="display:none;">
+                            <div class="featured__item">
+                                <div id="userImage" class="featured__item__pic">
+                                    <img src="https://via.placeholder.com/300" alt="">
+                                </div>
+                                <div class="featured__item__text">
+                                    <h6 id="userDisplayName">User Name</h6>
+                                    <p id="userUsername"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Empty User Text -->
+                        <div id="emptyUserText" class="col-lg-12 text-center" style="display:none;">
+                            <h4>Không tìm thấy người dùng nào</h4>
+                        </div>
+
+                        <!-- User Pagination -->
+                        <div class="col-lg-12">
+                            <ul class="listPageUsers"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FEATURED BLOGS CAROUSEL SECTION - SEPARATE CONTAINER -->
+    <section class="featured-carousel-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 style="font-weight: bold; margin-bottom: 20px; text-align: center; color: #333;">
+                        Bài viết nổi bật <i class="fa fa-fire" style="color: #ff6b35;"></i>
+                    </h3>
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <span style="font-size: 16px; color: #666;">Mỗi ngày những bài mới hay nhất!</span>
+                    </div>
+
+                    <!-- Carousel Container with Side Navigation -->
+                    <div class="carousel-container">
+                        <!-- Left Navigation Button -->
+                        <button class="carousel-nav-btn carousel-nav-left" id="featuredPrev">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+
+                        <!-- Owl Carousel for featured blog items -->
+                        <div id="featuredBlogsCarousel">
+                            <!-- Blog items will be dynamically loaded here -->
+                            <div class="text-center p-4">
+                                <h5>Đang tải...</h5>
+                            </div>
+                        </div>
+
+                        <!-- Right Navigation Button -->
+                        <button class="carousel-nav-btn carousel-nav-right" id="featuredNext">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+   
+</body>
+</html>

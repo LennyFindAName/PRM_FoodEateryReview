@@ -1,0 +1,19 @@
+﻿@model List<BusinessObjects.Models.Report>
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No reports found for this blog.</div>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var report in Model)
+        {
+            <li class="list-group-item">
+                <strong>Reason:</strong> @report.ReportReason?.BlogReasonContent <br />
+                <strong>Content:</strong> @report.ReportContent <br />
+                <strong>Reporter:</strong> @report.ReporterId <br />
+                <strong>Time:</strong> @report.ReportTime
+            </li>
+        }
+    </ul>
+}

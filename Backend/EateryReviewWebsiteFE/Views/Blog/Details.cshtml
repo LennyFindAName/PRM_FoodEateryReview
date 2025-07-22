@@ -1,0 +1,1697 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Blog Details";
+}
+
+@section Styles {
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="@Url.Content("~/css/bootstrap.min.css")" type="text/css">
+    <link rel="stylesheet" href="@Url.Content("~/css/font-awesome.min.css")" type="text/css">
+    <link rel="stylesheet" href="@Url.Content("~/css/elegant-icons.css")" type="text/css">
+    <link rel="stylesheet" href="@Url.Content("~/css/nice-select.css")" type="text/css">
+    <link rel="stylesheet" href="@Url.Content("~/css/jquery-ui.min.css")" type="text/css">
+    <link rel="stylesheet" href="@Url.Content("~/css/slicknav.min.css")" type="text/css">
+    <link rel="stylesheet" href="@Url.Content("~/css/style.css")" type="text/css">
+    <link rel="stylesheet" href="@Url.Content("~/css/blog-detail.css")" type="text/css">
+    <link rel="stylesheet" href="@Url.Content("~/css/owl.carousel.min.css")" type="text/css">
+
+    <!-- Bootstrap CDN - you may want to use local files instead -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <style>
+        #comment-icon-123 {
+            color: black; /* Default color */
+        }
+
+            #comment-icon-123:hover {
+                color: black; /* Color on hover */
+            }
+
+            #comment-icon-123:active {
+                color: black; /* Color on click */
+            }
+
+        #flag-icon-123 {
+            color: black; /* Default color */
+        }
+
+            #flag-icon-123:hover {
+                color: black; /* Color on hover */
+            }
+
+            #flag-icon-123:active {
+                color: black; /* Color on click */
+            }
+
+        .rating-section .individual-ratings div .rating-bar-food::after {
+            content: '';
+            height: 100%;
+            background: #ffc107;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 80%;
+        }
+
+        .rating-section .individual-ratings div .rating-bar-environment::after {
+            content: '';
+            height: 100%;
+            background: #ffc107;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 70%;
+        }
+
+        .rating-section .individual-ratings div .rating-bar-service::after {
+            content: '';
+            height: 100%;
+            background: #ffc107;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 90%;
+        }
+
+        .rating-section .individual-ratings div .rating-bar-pricing::after {
+            content: '';
+            height: 100%;
+            background: #ffc107;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 60%;
+        }
+
+        .rating-section .individual-ratings div .rating-bar-hygiene::after {
+            content: '';
+            height: 100%;
+            background: #ffc107;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 75%;
+        }
+
+        /* Updated Read More styling with !important flags */
+        .content-wrapper {
+            position: relative !important;
+            transition: max-height 0.5s ease !important;
+            width: 100% !important;
+        }
+
+        .content-collapsed {
+            max-height: 300px !important;
+            overflow: hidden !important;
+        }
+
+        .content-expanded {
+            max-height: none !important;
+            overflow: visible !important;
+        }
+
+        .fade-overlay {
+            position: absolute !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100px !important;
+            background: linear-gradient(to bottom, rgba(245, 244, 244, 0), rgba(245, 244, 244, 1)) !important;
+            pointer-events: none !important;
+            z-index: 10 !important;
+        }
+
+        #blog-content {
+            width: 100% !important;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+        }
+
+            #blog-content img {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+
+
+        /* Carousel Image Styling */
+        #myCarousel {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 auto;
+            overflow: hidden !important;
+        }
+
+            #myCarousel .carousel-inner {
+                width: 100% !important;
+                max-height: 450px !important; /* Limit the height */
+                overflow: hidden !important;
+            }
+
+                #myCarousel .carousel-inner .item {
+                    text-align: center !important;
+                    height: 450px !important; /* Fixed height */
+                    background-color: #f5f5f5 !important;
+                    overflow: hidden !important;
+                }
+
+                    #myCarousel .carousel-inner .item img {
+                        max-width: 100% !important;
+                        max-height: 450px !important;
+                        width: auto !important; /* Allow width to adjust based on aspect ratio */
+                        height: auto !important; /* Allow height to adjust based on aspect ratio */
+                        margin: 0 auto !important;
+                        object-fit: contain !important; /* This ensures image maintains aspect ratio */
+                    }
+
+        /* Thumbnail styling */
+        #thumbnails {
+            display: flex !important;
+            justify-content: center !important;
+            flex-wrap: wrap !important;
+            margin-top: 10px !important;
+        }
+
+        .thumbnail-item {
+            margin: 5px !important;
+            cursor: pointer !important;
+            border: 2px solid transparent !important;
+            transition: all 0.2s ease !important;
+            width: 100px !important;
+            height: 100px !important;
+            overflow: hidden !important;
+        }
+
+            .thumbnail-item.active-thumbnail {
+                border-color: #007bff !important;
+            }
+
+            .thumbnail-item img {
+                width: 100px !important;
+                height: 100px !important;
+                object-fit: cover !important;
+            }
+
+        .col-lg-7 > .container {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            width: 100% !important;
+        }
+
+    </style>
+
+   
+
+}
+
+@section Scripts {
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!-- Local JS Files -->
+    <script src="@Url.Content("~/js/jquery-3.3.1.min.js")"></script>
+    <script src="@Url.Content("~/js/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/js/jquery-ui.min.js")"></script>
+    <script src="@Url.Content("~/js/jquery.slicknav.js")"></script>
+    <script src="@Url.Content("~/js/jquery.nice-select.min.js")"></script>
+    <script src="@Url.Content("~/js/mixitup.min.js")"></script>
+    <script src="@Url.Content("~/js/owl.carousel.min.js")"></script>
+    <script src="@Url.Content("~/js/main.js")"></script>
+
+    <!-- Bookmark-->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButton = document.getElementById('bookmark-icon');
+            const urlParams = new URLSearchParams(window.location.search);
+            const blogId = urlParams.get('id');
+            const userId = getUserIdFromToken();
+
+            if (!toggleButton || !blogId || !userId) return;
+
+            // Step 1: Check if already bookmarked
+            fetch(`http://localhost:5029/api/Profile/${userId}/bookmarks`)
+                .then(res => res.json())
+                .then(bookmarks => {
+                    const found = bookmarks.some(b => b.blogId == blogId);
+                    if (found) {
+                        toggleButton.style.color = "#f5c842";
+                        toggleButton.classList.remove('fa-bookmark-o');
+                        toggleButton.classList.add('fa-bookmark');
+                        toggleButton.setAttribute('title', 'Xóa dấu trang bài này');
+                    }
+                })
+                .catch(err => {
+                    console.error("Lỗi khi tải bookmark:", err);
+                });
+
+            // Step 2: Add toggle listener
+            toggleButton.addEventListener('click', function () {
+                const isBookmarked = toggleButton.classList.contains('fa-bookmark');
+
+                if (!userId) {
+                    alert("Bạn cần đăng nhập để đánh dấu bài này.");
+                    return;
+                }
+
+                if (!isBookmarked) {
+                    toggleButton.style.color = "#f5c842";
+                    toggleButton.classList.remove('fa-bookmark-o');
+                    toggleButton.classList.add('fa-bookmark');
+                    toggleButton.setAttribute('title', 'Xóa dấu trang bài này');
+                    changeStatus(blogId, userId, "add");
+                } else {
+                    toggleButton.style.color = "grey";
+                    toggleButton.classList.remove('fa-bookmark');
+                    toggleButton.classList.add('fa-bookmark-o');
+                    toggleButton.setAttribute('title', 'Đánh dấu trang bài này');
+                    changeStatus(blogId, userId, "remove");
+                }
+            });
+        });
+
+        function changeStatus(blogID, userId, action) {
+            if (action === "add") {
+                fetch(`http://localhost:5029/api/Profile/add-bookmark?userId=${userId}&blogId=${blogID}`, {
+                    method: 'POST'
+                }).then(res => {
+                    if (!res.ok) throw new Error("Lỗi khi thêm bookmark");
+                    return res.json();
+                }).then(data => {
+                    console.log(data.message);
+                }).catch(err => {
+                    alert("Lỗi: " + err.message);
+                });
+            } else if (action === "remove") {
+                fetch(`http://localhost:5029/api/Profile/remove-bookmark?userId=${userId}&blogId=${blogID}`, {
+                    method: 'DELETE'
+                }).then(res => {
+                    if (!res.ok) throw new Error("Lỗi khi xóa bookmark");
+                    return res.json();
+                }).then(data => {
+                    console.log(data.message);
+                }).catch(err => {
+                    alert("Lỗi: " + err.message);
+                });
+            }
+        }
+    </script>
+
+
+    <!-- Heart Icon -->
+    <script>
+        $(document).ready(function () {
+            // Hover effect to change heart icon on hover
+            $('[id^=heart-icon]').hover(
+                function () {
+                    $(this).addClass('fa-heart').removeClass('fa-heart-o');
+                },
+                function () {
+                    if (!$(this).hasClass('liked')) { // Prevent changing back to fa-heart-o if it's liked
+                        $(this).removeClass('fa-heart').addClass('fa-heart-o');
+                    }
+                }
+            );
+        });
+
+        // Click event to like the blog
+        function likeBlog(event, blogID) {
+            event.preventDefault();
+
+            const userId = getUserIdFromToken(); // Extracted from JWT on client
+
+            if (userId) {
+                $.ajax({
+                    url: 'http://localhost:5029/api/blog/likeblog',
+                    type: 'POST',
+                    data: {
+                        blogID: blogID,
+                        userId: userId
+                    },
+                    success: function (response) {
+                        const heartIcon = $('#heart-icon-' + blogID);
+                        const likeButton = heartIcon.closest('a');
+
+                        if (response.hasLiked) {
+                            heartIcon.removeClass('fa-heart-o').addClass('fa-heart').css('color', 'red');
+                            likeButton.attr('title', 'Không thích bài này');
+                        } else {
+                            heartIcon.removeClass('fa-heart').addClass('fa-heart-o').css('color', '');
+                            likeButton.attr('title', 'Thích bài này');
+                        }
+
+                        $('#like-count-' + blogID).text(response.likeCount);
+                    },
+                    error: function () {
+                        alert('Không thể thích bài này');
+                    }
+                });
+            } else {
+                window.location.href = 'login'; // If user not logged in
+            }
+        }
+
+    </script>
+
+    <!-- Image Slider -->
+    <script>
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        // Next/previous controls
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        // Thumbnail image controls
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("item");
+            let dots = document.getElementsByClassName("thumbnail-item");
+            if (n > slides.length) {
+                slideIndex = 1
+            }
+            if (n < 1) {
+                slideIndex = slides.length
+            }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+                slides[i].className = slides[i].className.replace(" active", "");
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active-thumbnail", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            slides[slideIndex - 1].className += " active";
+            dots[slideIndex - 1].className += " active-thumbnail";
+        }
+
+        $(document).ready(function () {
+            // Ensure the carousel transitions when a thumbnail is clicked
+            $('.thumbnail-item').on('click', function () {
+                var index = $(this).data('slide-to');
+                currentSlide(index + 1); // +1 because slideIndex starts from 1
+            });
+
+            // Synchronize the thumbnail active state with the carousel
+            $('#myCarousel').on('slide.bs.carousel', function (e) {
+                var nextIndex = $(e.relatedTarget).index();
+                currentSlide(nextIndex + 1); // +1 because slideIndex starts from 1
+            });
+        });
+    </script>
+
+    <!-- Fetch Response -->
+    <script>
+        // Function to get URL parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+                // Function to load blog details
+        function loadBlogDetails() {
+            const blogId = getUrlParameter('id');
+            console.log("dangdeptrai blog ID from URL:", blogId);
+
+            const userId = getUserIdFromToken(); // get from JWT
+            console.log("dangdeptrai user ID from URL:", userId);
+
+            if (!blogId) {
+                console.error('Blog ID not found in URL parameters');
+                return;
+            }
+
+            $('#preloder').show();
+
+            // Build the API URL with userId query parameter (if logged in)
+            const apiUrl = userId
+                ? `http://localhost:5029/api/Blog/details/${blogId}?userId=${userId}`
+                : `http://localhost:5029/api/Blog/details/${blogId}`;
+
+            fetch(apiUrl, {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Blog data received:", data); // Debug log
+                updateBlogDetails(data);
+
+                // Load user profile using the userId from blog data
+                if (data.userId) {
+                    loadUserProfile(data.userId);
+                }
+
+                $('#preloder').hide();
+                initReadMore();
+            })
+            .catch(error => {
+                console.error('Error fetching blog details:', error);
+                $('#preloder').hide();
+                alert('Không thể tải thông tin bài viết. Vui lòng thử lại sau.');
+            });
+        }
+
+                // New function to load user profile
+        function loadUserProfile(userId) {
+            fetch(`http://localhost:5029/api/Profile/${userId}`, {
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.warn('Could not load user profile');
+                    return null;
+                }
+                return response.json();
+            })
+            .then(user => {
+                if (user) {
+                    updateUserProfileCard(user);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading user profile:', error);
+            });
+        }
+
+               function updateUserProfileCard(user) {
+            // Convert UserImage byte array to base64 if it exists
+            const profileImageSrc = user.userImage
+                ? `data:image/jpeg;base64,${user.userImage}`
+                : 'https://via.placeholder.com/150';
+
+            // Target the specific user profile card instead of all profile cards
+            $('#user-profile-card').html(`
+                <a href="#">
+                    <img src="${profileImageSrc}" alt="User Profile Picture">
+                    <h4>${user.displayName || user.username}</h4>
+                    <p>${user.username}</p>
+                    <div class="stats">
+                        <div>
+                            <p>Bài viết</p>
+                            <p style="font-weight:bold;">${user.blogs?.length || 0}</p>
+                        </div>
+                        <div>
+                            <p>Đang theo dõi</p>
+                            <p style="font-weight:bold;">0</p>
+                        </div>
+                        <div>
+                            <p>Người theo dõi</p>
+                            <p style="font-weight:bold;">0</p>
+                        </div>
+                    </div>
+                </a>
+            `);
+        }
+
+        // Function to update UI with blog details
+        function updateBlogDetails(blog) {
+            // Update basic blog information
+            document.title = `${blog.blogTitle} - Chi tiết bài viết`;
+
+
+        // In your updateBlogDetails function
+        $('#blog-content').html(`
+            <div style="width:100%;">
+                <p>${formatDate(blog.blogDate)}</p>
+                <h3 style="font-weight: bold; max-width: 100%;">${blog.blogTitle}</h3>
+                <hr>
+                <div style="max-width: 100%; overflow-wrap: break-word;">${blog.blogContent}</div>
+            </div>
+        `);
+
+        // Call initReadMore with a slight delay to ensure content is rendered
+        setTimeout(() => {
+            initReadMore();
+        }, 100);
+
+           
+            // Update ratings
+            $('.overall-rating span').text(`${blog.blogRate}/5.0`);
+
+            // Update individual ratings
+            updateRatingBar('food', blog.foodQualityRate);
+            updateRatingBar('environment', blog.environmentRate);
+            updateRatingBar('service', blog.serviceRate);
+            updateRatingBar('pricing', blog.pricingRate);
+            updateRatingBar('hygiene', blog.hygieneRate);
+
+            // Update individual rating values
+            $('.rating-bar-food').next('span').text(blog.foodQualityRate);
+            $('.rating-bar-environment').next('span').text(blog.environmentRate);
+            $('.rating-bar-service').next('span').text(blog.serviceRate);
+            $('.rating-bar-pricing').next('span').text(blog.pricingRate);
+            $('.rating-bar-hygiene').next('span').text(blog.hygieneRate);
+
+            // Update map with location
+            updateMap(blog.eateryAddressDetail, blog.eateryLocationDetail);
+
+            $('#like-container-123').attr('id', `like-container-${blog.blogId}`);
+            $('#like-count-123').attr('id', `like-count-${blog.blogId}`);
+
+            renderLikeButton(blog.blogId, blog.likeCount, blog.hasLiked);
+
+            // Update categories section
+            updateCategories(blog);
+
+            // Update images
+            updateBlogImages(blog);
+
+            initCommentSection(blog.blogId);
+
+            loadReportReasons()
+        }
+
+        function initCommentSection(blogId) {
+            $('#comment-blog-id').val(blogId);
+            loadComments(blogId);
+        }
+
+        function loadComments(blogId) {
+            console.log("dangdeptrai loadcomment blogId:", blogId);
+            $.get(`http://localhost:5029/api/Comment/blog/${blogId}`, function (data) {
+                renderComments(data, blogId);
+            });
+        }
+
+
+        function renderComments(comments) {
+            const currentUserId = getUserIdFromToken(); // Logged-in user's ID
+            const container = $('#commentsSection');
+            container.empty();
+
+            if (comments.length === 0) {
+                container.append('<p>Chưa có bình luận nào.</p>');
+                return;
+            }
+
+            comments.forEach(comment => {
+                const showDeleteCommentBtn = String(comment.userId) === String(currentUserId);
+
+                const repliesHtml = comment.replies.map(reply => {
+                    const showDeleteReplyBtn = String(reply.userId) === String(currentUserId);
+
+                    return `
+                        <div class="media-block" id="reply-${reply.replyId}">
+                            <a class="media-left" href="#"><img class="img-circle img-sm" src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="User"></a>
+                            <div class="media-body">
+                                <div class="mar-btm">
+                                    <a href="#" class="btn-link text-semibold media-heading box-inline">${reply.username}</a>
+                                    <p class="text-muted text-sm">${formatDateComment(reply.replyDate)}</p>
+                                </div>
+                                <p>${reply.content}</p>
+                                <div class="pad-ver">
+        <span class="tag tag-sm" id="reply-like-count-${reply.replyId}">
+            <i class="fa fa-heart text-danger"></i> ${reply.replyLike} Lượt thích
+        </span>
+        <a class="btn btn-sm btn-default btn-hover-success" href="#" onclick="event.preventDefault(); toggleReplyLike(${reply.replyId})">
+            <i class="fa fa-thumbs-up"></i>
+        </a>
+                                    ${showDeleteReplyBtn
+                            ? `<a class="btn btn-sm btn-default btn-hover-danger" href="#" onclick="event.preventDefault(); deleteReply(${reply.replyId})"><i class="fa fa-trash-o text-danger"></i></a>`
+                            : ''
+                        }
+                                </div>
+                                <hr />
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                container.append(`
+                    <div class="media-block" id="comment-${comment.commentId}">
+                        <a class="media-left" href="#"><img class="img-circle img-sm" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="User"></a>
+                        <div class="media-body">
+                            <div class="mar-btm">
+                                <a href="#" class="btn-link text-semibold media-heading box-inline">${comment.username}</a>
+                                <p class="text-muted text-sm">${formatDateComment(comment.commentDate)}</p>
+                            </div>
+                            <p>${comment.content}</p>
+                            <div class="pad-ver">
+                                <span class="tag tag-sm" id="like-count-${comment.commentId}">
+                                    <i class="fa fa-heart text-danger"></i> ${comment.commentLike} Lượt thích
+                                </span>
+        <a class="btn btn-sm btn-default btn-hover-success" href="#" onclick="event.preventDefault(); toggleCommentLike(${comment.commentId})">
+            <i class="fa fa-thumbs-up"></i>
+        </a>
+                                <a class="btn btn-sm btn-default btn-hover-primary" href="#" onclick="event.preventDefault(); showReplyForm(${comment.commentId})">Phản hồi</a>
+                                ${showDeleteCommentBtn
+                        ? `<a class="btn btn-sm btn-default btn-hover-danger" href="#" onclick="event.preventDefault(); deleteComment(${comment.commentId})"><i class="fa fa-trash-o text-danger"></i></a>`
+                        : ''
+                    }
+                            </div>
+
+                            <div class="reply-form mt-2" id="replyForm-${comment.commentId}" style="display: none;">
+                                <form onsubmit="submitReply(event, ${comment.commentId})">
+                                    <textarea class="form-control mb-2" rows="2" name="replyContent" required placeholder="Viết phản hồi..."></textarea>
+                                    <button class="btn btn-sm btn-primary pull-right" type="submit">
+                                        <i class="fa fa-pencil fa-fw"></i> Chia sẻ
+                                    </button>
+                                </form>
+                            </div>
+
+                            <div id="replies-${comment.commentId}" class="mt-3">
+                                ${repliesHtml}
+                            </div>
+
+                            <hr />
+                        </div>
+                    </div>
+                `);
+            });
+        }
+
+
+
+        $('#createCommentForm').submit(function (e) {
+            console.log("dangdeptrai create comment");
+            e.preventDefault();
+            const blogId = $('#comment-blog-id').val();
+            const content = $(this).find('textarea[name="content"]').val().trim();
+
+            if (!content) return;
+
+            const userId = getUserIdFromToken(); // Replace with actual logged-in user ID
+
+            $.ajax({
+                url: 'http://localhost:5029/api/Comment',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ blogId, content, userId }),
+                success: function () {
+                    $('#createCommentForm')[0].reset();
+                    loadComments(blogId);
+                },
+                error: function () {
+                    alert('Bạn cần đăng nhập để bình luận.');
+                }
+            });
+        });
+
+        function showReplyForm(commentId) {
+            $(`#replyForm-${commentId}`).toggle();
+        }
+
+        function submitReply(event, commentId) {
+            event.preventDefault();
+
+            const replyTextarea = $(`#replyForm-${commentId} textarea[name="replyContent"]`);
+            const content = replyTextarea.val().trim();
+            const userId = getUserIdFromToken(); // Replace with real user ID
+
+            if (!content) return;
+
+            $.ajax({
+                url: 'http://localhost:5029/api/reply',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    commentId,
+                    content,
+                    userId // include if needed
+                }),
+                success: function () {
+                    replyTextarea.val('');
+                    loadComments($('#comment-blog-id').val());
+                },
+                error: function () {
+                    alert('Lỗi khi gửi phản hồi.');
+                }
+            });
+        }
+        function deleteComment(commentId) {
+            if (!confirm("Bạn có chắc muốn xóa bình luận này?")) return;
+
+            $.ajax({
+                url: `http://localhost:5029/api/Comment/${commentId}`,
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                success: function () {
+                    loadComments($('#comment-blog-id').val());
+                },
+                error: function () {
+                    alert("Xóa bình luận thất bại.");
+                }
+            });
+        }
+
+        function deleteReply(replyId) {
+            if (!confirm("Bạn có chắc muốn xóa phản hồi này?")) return;
+
+            $.ajax({
+                url: `http://localhost:5029/api/Reply/${replyId}`,
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                success: function () {
+                    loadComments($('#comment-blog-id').val());
+                },
+                error: function () {
+                    alert("Xóa phản hồi thất bại.");
+                }
+            });
+        }
+
+        function toggleCommentLike(commentId) {
+            const userId = getUserIdFromToken();
+            $.ajax({
+                url: `http://localhost:5029/api/Comment/like/${commentId}`,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(userId),
+                success: function () {
+                    loadComments($('#comment-blog-id').val());
+                },
+                error: function () {
+                    alert("Lỗi khi thích bình luận.");
+                }
+            });
+        }
+
+        function toggleReplyLike(replyId) {
+            const userId = getUserIdFromToken();
+            $.ajax({
+                url: `http://localhost:5029/api/Reply/like/${replyId}`,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(userId),
+                success: function () {
+                    loadComments($('#comment-blog-id').val());
+                },
+                error: function () {
+                    alert("Lỗi khi thích phản hồi.");
+                }
+            });
+        }
+
+        function renderLikeButton(blogId, likeCount, hasLiked) {
+            const userId = getUserIdFromToken();
+            const container = $(`#like-container-${blogId}`);
+
+            if (!userId) {
+                container.empty(); // Not logged in → don't show like icon
+                return;
+            }
+
+            const iconClass = hasLiked ? 'fa-heart liked' : 'fa-heart-o';
+            const iconStyle = hasLiked ? 'color:red;' : '';
+
+            container.html(`
+                <a href="#" onclick="likeBlog(event, ${blogId})" title="${hasLiked ? 'Không thích bài này' : 'Thích bài này'}">
+                    <i class="fa ${iconClass}" id="heart-icon-${blogId}" style="font-size: 24px; margin-bottom: 30px; ${iconStyle}"></i>
+                </a>
+            `);
+
+            // Update the like count
+            const likeCountElem = $(`#like-count-${blogId}`);
+            likeCountElem.text(likeCount);
+            likeCountElem.attr('title', `${likeCount} người thích bài này`);
+        }
+
+        function loadReportReasons() {
+            console.log("Loading report reasons...");
+
+            fetch('http://localhost:5029/api/report/reasons')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('reportReasonList');
+                    container.innerHTML = ''; // Clear old content
+
+                    data.forEach(reason => {
+                        const item = document.createElement('label');
+                        item.className = 'list-group-item list-group-item-action';
+
+                        item.innerHTML = `
+                            <input type="radio" name="reportReason" value="${reason.reasonId}" class="mr-2">
+                            ${reason.blogReasonContent}
+                        `;
+
+                        container.appendChild(item);
+                    });
+                })
+                .catch(err => console.error('Failed to load reasons:', err));
+        }
+
+
+        document.getElementById('submitReportBtn').addEventListener('click', () => {
+            const selected = document.querySelector('input[name="reportReason"]:checked');
+            const blogId = getUrlParameter('id');
+            const userId = getUserIdFromToken();
+            const reportContent = document.getElementById('reportContent').value.trim();
+
+            if (!selected || !blogId || !userId) {
+                alert("Vui lòng chọn lý do tố cáo.");
+                return;
+            }
+
+            const reasonId = parseInt(selected.value);
+
+            fetch('http://localhost:5029/api/report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    blogId: parseInt(blogId),
+                    reportReasonId: reasonId,
+                    reporterId: userId,
+                    reportContent: reportContent
+                })
+            })
+                .then(res => {
+                    if (res.ok) {
+                        alert("Tố cáo của bạn đã được gửi.");
+                        $('#modal-report-blog').modal('hide');
+                    } else {
+                        throw new Error("Có lỗi xảy ra khi gửi tố cáo.");
+                    }
+                })
+                .catch(err => alert(err.message));
+        });
+
+
+        function formatDateComment(dateString) {
+            const date = new Date(dateString);
+
+            const day = date.getDate();
+            const month = date.getMonth() + 1; 
+            const year = date.getFullYear();
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+        }
+
+        function getUserIdFromToken() {
+            const token = localStorage.getItem('accessToken');
+            if (!token) return null;
+
+            try {
+                const decoded = jwt_decode(token); // Sử dụng jwt-decode để giải mã token
+                return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']; // Lấy userId từ claim
+            } catch (e) {
+                console.error('Invalid token', e);
+                return null;
+            }
+        }
+        
+              function initReadMore() {
+            console.log("Initializing Read More functionality");
+
+            // Get the DOM elements
+            const contentWrapper = document.getElementById('content-wrapper');
+            const fadeOverlay = document.getElementById('fade-overlay');
+            const readMoreBtn = document.getElementById('readMoreBtn');
+
+            // Check if the content is tall enough to need the read more button
+            const contentHeight = document.getElementById('blog-content').offsetHeight;
+
+            if (contentHeight <= 300) {
+                // Content is short enough, hide the read more button and fade overlay
+                readMoreBtn.style.display = 'none';
+                fadeOverlay.style.display = 'none';
+                contentWrapper.classList.remove('content-collapsed');
+                console.log("Content is short, hiding read more button");
+                return;
+            }
+
+            // Force the initial state
+            contentWrapper.classList.add('content-collapsed');
+            contentWrapper.classList.remove('content-expanded');
+            fadeOverlay.style.display = 'block';
+            readMoreBtn.textContent = 'Đọc thêm';
+
+            let expanded = false;
+
+            // Remove any existing event listeners to prevent duplicates
+            const newReadMoreBtn = readMoreBtn.cloneNode(true);
+            readMoreBtn.parentNode.replaceChild(newReadMoreBtn, readMoreBtn);
+
+            // Add event listener to the new button
+            newReadMoreBtn.addEventListener('click', function() {
+                console.log("Read More button clicked");
+                expanded = !expanded;
+
+                if (expanded) {
+                    contentWrapper.classList.remove('content-collapsed');
+                    contentWrapper.classList.add('content-expanded');
+                    fadeOverlay.style.display = 'none';
+                    newReadMoreBtn.textContent = 'Thu gọn';
+                    console.log("Content expanded");
+                } else {
+                    contentWrapper.classList.remove('content-expanded');
+                    contentWrapper.classList.add('content-collapsed');
+                    fadeOverlay.style.display = 'block';
+                    newReadMoreBtn.textContent = 'Đọc thêm';
+                    console.log("Content collapsed");
+                }
+            });
+
+            console.log("Read More button handler attached");
+        }
+
+
+        // Function to update rating bars
+        function updateRatingBar(type, rating) {
+            const percentage = (rating / 5) * 100;
+            $(`.rating-bar-${type}::after`).css('width', `${percentage}%`);
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            if (!dateString) return '';
+
+            // Parse date from format "YYYY-MM-DD"
+            const parts = dateString.split('-');
+            if (parts.length !== 3) return dateString;
+
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+
+        // Update map
+        function updateMap(address, location) {
+            const fullAddress = `${address}, ${location}`;
+            const encodedAddress = encodeURIComponent(fullAddress);
+
+            // Get the API key from server-side (passed via ViewBag)
+            const googleMapsApiKey = '@ViewBag.GoogleMapsApiKey';
+
+           const mapSrc = `https://www.google.com/maps/embed/v1/place?key=${googleMapsApiKey}&q=${encodedAddress}`;
+
+            // Update iframe src
+            $('.details iframe').attr('src', mapSrc);
+        }
+
+        // Update categories section
+        function updateCategories(blog) {
+            // Update price range
+            if (blog.priceRanges && blog.priceRanges.length > 0) {
+                $('.details p:contains("Giá cả")').html(`
+                    <strong>Giá cả</strong><br>
+                    ${blog.priceRanges[0]}
+                `);
+            }
+
+            // Update food types
+            if (blog.foodTypeNames && blog.foodTypeNames.length > 0) {
+                let foodTypesHtml = '<strong>Ẩm thực</strong><br>|';
+                blog.foodTypeNames.forEach(type => {
+                    foodTypesHtml += ` ${type} &nbsp;|`;
+                });
+                $('.details p:contains("Ẩm thực")').html(foodTypesHtml);
+            }
+
+            // Update meal types
+            if (blog.mealTypeNames && blog.mealTypeNames.length > 0) {
+                let mealTypesHtml = '<strong>Phục vụ bữa</strong><br>|';
+                blog.mealTypeNames.forEach(type => {
+                    mealTypesHtml += ` ${type} &nbsp;|`;
+                });
+                $('.details p:contains("Phục vụ bữa")').html(mealTypesHtml);
+            }
+        }
+
+        // Update blog images - properly handling images without removing the last one
+        function updateBlogImages(blog) {
+            if (blog.blogImagesBase64 && blog.blogImagesBase64.length > 0) {
+                // Clear existing carousel items
+                $('.carousel-inner').empty();
+                $('#thumbnails').empty();
+
+                // Get images and filter out empty ones
+                const validImages = blog.blogImagesBase64.filter(img => img && img.trim() !== '');
+
+                // Don't include the bill image which is stored separately
+                // The bill image is available in blog.blogBillImageBase64
+
+                // Check if we have any valid images
+                if (validImages.length === 0) {
+                    // No valid images, hide carousel
+                    $('#myCarousel, #thumbnails').hide();
+                    return;
+                }
+
+                // Show carousel since we have valid images
+                $('#myCarousel, #thumbnails').show();
+
+                // Add images to carousel
+                for (let i = 0; i < validImages.length; i++) {
+                    const active = i === 0 ? 'active' : '';
+                    const activeThumb = i === 0 ? 'active-thumbnail' : '';
+
+                    // Add to main carousel
+                    $('.carousel-inner').append(`
+                        <div class="item ${active}">
+                            <img src="data:image/jpeg;base64,${validImages[i]}" alt="Blog image ${i+1}">
+                        </div>
+                    `);
+
+                    // Add to thumbnails
+                    $('#thumbnails').append(`
+                        <div class="thumbnail-item ${activeThumb}" data-slide-to="${i}">
+                            <img src="data:image/jpeg;base64,${validImages[i]}" alt="Thumbnail ${i+1}">
+                        </div>
+                    `);
+                }
+
+                // Show or hide carousel controls based on number of images
+                if (validImages.length <= 1) {
+                    $('.carousel-control').hide(); // Hide controls if only one image
+                } else {
+                    $('.carousel-control').show(); // Show controls if multiple images
+                }
+
+                // Reset slide index and initialize slides
+                slideIndex = 1;
+                showSlides(slideIndex);
+
+                // Reinitialize thumbnail click events
+                $('.thumbnail-item').on('click', function() {
+                    var index = $(this).data('slide-to');
+                    currentSlide(index + 1);
+                });
+
+                console.log(`Loaded ${validImages.length} images into carousel`);
+            } else {
+                // No images available
+                console.log("No images to display in carousel");
+                $('#myCarousel, #thumbnails').hide();
+            }
+        }
+
+        // Load blog details when page is ready
+        $(document).ready(function() {
+            loadBlogDetails();
+        });
+
+                // Add this right after loading blog details
+        console.log("Blog content loaded:", {
+            title: blog.blogTitle,
+            contentLength: blog.blogContent?.length || 0,
+            contentSnippet: blog.blogContent?.substring(0, 100) + "..."
+        });
+
+        // Check DOM element dimensions
+        setTimeout(() => {
+            const contentWrapper = document.getElementById('content-wrapper');
+            const blogContent = document.getElementById('blog-content');
+            console.log("Element dimensions:", {
+                contentWrapperHeight: contentWrapper?.offsetHeight || 0,
+                blogContentHeight: blogContent?.offsetHeight || 0,
+                blogContentWidth: blogContent?.offsetWidth || 0
+            });
+        }, 200);
+    </script>
+}
+
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<!-- Blog Details Hero Begin -->
+<section class="breadcrumb-section set-bg content-below-header"
+         data-setbg="@Url.Content("~/img/banner/blog.jpg")"
+         style="background-image: url('@Url.Content("~/img/banner/blog.jpg")'); background-size: cover; background-position: center;">
+    <div class="container">
+    </div>
+</section>
+<!-- Blog Details Hero End -->
+<!-- Blog Details Section Begin -->
+<section class="blog-details spad" style="background-color: #F5F4F4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-1">
+                <div class="profile-card mt-4" style="display: flex; flex-direction: column; align-items: center;">
+                    <!-- Like icon with tooltip -->
+                    <div id="like-container-123"></div>
+                    <span id="like-count-123" style="font-size: 24px; margin-bottom: 30px;" title="...">0</span>
+
+                    <!-- Comment icon with tooltip -->
+                    <a href="#comment-section-123" title="Đi đến mục bình luận">
+                        <i class="fa fa-comment-o" id="comment-icon-123" style="font-size: 24px; margin-bottom: 30px;"></i>
+                    </a>
+
+                    <!-- Report icon with tooltip -->
+                    <a href="#" data-toggle="modal" data-target="#modal-report-blog" id="reportButton" title="Tố cáo bài này">
+                        <i class="fa fa-flag-o" id="flag-icon-123" style="font-size: 24px; margin-bottom: 30px;"></i>
+                    </a>
+
+                    <!-- Bookmark icon with tooltip -->
+                    <i class="fa fa-bookmark-o bookmark-icon" id="bookmark-icon" title="Đánh dấu trang bài này" style="color: grey; font-size: 24px; margin-bottom: 30px; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="container">
+                    <div id="myCarousel" class="carousel slide">
+                        <div class="carousel-inner">
+                            <!-- Images will be dynamically added here -->
+                            <div class="item active">
+                                <img src="https://via.placeholder.com/800x400?text=Loading..." alt="Loading...">
+                            </div>
+                        </div>
+
+                        <!-- Left and right controls -->
+                        <a class="left carousel-control" href="#myCarousel" role="button" onclick="plusSlides(-1)">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#myCarousel" role="button" onclick="plusSlides(1)">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+
+                    <!-- Thumbnails -->
+                    <div id="thumbnails" class="thumbnails">
+                        <!-- Thumbnails will be dynamically added here -->
+                    </div>
+                </div>
+                <!-- Clean, simplified blog content structure -->
+                <div class="blog__details__description" style="margin-top: 20px;">
+                    <div id="content-wrapper" class="content-wrapper content-collapsed">
+                        <div id="blog-content" style="width:100%;"></div>
+                        <div id="fade-overlay" class="fade-overlay"></div>
+                    </div>
+                    <button id="readMoreBtn" class="read-more-btn">Đọc thêm</button>
+                </div>
+
+                <!-- Featured Blogs -->
+                <div id="featuredBlogs" class="blog__details__description">
+                    <h3 style="font-weight: bold; margin-top: 0px">Bài viết nổi bật <i class="fa fa-fire"></i></h3>
+                    <div class="show-choice" id="show-choice">
+                        <div class="choice-item" id="explore-option">
+                            Mỗi ngày những bài mới hay !
+                        </div>
+                    </div><br />
+
+                    <!-- Carousel Container with Side Navigation -->
+                    <div class="carousel-container" style="position: relative;">
+                        <!-- Left Navigation Button -->
+                        <button class="carousel-nav-btn carousel-nav-left" id="featuredPrev">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+
+                        <!-- Owl Carousel for featured blog items -->
+                        <div class="owl-carousel owl-theme featured-blogs-carousel" id="featuredBlogsCarousel">
+                            <!-- Blog items will be dynamically added here -->
+                            <div class="featured__blog__item">
+                                <div class="featured___blog__item__pic">
+                                    <a href="#" class="category-link">
+                                        <img src="@Url.Content("~/img/test.jpeg")" alt="Test Image">
+                                        <div class="text-overlay">
+                                            Test Blog Title
+                                        </div>
+                                        <div class="text-overlay-count">
+                                            <img id="text-overlay-count-img" src="@Url.Content("~/img/test_profile.png")"
+                                                 style="width: 20px; height: 20px; border-radius: 14px; margin-right: 5px;" alt="Profile Picture">
+                                            Test Username
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Right Navigation Button -->
+                        <button class="carousel-nav-btn carousel-nav-right" id="featuredNext">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <style>
+                    /* Carousel Container */
+                    .carousel-container {
+                        position: relative;
+                        padding: 0 20px; /* Space for side buttons */
+                    }
+
+                    /* Featured Blogs Carousel Styles */
+                    .featured-blogs-carousel {
+                        margin: 0;
+                    }
+
+                        .featured-blogs-carousel .owl-item {
+                            padding: 0 10px;
+                        }
+
+                    .featured__blog__item {
+                        background-color: white;
+                        border: 1px solid lightgrey;
+                        border-radius: 15px;
+                        margin-bottom: 20px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        text-align: center;
+                        overflow: hidden;
+                        position: relative;
+                    }
+
+                    .featured___blog__item__pic {
+                        position: relative;
+                        height: 100px;
+                        overflow: hidden;
+                    }
+
+                        .featured___blog__item__pic img {
+                            width: 100%;
+                            height: 200px;
+                            object-fit: cover;
+                            border-radius: 15px;
+                            filter: brightness(75%);
+                            transition: transform 0.3s ease;
+                        }
+
+                    .featured__blog__item:hover .featured___blog__item__pic img {
+                        transform: scale(1.05);
+                    }
+
+                    /* Text overlay styles */
+                    .text-overlay {
+                        position: absolute;
+                        bottom: 30px;
+                        left: 10px;
+                        right: 10px;
+                        padding: 8px 12px;
+                        color: white;
+                        border-radius: 5px;
+                        font-weight: bold;
+                        font-size: 14px;
+                        line-height: 1.2;
+                        background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+                        z-index: 2;
+                        /* Text truncation */
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .text-overlay-count {
+                        position: absolute;
+                        bottom: 5px;
+                        left: 10px;
+                        padding: 1px 8px;
+                        color: white;
+                        border-radius: 10px;
+                        font-size: 12px;
+                        background: rgba(0,0,0,0.6);
+                        z-index: 2;
+                        display: flex;
+                        align-items: center;
+                    }
+
+                        .text-overlay-count img {
+                            width: 16px !important;
+                            height: 16px !important;
+                            border-radius: 50% !important;
+                            margin-right: 5px !important;
+                            object-fit: cover !important;
+                        }
+
+                    /* Side Navigation Buttons */
+                    .carousel-nav-btn {
+                        position: absolute;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        border: 2px solid #ddd;
+                        background-color: white;
+                        color: #666;
+                        font-size: 16px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        z-index: 10;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                    }
+
+                    .carousel-nav-left {
+                        left: 10px;
+                    }
+
+                    .carousel-nav-right {
+                        right: 10px;
+                    }
+
+                    .carousel-nav-btn:hover {
+                        background-color: #7fad39;
+                        border-color: #7fad39;
+                        color: white;
+                        transform: translateY(-50%) scale(1.1);
+                    }
+
+                    .carousel-nav-btn:focus {
+                        outline: none;
+                        box-shadow: 0 0 0 3px rgba(127, 173, 57, 0.3);
+                    }
+
+                    /* Hide buttons when hovering over carousel to prevent interference */
+                    .carousel-container:not(:hover) .carousel-nav-btn {
+                        opacity: 0.7;
+                    }
+
+                    .carousel-container:hover .carousel-nav-btn {
+                        opacity: 1;
+                    }
+
+                    /* Owl Carousel customization */
+                    .featured-blogs-carousel .owl-nav {
+                        display: none; /* Hide default nav */
+                    }
+
+                    .featured-blogs-carousel .owl-dots {
+                        text-align: center;
+                    }
+
+                    .featured-blogs-carousel .owl-dot {
+                        display: inline-block;
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 50%;
+                        background: #ddd;
+                        margin: 0 3px;
+                        cursor: pointer;
+                        transition: background 0.3s ease;
+                    }
+
+                        .featured-blogs-carousel .owl-dot.active {
+                            background: #7fad39;
+                        }
+
+                    .carousel-nav-btn {
+                        width: 35px;
+                        height: 35px;
+                        font-size: 14px;
+                    }
+
+                    .carousel-nav-left {
+                        left: 5px;
+                    }
+
+                    .carousel-nav-right {
+                        right: 5px;
+                    }
+
+                    .featured___blog__item__pic {
+                        height: 180px;
+                    }
+
+                        .featured___blog__item__pic img {
+                            height: 180px;
+                        }
+
+                    .text-overlay {
+                        font-size: 12px;
+                        bottom: 25px;
+                    }
+
+                    }
+
+                    .carousel-nav-btn {
+                        width: 30px;
+                        height: 30px;
+                        font-size: 12px;
+                    }
+
+                    }
+                </style>
+
+                <!-- Enhanced Featured Blogs Script -->
+                <script>
+                    $(document).ready(function() {
+                        // Load featured blogs
+                        loadFeaturedBlogs();
+
+                        function loadFeaturedBlogs() {
+                            const apiUrl = 'http://localhost:5029/api/Blog/paidBlogs';
+
+                            $.ajax({
+                                url: apiUrl,
+                                type: 'GET',
+                                dataType: 'json',
+                                cache: false,
+                                success: function(data) {
+                                    console.log('Featured blogs data received:', data);
+
+                                    if (data && data.length > 0) {
+                                        // Clear existing carousel items
+                                        $('#featuredBlogsCarousel').empty();
+
+                                        data.forEach(function(blog, index) {
+                                            // Handle blog main image
+                                            const blogImage = blog.firstImage ?
+                                                'data:image/jpeg;base64,' + blog.firstImage :
+                                                'https://via.placeholder.com/300x200?text=No+Image';
+
+                                            // Handle profile image
+                                            const profileImage = blog.profileImage ?
+                                                'data:image/jpeg;base64,' + blog.profileImage :
+                                                'https://via.placeholder.com/20?text=U';
+
+                                            // Create blog item HTML
+                                            const blogItemHtml = `
+                                                <div class="featured__blog__item">
+                                                    <div class="featured___blog__item__pic">
+                                                        <a href="/Blog/Details?id=${blog.blogId}" class="category-link">
+                                                            <img src="${blogImage}" alt="${blog.blogTitle || 'Blog Image'}">
+                                                            <div class="text-overlay">
+                                                                ${blog.blogTitle || 'Untitled'}
+                                                            </div>
+                                                            <div class="text-overlay-count">
+                                                                <img src="${profileImage}" alt="Profile Picture">
+                                                                ${blog.username || 'Anonymous'}
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            `;
+
+                                            // Add to carousel
+                                            $('#featuredBlogsCarousel').append(blogItemHtml);
+                                        });
+
+                                        // Initialize Owl Carousel
+                                        initFeaturedBlogsCarousel();
+                                    } else {
+                                        console.log('No featured blogs found');
+                                        $('#featuredBlogsCarousel').html('<div class="text-center"><p>Không có bài viết nổi bật nào.</p></div>');
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error('Error fetching featured blogs:', error);
+                                    $('#featuredBlogsCarousel').html('<div class="text-center"><p>Lỗi khi tải bài viết nổi bật.</p></div>');
+                                }
+                            });
+                        }
+
+                        function initFeaturedBlogsCarousel() {
+                        // Destroy existing carousel if it exists
+                        if ($('#featuredBlogsCarousel').hasClass('owl-loaded')) {
+                            $('#featuredBlogsCarousel').trigger('destroy.owl.carousel');
+                            $('#featuredBlogsCarousel').removeClass('owl-loaded');
+                        }
+
+                        // Initialize Owl Carousel
+                        $('#featuredBlogsCarousel').owlCarousel({
+                            loop: true,
+                            margin: 15,
+                            nav: false,
+                            dots: true,
+                            autoplay: true,
+                            autoplayTimeout: 4000,
+                            autoplayHoverPause: true,
+                            responsive: {
+                                0: {
+                                    items: 1
+                                },
+                                576: {
+                                    items: 1
+                                },
+                                768: {
+                                    items: 2
+                                },
+                                992: {
+                                    items: 2
+                                },
+                                1200: {
+                                    items: 2
+                                }
+                            }
+                        });
+
+                        // Custom navigation
+                        $('#featuredPrev').click(function() {
+                            $('#featuredBlogsCarousel').trigger('prev.owl.carousel');
+                        });
+
+                        $('#featuredNext').click(function() {
+                            $('#featuredBlogsCarousel').trigger('next.owl.carousel');
+                        });
+
+                        console.log('Featured blogs carousel initialized');
+                    }
+                    });
+                </script>
+            </div>
+
+            <div class="col-lg-4 col-md-5 order-md-1 order-2">
+                <div class="profile-card mt-4" id="user-profile-card">
+                    <!-- User profile content will go here -->
+                </div>
+
+                <div id="rating" class="rating-section">
+                    <h3>Điểm Rate</h3>
+                    <div class="overall-rating">
+                        <span></span>
+                        <i class="fa fa-star"></i>
+                    </div>
+                    <div class="individual-ratings">
+                        <div>
+                            <span>Chất lượng</span>
+                            <div class="rating-bar rating-bar-food" style="width:100%">
+                                <div></div>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span>Không gian</span>
+                            <div class="rating-bar rating-bar-environment" style="width:100%">
+                                <div></div>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span>Phục vụ</span>
+                            <div class="rating-bar rating-bar-service" style="width:100%">
+                                <div></div>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span>Giá cả</span>
+                            <div class="rating-bar rating-bar-pricing" style="width:100%">
+                                <div></div>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span>Vệ sinh</span>
+                            <div class="rating-bar rating-bar-hygiene" style="width:100%">
+                                <div style="width: 100%;"></div>
+                            </div>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details">
+                    <h3>Địa điểm</h3>
+                    <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCJnsbQBxAy1goHWDsu5bzOqO4epRMtJqw&q='123 Đường Cầu Giấy, Cầu Giấy, Hà Nội'" width="320" height="300" allowfullscreen></iframe>
+                </div>
+
+              @*   <div class="tags">
+                    <h3>Tags</h3>
+                    <div class="tags-list">
+                        <!-- Tags will be dynamically added here -->
+                    </div>
+                </div> *@
+
+                <div class="details">
+                    <h3>Danh mục</h3>
+                    <p>
+                        <strong>Giá cả</strong><br>
+                        <!-- Price range will be added here -->
+                    </p>
+                    <p>
+                        <strong>Ẩm thực</strong><br>|
+                        <!-- Food types will be added here -->
+                    </p>
+                    <p>
+                        <strong>Phục vụ bữa</strong><br>|
+                        <!-- Meal types will be added here -->
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Blog Details Section End -->
+
+<div class="container bootdey" margin-top: 30px">
+    <div class="col-md-12 bootstrap snippets" >
+        <div class="panel">
+            <h4 style="margin-left: 30px; padding-top: 20px;">Bình luận</h4>
+            <div class="panel-body" style="border-radius: 15px">
+                <form id="createCommentForm">
+                    <input type="hidden" name="blogId" id="comment-blog-id" />
+                    <textarea name="content" class="form-control" rows="2" placeholder="Bạn nghĩ sao về bài viết này?" required></textarea>
+                    <div class="mar-top clearfix">
+                        <button class="btn btn-sm btn-primary pull-right" type="submit">
+                            <i class="fa fa-pencil fa-fw"></i> Chia sẻ
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-body">
+                <div id="commentsSection"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-report-blog" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tố cáo bài viết</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="reportForm">
+                    <div id="reportReasonList" class="list-group"></div>
+                </form>
+
+                <div class="form-group mt-3">
+                    <label for="reportContent">Chi tiết tố cáo (tùy chọn):</label>
+                    <textarea class="form-control" id="reportContent" rows="3" placeholder="Nhập nội dung tố cáo..."></textarea>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="submitReportBtn">Gửi tố cáo</button>
+            </div>
+        </div>
+    </div>
+</div>

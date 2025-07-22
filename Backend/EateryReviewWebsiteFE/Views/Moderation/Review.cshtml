@@ -1,0 +1,390 @@
+﻿@using Microsoft.AspNetCore.Html
+@model BusinessObjects.ModerationModels.Blog.BlogModerationViewModel
+@{
+	Layout = "_Layout";
+	ViewData["Title"] = "Blog Moderation";
+}
+
+@section Styles {
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" type="text/css">
+	<link rel="stylesheet" href="@Url.Content("~/css/bootstrap.min.css")" type="text/css">
+	<link rel="stylesheet" href="@Url.Content("~/css/style.css")" type="text/css">
+	<style>
+		.moderation-card {
+			border: 1px solid #eee;
+			border-radius: 8px;
+			margin-bottom: 30px;
+			padding: 20px;
+			background: #fff;
+		}
+
+		.moderation-actions {
+			margin-top: 15px;
+		}
+
+		.opinion-box {
+			background: #f8f9fa;
+			border-left: 4px solid #007bff;
+			padding: 10px 15px;
+			margin-bottom: 10px;
+			font-style: italic;
+		}
+
+		.blog-image-thumb {
+			max-width: 120px;
+			max-height: 120px;
+			margin-right: 10px;
+			border-radius: 4px;
+			border: 1px solid #eee;
+		}
+
+		.page-number-box {
+			display: inline-block;
+			min-width: 32px;
+			padding: 4px 10px;
+			margin: 0 2px;
+			border: 1px solid #007bff;
+			border-radius: 4px;
+			background: #fff;
+			color: #007bff;
+			cursor: pointer;
+			transition: background 0.2s, color 0.2s;
+			text-align: center;
+			user-select: none;
+		}
+
+			.page-number-box.active, .page-number-box:disabled {
+				background: #007bff;
+				color: #fff;
+				cursor: default;
+				font-weight: bold;
+			}
+
+			.page-number-box.ellipsis {
+				border: none;
+				background: transparent;
+				color: #888;
+				cursor: default;
+			}
+	</style>
+}
+
+<section class="breadcrumb-section set-bg content-below-header"
+		 data-setbg="@Url.Content("~/img/banner/blog.jpg")"
+		 style="background-image: url('@Url.Content("/img/banner/blog.jpg")'); background-size: cover; background-position: center;">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 text-center">
+				<div class="breadcrumb__text">
+					<h2>Duyệt bài viết</h2>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="checkout spad">
+	<div class="container">
+		<div class="checkout__form">
+			<h4>Bài viết chờ duyệt</h4>
+			<form method="get" class="row mb-3">
+				<div class="col">
+					<label for="title" class="form-label">Title</label>
+					<input id="title" name="title" class="form-control" type="text" value="@Context.Request.Query["title"]" placeholder="Title" />
+				</div>
+				<div class="col">
+					<label for="username" class="form-label">Username</label>
+					<input id="username" name="username" class="form-control" type="text" value="@Context.Request.Query["username"]" placeholder="Username" />
+				</div>
+				<div class="col">
+					<label for="dateFrom" class="form-label">Date From</label>
+					<input id="dateFrom" name="dateFrom" class="form-control" type="date" value="@Context.Request.Query["dateFrom"]" />
+				</div>
+				<div class="col">
+					<label for="dateTo" class="form-label">Date To</label>
+					<input id="dateTo" name="dateTo" class="form-control" type="date" value="@Context.Request.Query["dateTo"]" />
+				</div>
+				<div class="col">
+					<label for="status" class="form-label">Status</label>
+					<select id="status" name="status" class="form-control">
+						<option value="">Status</option>
+						<option value="0" selected="@(Context.Request.Query["status"] == "0")">Pending</option>
+						<option value="1" selected="@(Context.Request.Query["status"] == "1")">Approved</option>
+						<option value="-1" selected="@(Context.Request.Query["status"] == "-1")">Rejected</option>
+					</select>
+				</div>
+				<div class="col-auto align-self-end">
+					<button type="submit" class="btn btn-primary">Search</button>
+				</div>
+			</form>
+			<div>
+				@if (Model.Blogs == null || !Model.Blogs.Any())
+				{
+					<div class="alert alert-info">No blogs found.</div>
+				}
+				else
+				{
+					foreach (var blog in Model.Blogs)
+					{
+						<div class="moderation-card" id="blog-@blog.BlogId">
+							<div class="d-flex justify-content-between align-items-start mb-2">
+								<h5 class="mb-0">
+									<a href="/Blog/Details?id=@blog.BlogId" target="_blank">
+										@(blog.BlogTitle ?? "(No Title)")
+									</a>
+								</h5>
+								<button type="button" class="btn btn-info btn-sm view-reports-btn" data-blog-id="@blog.BlogId">
+									View Reports
+								</button>
+							</div>
+							<div><strong>By User:</strong> @(blog.UserDisplayName ?? blog.UserId.ToString())</div>
+							<div><strong>Date:</strong> @blog.BlogDate?.ToString("yyyy-MM-dd")</div>
+							<div><strong>Likes:</strong> @blog.BlogLike</div>
+							<div><strong>Status:</strong> @StatusText((int)blog.BlogStatus)</div>
+							<div>
+								<strong>Images:</strong>
+								@if (blog.Images != null && blog.Images.Any())
+								{
+									foreach (var img in blog.Images)
+									{
+										<img src="data:image/jpeg;base64,@img" class="blog-image-thumb" />
+									}
+								}
+								else
+								{
+									<span>No image</span>
+								}
+							</div>
+							<div class="opinion-box">@(!string.IsNullOrEmpty(blog.Opinion) ? blog.Opinion : "No opinion available.")</div>
+							<form asp-action="ReviewBlog" asp-route-blogId="@blog.BlogId" method="post" class="mb-2">
+								<label for="opinion-@blog.BlogId" class="form-label">Moderator Opinion (optional):</label>
+								<textarea id="opinion-@blog.BlogId" name="opinion" class="form-control" rows="2" placeholder="Enter your reason or comment..."></textarea>
+								<div class="moderation-actions mt-2">
+									<button name="request" value="1" class="btn btn-success">Approve</button>
+									<button name="request" value="-1" class="btn btn-danger">Reject</button>
+									<button formaction="/Moderation/AssessByAI" formmethod="post" name="blogId" value="@blog.BlogId" class="btn btn-primary">Assess by AI</button>
+								</div>
+							</form>
+						</div>
+					}
+				}
+			</div>
+			<div class="mb-3">
+				@if (Model.TotalPages > 1)
+				{
+					<nav>
+						<ul class="pagination">
+							@for (int i = 1; i <= Model.TotalPages; i++)
+							{
+								var query = new Dictionary<string, string>
+					{
+						["page"] = i.ToString()
+					};
+								foreach (var key in new[] { "title", "username", "dateFrom", "dateTo", "status" })
+								{
+									var val = Context.Request.Query[key].ToString();
+									if (!string.IsNullOrEmpty(val))
+									{
+										query[key] = val;
+									}
+								}
+								var url = Url.Action("Review", "Moderation", query);
+								<li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+									<a class="page-link" href="@url">@i</a>
+								</li>
+							}
+						</ul>
+					</nav>
+				}
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="modal fade" id="reportsModal" tabindex="-1" aria-labelledby="reportsModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="reportsModalLabel">Reports for Blog</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="reportsModalBody">
+				Loading...
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+
+	<script>
+		$(document).ready(function () {
+			checkAdminAccess();
+		});
+
+
+		// Approve/Reject via AJAX
+		$(document).on('click', 'button[name="request"]', function (e) {
+			e.preventDefault();
+			var $btn = $(this);
+			var $form = $btn.closest('form');
+			var blogId = $form.find('input[name="blogId"]').val() || $form.attr('asp-route-blogId') || $form.find('button[formaction="/Moderation/AssessByAI"]').val();
+			var opinion = $form.find('textarea[name="opinion"]').val();
+			var request = $btn.val();
+
+			$.ajax({
+				url: '/Moderation/ReviewBlog?blogId=' + encodeURIComponent(blogId),
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({ request: parseInt(request), opinion: opinion }),
+				success: function (data) {
+					toastr.success(data.message || "Moderation completed.");
+					updateBlogCard(blogId, data.request, data.opinion, data.status);
+				},
+				error: function (xhr) {
+					var msg = "Moderation failed.";
+					if (xhr.responseJSON && xhr.responseJSON.message)
+						msg = xhr.responseJSON.message;
+					toastr.error(msg);
+				}
+			});
+		});
+
+		function checkAdminAccess() {
+			const userId = getUserIdFromToken();
+
+			// If no token or userId, redirect to login
+			if (!userId) {
+				console.log('No token found, redirecting to login');
+				window.location.href = '/Authen';
+				return;
+			}
+
+			// Call API to get user data including role
+			$.ajax({
+				url: `http://localhost:5029/api/Account?id=${userId}`,
+				type: 'GET',
+				headers: {
+					'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+				},
+				success: function(user) {
+					console.log('User data received:', user);
+
+					// Check if user role is Moderator (2)
+					if (parseInt(user.roleId) !== 2) {
+						console.log('User is not mod, redirecting to homepage');
+						localStorage.setItem('homeAlert', 'Access denied.');
+
+						window.location.href = '/Home';
+						return;
+					}
+
+
+					console.log('Admin access granted');
+					// User is admin, continue with dashboard loading
+				},
+				error: function(xhr, status, error) {
+				console.error('Error fetching user data:', error);
+				}
+			});
+		}
+
+		function getUserIdFromToken() {
+			const token = localStorage.getItem('accessToken');
+			if (!token) return null;
+
+			try {
+				const decoded = jwt_decode(token); // Sử dụng jwt-decode để giải mã token
+				return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']; // Lấy userId từ claim
+			} catch (e) {
+				console.error('Invalid token', e);
+				return null;
+			}
+		}
+
+		// Assess by AI via AJAX
+		$(document).on('click', 'button[formaction="/Moderation/AssessByAI"]', function (e) {
+			e.preventDefault();
+			var $btn = $(this);
+			var blogId = $btn.val();
+
+			$.ajax({
+				url: '/Moderation/AssessByAI',
+				type: 'POST',
+				data: { blogId: blogId },
+				success: function (data) {
+					toastr.success(data.message || "AI assessment completed.");
+					// Optionally, update the card UI (status/opinion) if returned in data
+					updateBlogCard(blogId, data.status, data.opinion, data.status);
+				},
+				error: function (xhr) {
+					var msg = "AI assessment failed.";
+					if (xhr.responseJSON && xhr.responseJSON.message)
+						msg = xhr.responseJSON.message;
+					toastr.error(msg);
+				}
+			});
+		});
+
+		// View Reports via AJAX
+		$(document).on('click', '.view-reports-btn', function () {
+			var blogId = $(this).data('blog-id');
+			$('#reportsModalBody').html('Loading...');
+			$('#reportsModal').modal('show');
+			$.get('/Report/GetReports', { blogId: blogId }, function (data) {
+				if (!data || data.length === 0) {
+					$('#reportsModalBody').html('<div class="alert alert-info">No reports found for this blog.</div>');
+				} else {
+					var html = '<ul class="list-group">';
+					data.forEach(function (report) {
+						html += '<li class="list-group-item">';
+						html += '<strong>Reason:</strong> ' + (report.reason || 'N/A') + '<br />';
+						html += '<strong>Content:</strong> ' + (report.reportContent || 'N/A') + '<br />';
+						html += '<strong>Reporter:</strong> ' + (report.reporterId || 'N/A') + '<br />';
+						html += '<strong>Time:</strong> ' + (report.reportTime || 'N/A') + '<br />';
+						html += '</li>';
+					});
+					html += '</ul>';
+					$('#reportsModalBody').html(html);
+				}
+			}).fail(function () {
+				$('#reportsModalBody').html('<div class="alert alert-danger">Failed to load reports.</div>');
+			});
+		});
+
+		// Helper to update the blog card UI
+		function updateBlogCard(blogId, status, opinion, statusValue) {
+			var $card = $('#blog-' + blogId);
+			// Update status text
+			var statusHtml = '';
+			switch (parseInt(statusValue)) {
+				case 1: statusHtml = '<span class="text-success">Approved</span>'; break;
+				case -1: statusHtml = '<span class="text-danger">Rejected</span>'; break;
+				case 0: statusHtml = '<span class="text-warning">Pending</span>'; break;
+				default: statusHtml = '<span class="text-secondary">Unknown</span>';
+			}
+			$card.find('div:contains("Status:")').html('<strong>Status:</strong> ' + statusHtml);
+
+			// Update opinion
+			if (opinion !== undefined && opinion !== null) {
+				$card.find('.opinion-box').text(opinion || "No opinion available.");
+			}
+		}
+	</script>
+}
+
+@functions {
+	public IHtmlContent StatusText(int status)
+	{
+		switch (status)
+		{
+			case 1: return new HtmlString("<span class=\"text-success\">Approved</span>");
+			case -1: return new HtmlString("<span class=\"text-danger\">Rejected</span>");
+			case 0: return new HtmlString("<span class=\"text-warning\">Pending</span>");
+			default: return new HtmlString("<span class=\"text-secondary\">Unknown</span>");
+		}
+	}
+}

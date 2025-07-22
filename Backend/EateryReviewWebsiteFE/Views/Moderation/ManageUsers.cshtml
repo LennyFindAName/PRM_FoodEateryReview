@@ -1,0 +1,255 @@
+﻿@model BusinessObjects.ModerationModels.User.UserModerationViewModel
+@{
+    ViewData["Title"] = "User Management";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" type="text/css">
+    <link rel="stylesheet" href="@Url.Content("~/css/bootstrap.min.css")" type="text/css">
+    <link rel="stylesheet" href="@Url.Content("~/css/style.css")" type="text/css">
+    <style>
+        .moderation-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fff;
+        }
+
+        .moderation-actions {
+            margin-top: 15px;
+        }
+
+        .user-reason-box {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+    </style>
+}
+
+<section class="breadcrumb-section set-bg content-below-header"
+         data-setbg="@Url.Content("~/img/banner/blog.jpg")"
+         style="background-image: url('@Url.Content("/img/banner/blog.jpg")'); background-size: cover; background-position: center;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Quản lý người dùng</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="checkout spad">
+    <div class="container">
+        <div class="checkout__form">
+            <form method="get" class="row mb-3">
+                <div class="col">
+                    <label for="displayName" class="form-label">Display Name</label>
+                    <input id="displayName" name="displayName" class="form-control" type="text" value="@Context.Request.Query["displayName"]" placeholder="Display Name" />
+                </div>
+                <div class="col">
+                    <label for="username" class="form-label">Username</label>
+                    <input id="username" name="username" class="form-control" type="text" value="@Context.Request.Query["username"]" placeholder="Username" />
+                </div>
+                <div class="col">
+                    <label for="email" class="form-label">Email</label>
+                    <input id="email" name="email" class="form-control" type="text" value="@Context.Request.Query["email"]" placeholder="Email" />
+                </div>
+                <div class="col">
+                    <label for="status" class="form-label">Status</label>
+                    <select id="status" name="status" class="form-control">
+                        <option value="">All</option>
+                        <option value="1" selected="@(Context.Request.Query["status"] == "1")">Active</option>
+                        <option value="0" selected="@(Context.Request.Query["status"] == "0")">Banned</option>
+                    </select>
+                </div>
+                <div class="col-auto align-self-end">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+
+            <div>
+                @if (Model.Users == null || !Model.Users.Any())
+                {
+                    <div class="alert alert-info">No users found.</div>
+                }
+                else
+                {
+                    foreach (var user in Model.Users)
+                    {
+                        <div class="moderation-card" id="user-@user.UserId">
+                            <h5>
+                                <a href="/Profile?id=@user.UserId" target="_blank">
+                                    @(user.DisplayName ?? "(No Display Name)")
+                                </a>
+                            </h5>
+                            <div><strong>Username:</strong> @user.Username</div>
+                            <div><strong>Email:</strong> @user.UserEmail</div>
+                            <div><strong>Status:</strong> <span class="user-status">@((user.UserStatus == 1) ? "Active" : "Banned")</span></div>
+                            <div class="user-reason-box">
+                                @if (!string.IsNullOrEmpty(user.ModeratorNote))
+                                {
+                                    @user.ModeratorNote
+                                }
+                                else
+                                {
+                                    <span>No moderation reason available.</span>
+                                }
+                            </div>
+                            <form class="mb-2">
+                                <label for="reason-@user.UserId" class="form-label">Moderator Reason:</label>
+                                <textarea id="reason-@user.UserId" name="reason" class="form-control user-reason" rows="2" placeholder="Enter your reason..."></textarea>
+                                <div class="moderation-actions mt-2">
+                                    @if (user.UserStatus == 1)
+                                    {
+                                        <button type="button" class="btn btn-danger user-moderate-btn" data-userid="@user.UserId" data-request="0">Ban</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-success user-moderate-btn" data-userid="@user.UserId" data-request="1">Unban</button>
+                                    }
+                                </div>
+                            </form>
+                        </div>
+                    }
+                }
+            </div>
+
+            @if (Model.TotalPages > 1)
+            {
+                <nav>
+                    <ul class="pagination">
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            var query = new Dictionary<string, string>
+                            {
+                                ["page"] = i.ToString()
+                            };
+                            foreach (var key in new[] { "displayName", "username", "email", "status" })
+                            {
+                                var val = Context.Request.Query[key].ToString();
+                                if (!string.IsNullOrEmpty(val))
+                                {
+                                    query[key] = val;
+                                }
+                            }
+                            var url = Url.Action("ManageUsers", "Moderation", query);
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="@url">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            checkAdminAccess();
+        });
+
+        function checkAdminAccess() {
+            const userId = getUserIdFromToken();
+
+            // If no token or userId, redirect to login
+            if (!userId) {
+                console.log('No token found, redirecting to login');
+                window.location.href = '/Authen';
+                return;
+            }
+
+            // Call API to get user data including role
+            $.ajax({
+                url: `http://localhost:5029/api/Account?id=${userId}`,
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+                },
+                success: function(user) {
+                    console.log('User data received:', user);
+
+                    // Check if user role is Moderator (2)
+                    if (parseInt(user.roleId) !== 2) {
+                        console.log('User is not mod, redirecting to homepage');
+                        localStorage.setItem('homeAlert', 'Access denied.');
+
+                        window.location.href = '/Home';
+                        return;
+                    }
+
+
+                    console.log('Admin access granted');
+                    // User is admin, continue with dashboard loading
+                },
+                error: function(xhr, status, error) {
+                console.error('Error fetching user data:', error);
+                }
+            });
+        }
+
+        function getUserIdFromToken() {
+            const token = localStorage.getItem('accessToken');
+            if (!token) return null;
+
+            try {
+                const decoded = jwt_decode(token); // Sử dụng jwt-decode để giải mã token
+                return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']; // Lấy userId từ claim
+            } catch (e) {
+                console.error('Invalid token', e);
+                return null;
+            }
+        }
+
+        $(document).on('click', '.user-moderate-btn', function (e) {
+            e.preventDefault();
+            var $btn = $(this);
+            var userId = $btn.data('userid');
+            var request = $btn.data('request');
+            var $card = $('#user-' + userId);
+            var reason = $card.find('.user-reason').val();
+
+            if (!reason || !reason.trim()) {
+                toastr.error(request === 0 ? "Ban reason is required." : "Unban reason is required.");
+                return;
+            }
+
+            $.ajax({
+                url: '/Moderation/ReviewUser?userId=' + encodeURIComponent(userId),
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ request: request, opinion: reason }),
+                success: function (data) {
+                    // Only update UI if backend confirms the action
+                    if ((request === 0 && data.status === 0) || (request === 1 && data.status === 1)) {
+                        toastr.success(data.message || (request === 0 ? "User banned." : "User unbanned."));
+                        $card.find('.user-status').text(request === 0 ? 'Banned' : 'Active');
+                        $card.find('.user-reason').val('');
+                        $card.find('.user-reason-box').text(reason);
+                        if (request === 0) {
+                            $btn.removeClass('btn-danger').addClass('btn-success').text('Unban').data('request', 1);
+                        } else {
+                            $btn.removeClass('btn-success').addClass('btn-danger').text('Ban').data('request', 0);
+                        }
+                    } else {
+                        toastr.error("Action failed or status not updated.");
+                    }
+                },
+                error: function (xhr) {
+                    var msg = request === 0 ? "Ban failed." : "Unban failed.";
+                    if (xhr.responseJSON && xhr.responseJSON.message)
+                        msg = xhr.responseJSON.message;
+                    toastr.error(msg);
+                }
+            });
+        });
+    </script>
+}
